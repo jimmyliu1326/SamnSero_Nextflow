@@ -9,28 +9,28 @@ process combine {
     input:
         tuple val(sample_id), path(reads)
     output:
-        tuple val(sample_id), file("${sample_id}.{fastq,fastq.gz}")
+        file("${sample_id}.{fastq,fastq.gz}")
     shell:
         """
         sample=\$(ls ${reads} | head -n 1)
         if [[ \${sample##*.} == "gz" ]]; then
-            cat ${reads}/* > ${sample_id}.fastq.gz
+            cat ${reads}/*.fastq.gz > ${sample_id}.fastq.gz
         else
-            cat ${reads}/* > ${sample_id}.fastq
+            cat ${reads}/*.fastq > ${sample_id}.fastq
         fi
         """
 }
 
 process porechop {
-    tag "Adaptor trimming on ${sample_id}"
+    tag "Adaptor trimming on ${reads.baseName}"
     label "process_high"
 
     input:
-        tuple val(sample_id), path(reads)
+        path(reads)
     output:
-        tuple val(sample_id), file("${sample_id}_trimmed.fastq")
+        file("${reads.baseName}_trimmed.fastq")
     shell:
         """
-        porechop -t ${task.cpus} -i ${reads} -o ${sample_id}_trimmed.fastq
+        porechop -t ${task.cpus} -i ${reads} -o ${reads.baseName}_trimmed.fastq
         """
 }

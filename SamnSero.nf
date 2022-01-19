@@ -32,9 +32,9 @@ if( !params.input ) { error pipeline_name+": Missing --input parameter" }
 log.info """\
          S A M N S E R O   P I P E L I N E    
          ==================================
-         input        : ${params.input}
-         outdir       : ${params.outdir}
-         trimming     : ${params.notrim}
+         input               : ${params.input}
+         outdir              : ${params.outdir}
+         disable trimming    : ${params.notrim}
          """
          .stripIndent()
 

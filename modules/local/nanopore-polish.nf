@@ -3,17 +3,18 @@ nextflow.enable.dsl=2
 
 // post-assembly polishing for Nanopore workflows
 process medaka {
-    tag "Assembly polishing for ${sample_id}"
+    tag "Assembly polishing for ${reads.baseName}"
     label "process_med"
-    publishDir "$params.outdir/${sample_id}"
+    publishDir "$params.outdir", mode: "copy"
 
     input:
-        tuple val(sample_id), path(reads)
-        tuple val(sample_id), path(assembly)
+        path(reads)
+        path(assembly)
     output:
-        tuple val(sample_id), file("assembly/consensus.fa")
+        file("assembly/${reads.baseName}.fasta")
     shell:
         """
-        medaka_consensus -i ${reads} -d ${assembly} -o assembly -t {task.cpus}
+        medaka_consensus -i ${reads} -d ${assembly} -o assembly -t ${task.cpus}
+        mv assembly/consensus.fasta assembly/${reads.baseName}.fasta
         """
 }

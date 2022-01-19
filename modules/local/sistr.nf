@@ -3,31 +3,31 @@ nextflow.enable.dsl=2
 
 // in-silico serotyping using SISTR
 process sistr {
-    tag "SISTR Serotyping for ${sample_id}"
+    tag "SISTR Serotyping for ${assembly.baseName}"
     label "process_low"
-    publishDir "$params.outdir"+"/sistr_res"
+    publishDir "$params.outdir"+"/sistr_res", mode: "copy"
 
     input:
-        tuple val(sample_id), path(assembly)
+        path(assembly)
     output:
-        tuple val(sample_id), file("${sample}.csv")
+        file("${assembly.baseName}.csv")
     shell:
         """
-        sistr -i ${assembly} ${sample_id} -o ${sample}.csv -t ${task.cpus} -f csv --qc
+        sistr -i ${assembly} ${assembly.baseName} -o ${assembly.baseName}.csv -t ${task.cpus} -f csv --qc
         """   
 }
 
 process aggregate_sistr {
     tag "Aggregating SISTR results"
     label "process_low"
-    publishDir "$params.outdir"
+    publishDir "$params.outdir", mode: "copy"
 
     input:
-        path("*")
+        path(sistr_res)
     output:
-        "sistr_res_aggregate.tsv"
+        file("sistr_res_aggregate.csv")
     shell:
         """
-        awk 'NR == 1 || FNR > 1' *.csv > sistr_res_aggregate.csv
+        awk 'NR == 1 || FNR > 1' ${sistr_res.join(" ")} > sistr_res_aggregate.csv
         """
 }
