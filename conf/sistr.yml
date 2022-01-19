@@ -1,0 +1,6 @@
+name: sistr-1.1.1
+channels:
+  - conda-forge
+dependencies:
+  - sistr_cmd=1.1.1
+  - python=3.7

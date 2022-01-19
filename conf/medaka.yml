@@ -1,0 +1,5 @@
+name: medaka-1.5.0
+channels:
+  - conda-forge
+dependencies:
+  - medaka=1.5.0
