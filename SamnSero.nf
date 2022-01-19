@@ -14,7 +14,7 @@ def helpMessage() {
          --outdir                      Output directory path
 
         Optional arguments:
-        --threads                      Number of CPUs to use [6]
+        --notrim                       Skip adaptor trimming by Porechop
         --help                         Print pipeline usage statement
         """.stripIndent()
 }
