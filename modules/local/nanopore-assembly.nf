@@ -4,7 +4,7 @@ nextflow.enable.dsl=2
 // assembly methods for Nanopore workflows
 process flye {
     tag "Flye assembly on ${reads.baseName}"
-    label "process_med"
+    label "process_high"
 
     input:
         path(reads)
