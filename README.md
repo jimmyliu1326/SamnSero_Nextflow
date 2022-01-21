@@ -4,7 +4,7 @@
 ```bash
 # Install Pre-requisites
  - Nextflow
- - Containerization of choice (Conda, Docker, Singularity) 
+ - Package distributor of choice (Conda, Docker, Singularity) 
 
 # Clone repository
 git clone https://github.com/jimmyliu1326/SamnSero_Nextflow.git
