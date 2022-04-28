@@ -1,6 +1,3 @@
-#!/usr/bin/env nextflow
-nextflow.enable.dsl=2
-
 // basic processes for Nanopore workflows
 process combine {
     tag "Combining Fastq files for ${sample_id}"

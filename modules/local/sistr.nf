@@ -1,11 +1,7 @@
-#!/usr/bin/env nextflow
-nextflow.enable.dsl=2
-
 // in-silico serotyping using SISTR
 process sistr {
     tag "SISTR Serotyping for ${assembly.baseName}"
     label "process_low"
-    publishDir "$params.outdir"+"/sistr_res", mode: "copy"
 
     input:
         path(assembly)
@@ -18,7 +14,7 @@ process sistr {
 }
 
 process aggregate_sistr {
-    tag "Aggregating SISTR results"
+    tag "Aggregating QUAST results"
     label "process_low"
     publishDir "$params.outdir", mode: "copy"
 
@@ -28,6 +24,7 @@ process aggregate_sistr {
         file("sistr_res_aggregate.csv")
     shell:
         """
-        awk 'NR == 1 || FNR > 1' ${sistr_res.join(" ")} > sistr_res_aggregate.csv
+        awk 'NR == 1 || FNR > 1' *.csv > sistr_res_aggregate.csv
+        sed -i 's/,genome,/,id,/g' sistr_res_aggregate.csv
         """
 }

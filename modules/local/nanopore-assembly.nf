@@ -1,6 +1,3 @@
-#!/usr/bin/env nextflow
-nextflow.enable.dsl=2
-
 // assembly methods for Nanopore workflows
 process flye {
     tag "Flye assembly on ${reads.baseName}"

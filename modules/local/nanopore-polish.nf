@@ -1,6 +1,3 @@
-#!/usr/bin/env nextflow
-nextflow.enable.dsl=2
-
 // post-assembly polishing for Nanopore workflows
 process medaka {
     tag "Assembly polishing for ${reads.baseName}"
