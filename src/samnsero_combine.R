@@ -1,6 +1,7 @@
 # load pkgs
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(purrr))
+suppressPackageStartupMessages(library(stringr))
 suppressPackageStartupMessages(library(data.table))
 
 # parse args
