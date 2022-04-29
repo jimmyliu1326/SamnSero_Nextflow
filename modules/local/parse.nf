@@ -10,6 +10,6 @@ process combine_res {
         file("analysis_results.csv")
     shell:
         """
-        cat * > analysis_results.csv
+        Rscript /src/samnsero_combine.R * > analysis_results.csv
         """   
 }
