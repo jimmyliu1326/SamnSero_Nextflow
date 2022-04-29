@@ -2,7 +2,7 @@ jobs:
   build:
     machine:
         java:
-          version: oraclejdk8
+          version: oraclejdk11
         services:
           - docker
     steps:
@@ -10,7 +10,8 @@ jobs:
       - run:
           name: Setup environment
           command: |
-            curl -fsSL get.nextflow.io | bash
+            curl -s https://get.nextflow.io | bash
+            ls /home/circleci/project
             echo "export PATH=/home/circleci/project:\$PATH" >> ~/.bashrc
             source ~/.bashrc
             nextflow pull -hub github jimmyliu1326/SamnSero_Nextflow
