@@ -1,0 +1,13 @@
+machine:
+    java:
+        version: oraclejdk8
+    services:
+        - docker
+
+dependencies:
+    override:
+
+test:
+    override:
+        - curl -fsSL get.nextflow.io | bash
+        - nextflow pull -hub github jimmyliu1326/SamnSero_Nextflow
