@@ -1,8 +1,7 @@
 // genetic risk factor prediction
 process checkm {
     tag "Checking genome completness and contamination"
-    label "process_high"
-    publishDir "$params.outdir", mode: "copy"
+    label "process_med"
 
     input:
         file(assemblies)

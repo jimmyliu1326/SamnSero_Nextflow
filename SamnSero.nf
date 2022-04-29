@@ -10,12 +10,15 @@ def helpMessage() {
         Usage: nextflow run SamnSero.nf --input samples.csv --outdir /path/to/output
 
         Required arguments:
-         --input                       Path to a .csv containing two columns describing Sample ID and path to raw reads directory
-         --outdir                      Output directory path
+         --input PATH                  Path to a .csv containing two columns describing Sample ID and path to raw reads directory
+         --outdir PATH                 Output directory path
 
         Optional arguments:
-        --annot                        Annotate resulting genomes
-        --qc                           Perform quality check of resulting genomes
+        --annot                        Annotate genome assemblies using Abricate
+        --custom_db PATH               Path to a headerless .csv that lists custom databases (.FASTA) to search against for 
+                                       genome annotation instead of default Abricate databases (card, vfdb, plasmidfinder).
+                                       The .csv should contain two columns describing database name and path to FASTA.
+        --qc                           Perform quality check on genome assemblies
         --notrim                       Skip adaptor trimming by Porechop
         --help                         Print pipeline usage statement
         """.stripIndent()
@@ -47,6 +50,8 @@ log.info """\
 // import modules
 include { porechop; combine } from './modules/local/nanopore-base.nf'
 include { combine_res } from './modules/local/parse.nf'
+include { qc_report; annot_report } from './modules/local/report.nf'
+// import workflows
 include { ASSEMBLY } from './workflow/genome_assembly.nf'
 include { SEROTYPING } from './workflow/serotyping.nf'
 include { ANNOT } from './workflow/genome_annotation.nf'
@@ -69,11 +74,15 @@ workflow {
     
     SEROTYPING(ASSEMBLY.out)
 
-    if ( params.annot ) { ANNOT(ASSEMBLY.out) }
+    if ( params.annot ) { 
+        ANNOT(ASSEMBLY.out)
+        annot_report(SEROTYPING.out, ANNOT.out.collect())
+    }
 
     if ( params.qc ) { 
         QC(ASSEMBLY.out) 
         results = QC.out.checkm_res.concat(QC.out.quast_res, SEROTYPING.out).collect()
+        qc_report(SEROTYPING.out, QC.out.checkm_res, QC.out.quast_res)
     } else {
         results = SEROTYPING.out
     }

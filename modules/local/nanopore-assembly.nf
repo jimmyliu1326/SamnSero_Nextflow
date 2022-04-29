@@ -1,7 +1,7 @@
 // assembly methods for Nanopore workflows
 process flye {
     tag "Flye assembly on ${reads.baseName}"
-    label "process_high"
+    label "process_med"
 
     input:
         path(reads)
