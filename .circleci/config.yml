@@ -11,11 +11,8 @@ jobs:
           name: Setup environment
           command: |
             curl -s https://get.nextflow.io | bash
-            ls /home/circleci/project
-            echo "export PATH=/home/circleci/project:\$PATH" >> ~/.bashrc
-            source ~/.bashrc
-            nextflow pull -hub github jimmyliu1326/SamnSero_Nextflow
+            ./nextflow pull -hub github jimmyliu1326/SamnSero_Nextflow
       - run:
           name: Run Tests
           command: |
-            nextflow run jimmyliu1326/SamnSero_Nextflow --help
+            ./nextflow run jimmyliu1326/SamnSero_Nextflow --help
