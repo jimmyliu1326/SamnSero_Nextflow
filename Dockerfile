@@ -30,12 +30,4 @@ ADD src/abricate_plot.R  \
     src/samnsero_load.R \
     src/qc_report.Rmd \
     src/samnsero_combine.R \
-    /
-
-ADD src/make_annot_report.sh \
-    src/make_qc_report.sh \
-    /usr/bin/
-
-RUN chmod +x /usr/bin/*.sh
-
-WORKDIR /data
+    /src/

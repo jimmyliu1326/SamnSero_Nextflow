@@ -52,7 +52,7 @@ annot_types <- map2_dfr(annot_name, aggregate_res, function(x, y) {
 })
 ```
 
-```{r}
+```{r check-duplicates}
 dups <- annot_types %>% 
 	group_by(element) %>% 
 	tally() %>% 
