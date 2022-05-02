@@ -27,6 +27,16 @@ annot_name <- case_when(annot_name == "card" ~ "AMR Gene",
 												T ~ annot_name)
 ```
 
+```{r check-file}
+# check if abricate result is empty (containing only header)
+valid <- map_lgl(annot_path, function(x) {
+	file <- readLines(file.path(annot_dir, x))
+	if (length(file) == 1) { return(F) } else { return(T) }
+})
+annot_path <- annot_path[valid]
+annot_name <- annot_name[valid]
+```
+
 ```{r load-data}
 # read sistr output
 sistr_res <- load_sistr(sistr_path)
@@ -49,7 +59,9 @@ annot_types <- map2_dfr(annot_name, aggregate_res, function(x, y) {
 		mutate(type = x) %>% 
 		select(element, type) %>% 
 		distinct()
-})
+}) %>%
+	mutate(type = factor(type,
+						levels = annot_name))
 ```
 
 ```{r check-duplicates}
@@ -83,7 +95,7 @@ aggregate_res %>%
 	left_join(sistr_res, by = "id") %>% 
 	left_join(annot_types, by = "element") %>% 
 	filter(identity != ".") %>% 
-	group_by(id, serovar, type) %>% 
+	group_by(id, serovar, type, .drop = F) %>% 
 	tally() %>% 
 	ungroup() %>% 
 	pivot_wider(names_from = "type",
@@ -147,10 +159,15 @@ tidy_res <- annot_res %>%
 ## Genome Annotation Presence/Absence Matrix
 *Note: Only genetic elements with variable presence are shown.*
 
-```{r plot-heatmap, fig.width=10, fig.height=12}
+```{r plot-heatmap, fig.width=12, fig.height=12}
 cell_w <- ncol(tidy_res)*0.12
 cell_h <- nrow(tidy_res)*0.8
-plot_abricate(tidy_res, cell_w, cell_h, sistr_res)
+if (nrow(tidy_res != 0)) {
+	plot_abricate(tidy_res, cell_w, cell_h, sistr_res)
+} else {
+	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+}
+
 ```
 
 
