@@ -1,0 +1,19 @@
+jobs:
+  build:
+    machine:
+        java:
+          version: oraclejdk11
+        services:
+          - docker
+    steps:
+      - checkout
+      - run:
+          name: Setup environment
+          command: |
+            curl -s https://get.nextflow.io | bash
+            rm -rf ~/.gitconfig
+            ./nextflow pull -hub github jimmyliu1326/SamnSero_Nextflow
+      - run:
+          name: Run Tests
+          command: |
+            ./nextflow run jimmyliu1326/SamnSero_Nextflow --help

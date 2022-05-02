@@ -1,5 +1,6 @@
 // import modules
 include { abricate; abricate_summary; abricate_custom; makeblastdb } from '../modules/local/abricate.nf'
+include { annot_report } from '../modules/local/report.nf'
 
 workflow ANNOT {
     take: assembly
@@ -15,4 +16,5 @@ workflow ANNOT {
             abricate_custom(assembly.combine(db)) 
             abricate_summary(abricate_custom.out.groupTuple())
         }
+    emit: abricate_summary.out   
 }

@@ -17,7 +17,6 @@ process quast {
 process aggregate_quast {
     tag "Aggregating QUAST results"
     label "process_low"
-    publishDir "$params.outdir", mode: "copy"
 
     input:
         path(quast_res)

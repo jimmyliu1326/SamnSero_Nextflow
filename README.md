@@ -1,26 +1,35 @@
+[![Circleci](https://circleci.com/gh/jimmyliu1326/SamnSero_Nextflow.svg?style=svg)](https://app.circleci.com/pipelines/github/jimmyliu1326/SamnSero_Nextflow)
+
 # SamnSero (Nextflow)
+The nextflow pipeline processes raw Nanopore sequencing reads for *Salmonella enterica*. Different modules can be optionally invoked to perform genome annotation and quality control checks.
 
 ## Installation
 ```bash
 # Install Pre-requisites
  - Nextflow
- - Package distributor of choice (Conda, Docker, Singularity) 
+ - Docker
 
-# Clone repository
-git clone https://github.com/jimmyliu1326/SamnSero_Nextflow.git
+# Install SamnSero Nextflow pipeline
+nextflow pull -hub github jimmyliu1326/SamnSero_Nextflow
 ```
+
+## Pipeline Usage
+```
+Required arguments:
+    --input PATH                  Path to a .csv containing two columns describing Sample ID and path to raw reads directory
+    --outdir PATH                 Output directory path
+
+Optional arguments:
+    --annot                        Annotate genome assemblies using Abricate
+    --custom_db PATH               Path to a headerless .csv that lists custom databases (.FASTA) to search against for 
+                                   genome annotation instead of default Abricate databases (card, vfdb, plasmidfinder).
+                                   The .csv should contain two columns describing database name and path to FASTA.
+    --qc                           Perform quality check on genome assemblies
+    --notrim                       Skip adaptor trimming by Porechop
+    --help                         Print pipeline usage statement
+```
+
 ## Example Usage
-1. Execute workflow using Conda
 ```bash
-nextflow run /path/to/SamnSero.nf --input samples.csv --outdir results -profile conda
-```
-
-2. Execute workflow using Docker
-```bash
-nextflow run /path/to/SamnSero.nf --input samples.csv --outdir results -profile docker
-```
-
-3. Execute workflow using Slurm
-```bash
-nextflow run /path/to/SamnSero.nf --input samples.csv --outdir results -profile slurm
+nextflow run /path/to/SamnSero.nf --input samples.csv --outdir results
 ```
