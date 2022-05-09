@@ -1,12 +1,19 @@
 // import modules
 include { flye; dragonflye } from '../modules/local/nanopore-assembly.nf'
-include { medaka } from '../modules/local/nanopore-polish.nf'
+include { medaka; medaka_gpu } from '../modules/local/nanopore-polish.nf'
 
 workflow ASSEMBLY {
     take: reads
     main:
         dragonflye(reads)
-        medaka(reads, dragonflye.out)
+        if (params.gpu) {
+            medaka_gpu(reads, dragonflye.out)
+            assembly_out = medaka_gpu.out
+        } else {
+            medaka(reads, dragonflye.out)
+            assembly_out = medaka.out
+        }
+        
     emit:
-        medaka.out
+        assembly_out
 }

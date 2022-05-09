@@ -7,14 +7,12 @@ pipeline_name = "SamnSero"
 // print help message
 def helpMessage() {
     log.info """
-        Usage: nextflow run SamnSero.nf --input samples.csv --outdir /path/to/output -profile cpu
+        Usage: nextflow run jimmyliu1326/SamnSero_Nextflow --input samples.csv --outdir /path/to/output
 
         Required arguments:
         --input PATH                    Path to a .csv containing two columns describing Sample ID and path to raw
                                         reads directory
         --outdir PATH                   Output directory path
-        -profile cpu|gpu                Accelerate specific processes that utilize GPU computing. Must have NVIDIA Container
-                                        Toolkit installed to enable GPU computing, otherwise use CPU.
 
         Optional arguments:
         --annot                         Annotate genome assemblies using Abricate
@@ -24,6 +22,8 @@ def helpMessage() {
         --qc                            Perform quality check on genome assemblies
         --nanohq                        Input reads were basecalled using Guppy v5 SUP models
         --notrim                        Skip adaptor trimming by Porechop
+        --gpu                           Accelerate specific processes that utilize GPU computing. Must have NVIDIA Container
+                                        Toolkit installed to enable GPU computing, otherwise use CPU.
         --help                          Print pipeline usage statement
         """.stripIndent()
 }
@@ -49,6 +49,7 @@ log.info """\
          quality check       : ${params.qc}
          annotation          : ${params.annot}
          custom annot db     : ${params.custom_db}
+         gpu                 : ${params.gpu}
          """
          .stripIndent()
 

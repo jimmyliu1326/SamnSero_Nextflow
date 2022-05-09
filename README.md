@@ -18,8 +18,6 @@ nextflow pull -hub github jimmyliu1326/SamnSero_Nextflow
 Required arguments:
     --input PATH                   Path to a .csv containing two columns describing Sample ID and path to raw reads directory
     --outdir PATH                  Output directory path
-    -profile cpu|gpu               Accelerate specific processes that utilize GPU computing. Must have NVIDIA Container Toolkit installed
-                                   to enable GPU computing, otherwise use CPU.
 
 Optional arguments:
     --annot                        Annotate genome assemblies using Abricate
@@ -29,11 +27,13 @@ Optional arguments:
     --nanohq                       Input reads were basecalled using Guppy v5 SUP models
     --qc                           Perform quality check on genome assemblies
     --notrim                       Skip adaptor trimming by Porechop
+    --gpu                          Accelerate specific processes that utilize GPU computing. Must have NVIDIA Container
+                                   Toolkit installed to enable GPU computing, otherwise use CPU.
     --help                         Print pipeline usage statement
 ```
 
 ## Example Usage
 ### Run
 ```bash
-nextflow run /path/to/SamnSero.nf --input samples.csv --outdir results -profile cpu
+nextflow run jimmyliu1326/SamnSero_Nextflow --input samples.csv --outdir results
 ```
