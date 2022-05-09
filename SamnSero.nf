@@ -10,21 +10,21 @@ def helpMessage() {
         Usage: nextflow run SamnSero.nf --input samples.csv --outdir /path/to/output -profile cpu
 
         Required arguments:
-         --input PATH                  Path to a .csv containing two columns describing Sample ID and path to raw
-                                       reads directory
-         --outdir PATH                 Output directory path
-         -profile cpu|gpu              Accelerate specific processes that utilize GPU computing. Must have NVIDIA Container
-                                       Toolkit installed to enable GPU computing, otherwise use CPU.
+        --input PATH                    Path to a .csv containing two columns describing Sample ID and path to raw
+                                        reads directory
+        --outdir PATH                   Output directory path
+        -profile cpu|gpu                Accelerate specific processes that utilize GPU computing. Must have NVIDIA Container
+                                        Toolkit installed to enable GPU computing, otherwise use CPU.
 
         Optional arguments:
-        --annot                        Annotate genome assemblies using Abricate
-        --custom_db PATH               Path to a headerless .csv that lists custom databases (.FASTA) to search against for 
-                                       genome annotation instead of default Abricate databases (card, vfdb, plasmidfinder).
-                                       The .csv should contain two columns describing database name and path to FASTA.
-        --qc                           Perform quality check on genome assemblies
-        --nanohq                       Input reads were basecalled using Guppy v5 SUP models
-        --notrim                       Skip adaptor trimming by Porechop
-        --help                         Print pipeline usage statement
+        --annot                         Annotate genome assemblies using Abricate
+        --custom_db PATH                Path to a headerless .csv that lists custom databases (.FASTA) to search against for
+                                        genome annotation instead of default Abricate databases (card, vfdb, plasmidfinder).
+                                        The .csv should contain two columns describing database name and path to FASTA.
+        --qc                            Perform quality check on genome assemblies
+        --nanohq                        Input reads were basecalled using Guppy v5 SUP models
+        --notrim                        Skip adaptor trimming by Porechop
+        --help                          Print pipeline usage statement
         """.stripIndent()
 }
 
