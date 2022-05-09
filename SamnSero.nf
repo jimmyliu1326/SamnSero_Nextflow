@@ -19,6 +19,7 @@ def helpMessage() {
                                        genome annotation instead of default Abricate databases (card, vfdb, plasmidfinder).
                                        The .csv should contain two columns describing database name and path to FASTA.
         --qc                           Perform quality check on genome assemblies
+        --nanohq                       Input reads were basecalled using Guppy v5 SUP models
         --notrim                       Skip adaptor trimming by Porechop
         --help                         Print pipeline usage statement
         """.stripIndent()
@@ -41,6 +42,7 @@ log.info """\
          input               : ${params.input}
          outdir              : ${params.outdir}
          disable trimming    : ${params.notrim}
+         nanohq              : ${params.nanohq}
          quality check       : ${params.qc}
          annotation          : ${params.annot}
          custom annot db     : ${params.custom_db}

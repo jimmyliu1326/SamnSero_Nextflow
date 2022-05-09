@@ -1,7 +1,7 @@
 // genetic risk factor prediction
 process checkm {
     tag "Checking genome completness and contamination"
-    label "process_med"
+    label "process_medium"
 
     input:
         file(assemblies)

@@ -1,7 +1,7 @@
 // post-assembly polishing for Nanopore workflows
 process medaka {
     tag "Assembly polishing for ${reads.baseName}"
-    label "process_med"
+    label "process_high"
     publishDir "$params.outdir"+"/assembly", mode: "copy"
 
     input:
