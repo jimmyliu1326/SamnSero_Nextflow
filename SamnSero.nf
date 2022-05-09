@@ -7,12 +7,14 @@ pipeline_name = "SamnSero"
 // print help message
 def helpMessage() {
     log.info """
-        Usage: nextflow run SamnSero.nf --input samples.csv --outdir /path/to/output
+        Usage: nextflow run SamnSero.nf --input samples.csv --outdir /path/to/output -profile cpu
 
         Required arguments:
-         --input PATH                  Path to a .csv containing two columns describing Sample ID and path to raw reads directory
+         --input PATH                  Path to a .csv containing two columns describing Sample ID and path to raw
+                                       reads directory
          --outdir PATH                 Output directory path
-         -profile cpu|gpu              Accelerate specific processes that utilize GPU computing. Must have NVIDIA Container Toolkit installed
+         -profile cpu|gpu              Accelerate specific processes that utilize GPU computing. Must have NVIDIA Container
+                                       Toolkit installed to enable GPU computing, otherwise use CPU.
 
         Optional arguments:
         --annot                        Annotate genome assemblies using Abricate
