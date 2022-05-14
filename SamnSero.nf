@@ -3,6 +3,7 @@ nextflow.enable.dsl=2
 
 // define global var
 pipeline_name = "SamnSero"
+version = "1.0"
 
 // print help message
 def helpMessage() {
@@ -10,22 +11,30 @@ def helpMessage() {
         Usage: nextflow run jimmyliu1326/SamnSero_Nextflow --input samples.csv --outdir /path/to/output
 
         Required arguments:
-        --input PATH                    Path to a .csv containing two columns describing Sample ID and path to raw
-                                        reads directory
+        --input PATH                    Path to a .csv containing two columns describing Sample ID and path
+                                        to raw reads directory
         --outdir PATH                   Output directory path
 
         Optional arguments:
         --annot                         Annotate genome assemblies using Abricate
-        --custom_db PATH                Path to a headerless .csv that lists custom databases (.FASTA) to search against for
-                                        genome annotation instead of default Abricate databases (card, vfdb, plasmidfinder).
-                                        The .csv should contain two columns describing database name and path to FASTA.
-        --qc                            Perform quality check on genome assemblies
+        --custom_db PATH                Path to a headerless .csv that lists custom databases (.FASTA) to
+                                        search against for genome annotation instead of default Abricate
+                                        databases (card, vfdb, plasmidfinder). The .csv should contain two
+                                        columns describing database name and path to FASTA.
+        --qc                            Perform quality check on genome assemblies.
         --nanohq                        Input reads were basecalled using Guppy v5 SUP models
         --notrim                        Skip adaptor trimming by Porechop
-        --gpu                           Accelerate specific processes that utilize GPU computing. Must have NVIDIA Container
-                                        Toolkit installed to enable GPU computing, otherwise use CPU.
+        --gpu                           Accelerate specific processes that utilize GPU computing. Must have
+                                        NVIDIA Container Toolkit installed to enable GPU computing.
         --help                          Print pipeline usage statement
+        --version                       Print workflow version
         """.stripIndent()
+}
+
+def versionPrint() {
+    log.info """
+        $pipeline_name v$version
+    """.stripIndent()
 }
 
 // check params
@@ -34,14 +43,19 @@ if (params.help) {
     exit 0
 }
 
+if (params.version) {
+    versionPrint()
+    exit 0
+}
+
 if( !params.outdir ) { error pipeline_name+": Missing --outdir parameter" }
 if( !params.input ) { error pipeline_name+": Missing --input parameter" }
 
 // print log info
 log.info """\
-         ==================================
-         S A M N S E R O   P I P E L I N E    
-         ==================================
+         ========================================
+         S A M N S E R O   P I P E L I N E  v${version}
+         ========================================
          input               : ${params.input}
          outdir              : ${params.outdir}
          disable trimming    : ${params.notrim}
