@@ -6,10 +6,10 @@ process sistr {
     input:
         path(assembly)
     output:
-        file("${assembly.baseName}.csv")
+        file("${assembly.simpleName}.csv")
     shell:
         """
-        sistr -i ${assembly} ${assembly.baseName} -o ${assembly.baseName}.csv -t ${task.cpus} -f csv --qc
+        sistr -i ${assembly} ${assembly.simpleName} -o ${assembly.simpleName}.csv -t ${task.cpus} -f csv --qc
         """   
 }
 

@@ -19,15 +19,15 @@ process combine {
 }
 
 process porechop {
-    tag "Adaptor trimming on ${reads.baseName}"
+    tag "Adaptor trimming on ${reads.simpleName}"
     label "process_high"
 
     input:
         path(reads)
     output:
-        file("${reads.baseName}_trimmed.fastq")
+        file("${reads.simpleName}_trimmed.fastq")
     shell:
         """
-        porechop -t ${task.cpus} -i ${reads} -o ${reads.baseName}_trimmed.fastq
+        porechop -t ${task.cpus} -i ${reads} -o ${reads.simpleName}_trimmed.fastq
         """
 }
