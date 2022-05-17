@@ -22,6 +22,7 @@ def helpMessage() {
                                         databases (card, vfdb, plasmidfinder). The .csv should contain two
                                         columns describing database name and path to FASTA.
         --qc                            Perform quality check on genome assemblies.
+        --centrifuge                   Path to DIRECTORY containing Centrifuge database index (required if using --qc)
         --nanohq                        Input reads were basecalled using Guppy v5 SUP models
         --notrim                        Skip adaptor trimming by Porechop
         --gpu                           Accelerate specific processes that utilize GPU computing. Must have
@@ -50,6 +51,10 @@ if (params.version) {
 
 if( !params.outdir ) { error pipeline_name+": Missing --outdir parameter" }
 if( !params.input ) { error pipeline_name+": Missing --input parameter" }
+if( params.qc ) { 
+    db_dir = new File(params.centrifuge)
+    assert db_dir.exists() : pipeline_name+": Directory path to Centrifuge database cannot be found."
+}
 
 // print log info
 log.info """\
@@ -75,7 +80,7 @@ include { qc_report; annot_report } from './modules/local/report.nf'
 include { ASSEMBLY } from './workflow/genome_assembly.nf'
 include { SEROTYPING } from './workflow/serotyping.nf'
 include { ANNOT } from './workflow/genome_annotation.nf'
-include { QC } from './workflow/genome_qc.nf'
+include { ASSEMBLY_QC; READ_QC } from './workflow/sequence_qc.nf'
 // define main workflow
 workflow {
     // read data
@@ -85,26 +90,56 @@ workflow {
     
     // analysis start
     combine(data)
+
+    // trimming and assembly
     if ( params.trim ) { 
+        
         porechop(data)
+        
         ASSEMBLY(porechop.out)
+
     } else {
+        
         ASSEMBLY(combine.out)
+
     }    
-    
+    // in-silico serotyping
     SEROTYPING(ASSEMBLY.out)
 
+    // genome annotation
     if ( params.annot ) { 
+        
         ANNOT(ASSEMBLY.out)
+        
         annot_report(SEROTYPING.out, ANNOT.out.collect())
+
     }
 
+    // sequence QC
     if ( params.qc ) { 
-        QC(ASSEMBLY.out) 
-        results = QC.out.checkm_res.concat(QC.out.quast_res, SEROTYPING.out).collect()
-        qc_report(SEROTYPING.out, QC.out.checkm_res, QC.out.quast_res)
+        
+        if ( params.trim ) {
+            
+            READ_QC(porechop.out)
+
+            ASSEMBLY_QC(ASSEMBLY.out, porechop.out)
+        
+        } else {
+            
+            READ_QC(combine.out)
+
+            ASSEMBLY_QC(ASSEMBLY.out, combine.out)
+
+        }
+
+        results = ASSEMBLY_QC.out.checkm_res.concat(ASSEMBLY_QC.out.quast_res, SEROTYPING.out).collect()
+
+        qc_report(SEROTYPING.out, ASSEMBLY_QC.out.checkm_res, ASSEMBLY_QC.out.quast_res)
+
     } else {
+        
         results = SEROTYPING.out
+
     }
 
     // combine results into a master file

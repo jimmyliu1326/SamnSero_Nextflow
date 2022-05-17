@@ -7,9 +7,9 @@ process flye {
     label "process_medium"
 
     input:
-        path(reads)
+        tuple val(sample_id), path(reads)
     output:
-        file("flye/${reads.simpleName}.fasta")
+        tuple val(sample_id), file("flye/${reads.simpleName}.fasta")
     shell:
         """
         flye --nano-raw ${reads} -t ${task.cpus} -i 2 -g 4.8m --out-dir flye
@@ -22,9 +22,9 @@ process dragonflye {
     label "process_medium"
 
     input:
-        path(reads)
+        tuple val(sample_id), path(reads)
     output:
-        file("dragonflye/${reads.simpleName}.fasta")
+        tuple val(sample_id), file("dragonflye/${reads.simpleName}.fasta")
     shell:
         """
         dragonflye --reads ${reads} --cpus ${task.cpus} --gsize 4.8m --outdir dragonflye ${nanohq}

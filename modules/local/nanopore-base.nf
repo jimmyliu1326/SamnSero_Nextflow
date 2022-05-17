@@ -6,7 +6,7 @@ process combine {
     input:
         tuple val(sample_id), path(reads)
     output:
-        file("${sample_id}.{fastq,fastq.gz}")
+        tuple val(sample_id), file("${sample_id}.{fastq,fastq.gz}")
     shell:
         """
         sample=\$(ls ${reads} | head -n 1)
@@ -25,7 +25,7 @@ process porechop {
     input:
         path(reads)
     output:
-        file("${reads.simpleName}_trimmed.fastq")
+        tuple val(sample_id), file("${reads.simpleName}_trimmed.fastq")
     shell:
         """
         porechop -t ${task.cpus} -i ${reads} -o ${reads.simpleName}_trimmed.fastq

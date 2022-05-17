@@ -1,0 +1,28 @@
+// import modules
+include { checkm } from '../modules/local/checkm.nf'
+include { quast; aggregate_quast } from '../modules/local/quast.nf'
+
+workflow ASSEMBLY_QC {
+    take: 
+        assembly
+        reads
+    main:
+        checkm(assembly.map{ it[1] }.collect())
+        quast(assembly.join(reads))
+        aggregate_quast(quast.out.map{ it[1] }.collect())
+    emit:
+        checkm_res = checkm.out
+        quast_res = aggregate_quast.out
+}
+
+// import modules
+include { centrifuge; krona } from '../modules/local/nanopore-taxonomy.nf'
+
+workflow READ_QC {
+    take: reads
+    main:
+        centrifuge(reads, params.centrifuge)
+        krona(centrifuge.out.krona.collect())
+    emit:
+        centrifuge_res = centrifuge.out.kreport
+}

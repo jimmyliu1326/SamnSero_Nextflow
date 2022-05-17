@@ -1,38 +1,37 @@
-// taxonomic classifiers for Nanopore workflows
+// taxonomic classifiers and viz tools for Nanopore workflows
 process centrifuge {
     tag "Classifying reads for ${reads.baseName}"
     label "process_medium"
-    //publishDir "$params.outdir"+"/taxon_class/", mode: "copy"
+    publishDir "$params.outdir"+"/taxon_class/", mode: "copy"
 
     input:
-        path(reads)
-        path(database)
+        tuple val(sample_id), path(reads)
+        path(database_dir)
     output:
-        out=file("${reads.simpleName}/*.out")
-        report=file("${reads.simpleName}/*.report")
-        krona=file("${reads.simpleName}/*.krona")
+        path("*.out", emit: out)
+        path("*.report", emit: report)
+        path("*.krona", emit: krona)
+        path("*.kreport", emit: kreport)
     shell:
         """
-        centrifuge -U ${reads} -S ${reads.simpleName}/centrifuge.out --report ${reads.simpleName}/centrifuge.report -k 1 -x ${database} -p ${task.cpus}
-        cat centrifuge.out | cut -f1,3 > ${reads.simpleName}/${reads.simpleName}.krona
+        db_path=\$(find -L ${database_dir} -name "*.1.cf" -not -name "._*"  | sed 's/.1.cf//')
+        centrifuge -U ${reads} -S ${reads.simpleName}.out --report ${reads.simpleName}.report -x \$db_path -p ${task.cpus} --mm
+        cat ${reads.simpleName}.out | cut -f1,3 > ${reads.simpleName}.krona
+        centrifuge-kreport -x \$db_path ${reads.simpleName}.out > ${reads.simpleName}.kreport 
         """
 }
 
 process krona {
     tag "Generating Krona viz"
-    label "process_medium"
-    //publishDir "$params.outdir"+"/taxon_class/", mode: "copy"
+    label "process_low"
+    publishDir "$params.outdir"+"/reports/", mode: "copy"
 
     input:
-        path(reads)
-        path(database)
+        path(krona_input)
     output:
-        out=file("${reads.simpleName}/*.out")
-        report=file("${reads.simpleName}/*.report")
-        krona=file("${reads.simpleName}/*.krona")
+        file("taxonomy_classification.html")
     shell:
         """
-        centrifuge -U ${reads} -S ${reads.simpleName}/centrifuge.out --report ${reads.simpleName}/centrifuge.report -k 1 -x ${database} -p ${task.cpus}
-        cat centrifuge.out | cut -f1,3 > ${reads.simpleName}/${reads.simpleName}.krona
+        ktImportTaxonomy * -o taxonomy_classification.html
         """
 }

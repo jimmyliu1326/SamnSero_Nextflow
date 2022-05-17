@@ -5,10 +5,9 @@ process medaka {
     publishDir "$params.outdir"+"/assembly", mode: "copy"
 
     input:
-        path(reads)
-        path(assembly)
+        tuple val(sample_id), path(assembly), path(reads)
     output:
-        file("${reads.simpleName}.fasta")
+        tuple val(sample_id), file("${reads.simpleName}.fasta")
     shell:
         """
         medaka_consensus -i ${reads} -d ${assembly} -o . -t ${task.cpus}
@@ -23,10 +22,9 @@ process medaka_gpu {
     publishDir "$params.outdir"+"/assembly", mode: "copy"
 
     input:
-        path(reads)
-        path(assembly)
+        tuple val(sample_id), path(assembly), path(reads)
     output:
-        file("${reads.simpleName}.fasta")
+        tuple val(sample_id), file("${reads.simpleName}.fasta")
     shell:
         """
         medaka_consensus -i ${reads} -d ${assembly} -o . -t ${task.cpus}
