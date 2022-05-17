@@ -50,7 +50,7 @@ process abricate_summary {
     publishDir "$params.outdir"+"/abricate", mode: "copy"
 
     input:
-        path(assembly)
+        tuple val(db), path(assembly)
     output:
         file("${db}_summary.tab")
     shell:
