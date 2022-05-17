@@ -9,7 +9,18 @@ process quast {
         tuple val(sample_id), file("${assembly.simpleName}.tsv")
     shell:
         """
-        quast.py --fast -o . -t ${task.cpus} --nanopore ${reads} ${assembly}
+        quast.py \
+            -o . \
+            -t ${task.cpus} \
+            --nanopore ${reads} \
+            --no-plots \
+            --no-html \
+            --no-icarus \
+            --no-snps \
+            --no-gc \
+            --no-sv \
+            ${assembly}
+        
         mv transposed_report.tsv ${assembly.simpleName}.tsv
         """   
 }
@@ -19,7 +30,7 @@ process aggregate_quast {
     label "process_low"
 
     input:
-        path(quast_res)
+        tuple val(sample_id), path(quast_res)
     output:
         file("quast_res_aggregate.tsv")
     shell:

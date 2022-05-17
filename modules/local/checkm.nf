@@ -4,7 +4,7 @@ process checkm {
     label "process_medium"
 
     input:
-        file(assemblies)
+        tuple val(sample_id), file(assemblies)
     output:
         file("checkm_summary.tsv")
     shell:

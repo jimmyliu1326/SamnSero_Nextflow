@@ -6,7 +6,7 @@ workflow SEROTYPING {
     take: assembly
     main:
         sistr(assembly)
-        aggregate_sistr(sistr.out.collect().map { it[1] })
+        aggregate_sistr(sistr.out.collect())
     emit:
         aggregate_sistr.out
 }

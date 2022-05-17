@@ -7,9 +7,9 @@ workflow ASSEMBLY_QC {
         assembly
         reads
     main:
-        checkm(assembly.map{ it[1] }.collect())
+        checkm(assembly.collect())
         quast(assembly.join(reads))
-        aggregate_quast(quast.out.map{ it[1] }.collect())
+        aggregate_quast(quast.out.collect())
     emit:
         checkm_res = checkm.out
         quast_res = aggregate_quast.out
@@ -21,7 +21,8 @@ include { centrifuge; krona } from '../modules/local/nanopore-taxonomy.nf'
 workflow READ_QC {
     take: reads
     main:
-        centrifuge(reads, params.centrifuge)
+        centrifuge_db=file(params.centrifuge, checkIfExists: true)
+        centrifuge(reads, centrifuge_db)
         krona(centrifuge.out.krona.collect())
     emit:
         centrifuge_res = centrifuge.out.kreport
