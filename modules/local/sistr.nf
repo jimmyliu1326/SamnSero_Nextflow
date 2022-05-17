@@ -18,7 +18,7 @@ process aggregate_sistr {
     label "process_low"
 
     input:
-        tuple val(sample_id), path(sistr_res)
+        path(sistr_res)
     output:
         file("sistr_res_aggregate.csv")
     shell:

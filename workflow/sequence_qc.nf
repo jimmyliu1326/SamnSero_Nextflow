@@ -7,9 +7,9 @@ workflow ASSEMBLY_QC {
         assembly
         reads
     main:
-        checkm(assembly.collect())
+        checkm(assembly.map { it[1] }.collect())
         quast(assembly.join(reads))
-        aggregate_quast(quast.out.collect())
+        aggregate_quast(quast.out.map { it[1] }.collect())
     emit:
         checkm_res = checkm.out
         quast_res = aggregate_quast.out

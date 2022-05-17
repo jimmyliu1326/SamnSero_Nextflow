@@ -30,7 +30,7 @@ process aggregate_quast {
     label "process_low"
 
     input:
-        tuple val(sample_id), path(quast_res)
+        path(quast_res)
     output:
         file("quast_res_aggregate.tsv")
     shell:
