@@ -24,4 +24,4 @@ combined_res <- combined_res %>%
 	select(id, serovar, qc_status, qc_messages, everything())
 
 # write out
-write.table(combined_res, row.names = F, quote = F, sep = ",")
+fwrite(combined_res, row.names = F, sep = ",")
