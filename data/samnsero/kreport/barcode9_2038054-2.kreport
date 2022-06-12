@@ -1,0 +1,107 @@
+  0.25	35	35	U	0	unclassified
+ 99.75	14201	33	-	1	root
+ 99.07	14103	0	-	131567	  cellular organisms
+ 99.06	14102	1	D	2	    Bacteria
+ 99.05	14101	1	P	1224	      Proteobacteria
+ 99.04	14100	1	C	1236	        Gammaproteobacteria
+ 99.01	14095	2	O	91347	          Enterobacterales
+ 98.92	14082	73	F	543	            Enterobacteriaceae
+ 97.86	13931	7	G	590	              Salmonella
+ 97.79	13921	13921	S	28901	                Salmonella enterica
+  0.02	3	3	S	54736	                Salmonella bongori
+  0.51	72	0	G	561	              Escherichia
+  0.50	71	71	S	562	                Escherichia coli
+  0.01	1	1	S	564	                Escherichia fergusonii
+  0.02	3	1	G	544	              Citrobacter
+  0.01	1	1	S	67825	                Citrobacter rodentium
+  0.01	1	0	-	1344959	                Citrobacter freundii complex
+  0.01	1	1	S	546	                  Citrobacter freundii
+  0.01	1	0	G	547	              Enterobacter
+  0.01	1	0	S	354276	                Enterobacter cloacae complex
+  0.01	1	1	S	158836	                  Enterobacter hormaechei
+  0.01	1	0	-	191675	              unclassified Enterobacteriaceae
+  0.01	1	0	-	36866	                unclassified Enterobacteriaceae (miscellaneous)
+  0.01	1	1	S	693444	                  Enterobacteriaceae bacterium strain FGI 57
+  0.01	1	0	G	1335483	              Shimwellia
+  0.01	1	1	S	563	                Shimwellia blattae
+  0.02	3	0	F	1903409	            Erwiniaceae
+  0.02	3	0	G	53335	              Pantoea
+  0.01	2	2	S	1484158	                Pantoea sp. PSNIH1
+  0.01	1	1	S	1235990	                Candidatus Pantoea carbekii
+  0.02	3	0	F	1903412	            Hafniaceae
+  0.02	3	0	G	635	              Edwardsiella
+  0.01	2	2	S	636	                Edwardsiella tarda
+  0.01	1	1	S	93378	                Edwardsiella hoshinae
+  0.02	3	0	F	1903414	            Morganellaceae
+  0.01	1	0	G	586	              Providencia
+  0.01	1	1	S	588	                Providencia stuartii
+  0.01	1	0	G	626	              Xenorhabdus
+  0.01	1	1	S	40577	                Xenorhabdus poinarii
+  0.01	1	0	G	637	              Arsenophonus
+  0.01	1	1	S	634113	                Arsenophonus symbiont of Lipoptena fortisetosa
+  0.01	2	0	F	1903411	            Yersiniaceae
+  0.01	2	0	G	629	              Yersinia
+  0.01	2	0	S	1649845	                Yersinia pseudotuberculosis complex
+  0.01	2	2	S	632	                  Yersinia pestis
+  0.01	2	0	O	135619	          Oceanospirillales
+  0.01	1	0	F	28256	            Halomonadaceae
+  0.01	1	0	-	114403	              Zymobacter group
+  0.01	1	0	G	114185	                Candidatus Carsonella
+  0.01	1	1	S	114186	                  Candidatus Carsonella ruddii
+  0.01	1	0	F	224372	            Alcanivoracaceae
+  0.01	1	0	G	261963	              Kangiella
+  0.01	1	1	S	1144748	                Kangiella sediminilitoris
+  0.01	1	0	-	118884	          unclassified Gammaproteobacteria
+  0.01	1	0	-	198346	            Candidatus Baumannia
+  0.01	1	1	S	186490	              Candidatus Baumannia cicadellinicola
+  0.01	1	0	O	135613	          Chromatiales
+  0.01	1	0	F	1046	            Chromatiaceae
+  0.01	1	0	G	1227	              Nitrosococcus
+  0.01	1	1	S	1229	                Nitrosococcus oceani
+  0.01	1	0	D	2759	    Eukaryota
+  0.01	1	0	-	33154	      Opisthokonta
+  0.01	1	0	K	33208	        Metazoa
+  0.01	1	0	-	6072	          Eumetazoa
+  0.01	1	0	-	33213	            Bilateria
+  0.01	1	0	-	33511	              Deuterostomia
+  0.01	1	0	P	7711	                Chordata
+  0.01	1	0	-	89593	                  Craniata
+  0.01	1	0	-	7742	                    Vertebrata
+  0.01	1	0	-	7776	                      Gnathostomata
+  0.01	1	0	-	117570	                        Teleostomi
+  0.01	1	0	-	117571	                          Euteleostomi
+  0.01	1	0	-	8287	                            Sarcopterygii
+  0.01	1	0	-	1338369	                              Dipnotetrapodomorpha
+  0.01	1	0	-	32523	                                Tetrapoda
+  0.01	1	0	-	32524	                                  Amniota
+  0.01	1	0	C	40674	                                    Mammalia
+  0.01	1	0	-	32525	                                      Theria
+  0.01	1	0	-	9347	                                        Eutheria
+  0.01	1	0	-	1437010	                                          Boreoeutheria
+  0.01	1	0	-	314146	                                            Euarchontoglires
+  0.01	1	0	O	9443	                                              Primates
+  0.01	1	0	-	376913	                                                Haplorrhini
+  0.01	1	0	-	314293	                                                  Simiiformes
+  0.01	1	0	-	9526	                                                    Catarrhini
+  0.01	1	0	-	314295	                                                      Hominoidea
+  0.01	1	0	F	9604	                                                        Hominidae
+  0.01	1	0	-	207598	                                                          Homininae
+  0.01	1	0	G	9605	                                                            Homo
+  0.01	1	1	S	9606	                                                              Homo sapiens
+  0.43	61	0	D	10239	  Viruses
+  0.43	61	0	-	35237	    dsDNA viruses, no RNA stage
+  0.43	61	0	O	28883	      Caudovirales
+  0.22	31	0	F	10662	        Myoviridae
+  0.22	31	0	-	196896	          unclassified Myoviridae
+  0.22	31	31	S	929814	            Salmonella phage RE-2010
+  0.20	29	9	F	10744	        Podoviridae
+  0.14	20	12	G	186794	          P22virus
+  0.05	7	7	S	10754	            Salmonella virus P22
+  0.01	1	0	-	329158	            unclassified P22likevirus
+  0.01	1	1	S	876449	              Enterobacteria phage UAB_Phi20
+  0.01	1	0	F	10699	        Siphoviridae
+  0.01	1	0	-	196894	          unclassified Siphoviridae
+  0.01	1	1	S	1147140	            Salmonella phage SPN3UB
+  0.03	4	0	-	28384	  other sequences
+  0.03	4	0	-	81077	    artificial sequences
+  0.03	4	4	S	32630	      synthetic construct

@@ -1,0 +1,97 @@
+  0.16	16	16	U	0	unclassified
+ 99.84	10148	14	-	1	root
+ 99.57	10120	0	-	131567	  cellular organisms
+ 99.55	10118	1	D	2	    Bacteria
+ 99.53	10116	0	P	1224	      Proteobacteria
+ 99.53	10116	1	C	1236	        Gammaproteobacteria
+ 99.46	10109	1	O	91347	          Enterobacterales
+ 99.42	10105	10	F	543	            Enterobacteriaceae
+ 99.10	10073	6	G	590	              Salmonella
+ 98.98	10060	10060	S	28901	                Salmonella enterica
+  0.07	7	7	S	54736	                Salmonella bongori
+  0.12	12	1	G	561	              Escherichia
+  0.09	9	9	S	562	                Escherichia coli
+  0.02	2	2	S	208962	                Escherichia albertii
+  0.03	3	1	G	544	              Citrobacter
+  0.02	2	0	-	1344959	                Citrobacter freundii complex
+  0.02	2	2	S	546	                  Citrobacter freundii
+  0.02	2	1	G	547	              Enterobacter
+  0.01	1	0	S	354276	                Enterobacter cloacae complex
+  0.01	1	1	S	158836	                  Enterobacter hormaechei
+  0.02	2	0	G	570	              Klebsiella
+  0.01	1	1	S	573	                Klebsiella pneumoniae
+  0.01	1	1	S	1905288	                Klebsiella sp. LTGPAF-6F
+  0.01	1	1	G	413496	              Cronobacter
+  0.01	1	0	G	1330546	              Pluralibacter
+  0.01	1	1	S	61647	                Pluralibacter gergoviae
+  0.01	1	0	G	1330547	              Kosakonia
+  0.01	1	1	S	497725	                Kosakonia oryzae
+  0.02	2	0	F	1903409	            Erwiniaceae
+  0.02	2	0	G	551	              Erwinia
+  0.02	2	2	S	215689	                Erwinia sp. Ejp617
+  0.01	1	0	F	1903412	            Hafniaceae
+  0.01	1	0	G	635	              Edwardsiella
+  0.01	1	1	S	93378	                Edwardsiella hoshinae
+  0.02	2	0	-	118884	          unclassified Gammaproteobacteria
+  0.02	2	0	-	198346	            Candidatus Baumannia
+  0.02	2	2	S	186490	              Candidatus Baumannia cicadellinicola
+  0.02	2	0	O	135623	          Vibrionales
+  0.02	2	0	F	641	            Vibrionaceae
+  0.01	1	0	G	657	              Photobacterium
+  0.01	1	1	S	74109	                Photobacterium profundum
+  0.01	1	0	G	662	              Vibrio
+  0.01	1	1	S	666	                Vibrio cholerae
+  0.02	2	0	O	135625	          Pasteurellales
+  0.02	2	0	F	712	            Pasteurellaceae
+  0.01	1	0	G	724	              Haemophilus
+  0.01	1	1	S	727	                Haemophilus influenzae
+  0.01	1	0	G	745	              Pasteurella
+  0.01	1	1	S	747	                Pasteurella multocida
+  0.01	1	0	-	1783272	      Terrabacteria group
+  0.01	1	0	P	1239	        Firmicutes
+  0.01	1	0	C	909932	          Negativicutes
+  0.01	1	0	O	909929	            Selenomonadales
+  0.01	1	0	F	1843490	              Sporomusaceae
+  0.01	1	0	G	365348	                Pelosinus
+  0.01	1	1	S	365349	                  Pelosinus fermentans
+  0.02	2	0	D	2759	    Eukaryota
+  0.02	2	0	-	33154	      Opisthokonta
+  0.02	2	0	K	33208	        Metazoa
+  0.02	2	0	-	6072	          Eumetazoa
+  0.02	2	0	-	33213	            Bilateria
+  0.02	2	0	-	33511	              Deuterostomia
+  0.02	2	0	P	7711	                Chordata
+  0.02	2	0	-	89593	                  Craniata
+  0.02	2	0	-	7742	                    Vertebrata
+  0.02	2	0	-	7776	                      Gnathostomata
+  0.02	2	0	-	117570	                        Teleostomi
+  0.02	2	0	-	117571	                          Euteleostomi
+  0.02	2	0	-	8287	                            Sarcopterygii
+  0.02	2	0	-	1338369	                              Dipnotetrapodomorpha
+  0.02	2	0	-	32523	                                Tetrapoda
+  0.02	2	0	-	32524	                                  Amniota
+  0.02	2	0	C	40674	                                    Mammalia
+  0.02	2	0	-	32525	                                      Theria
+  0.02	2	0	-	9347	                                        Eutheria
+  0.02	2	0	-	1437010	                                          Boreoeutheria
+  0.02	2	0	-	314146	                                            Euarchontoglires
+  0.02	2	0	O	9443	                                              Primates
+  0.02	2	0	-	376913	                                                Haplorrhini
+  0.02	2	0	-	314293	                                                  Simiiformes
+  0.02	2	0	-	9526	                                                    Catarrhini
+  0.02	2	0	-	314295	                                                      Hominoidea
+  0.02	2	0	F	9604	                                                        Hominidae
+  0.02	2	0	-	207598	                                                          Homininae
+  0.02	2	0	G	9605	                                                            Homo
+  0.02	2	2	S	9606	                                                              Homo sapiens
+  0.14	14	0	D	10239	  Viruses
+  0.14	14	0	-	35237	    dsDNA viruses, no RNA stage
+  0.14	14	0	O	28883	      Caudovirales
+  0.12	12	0	F	10699	        Siphoviridae
+  0.12	12	1	-	196894	          unclassified Siphoviridae
+  0.07	7	7	S	1168549	            Salmonella phage vB_SosS_Oslo
+  0.03	3	3	S	101570	            Enterobacteria phage ES18
+  0.01	1	1	S	1147140	            Salmonella phage SPN3UB
+  0.02	2	0	F	10744	        Podoviridae
+  0.02	2	0	G	186794	          P22virus
+  0.02	2	2	-	329158	            unclassified P22likevirus

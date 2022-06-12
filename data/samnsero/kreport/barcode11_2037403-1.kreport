@@ -1,0 +1,88 @@
+  0.22	32	32	U	0	unclassified
+ 99.78	14205	3	-	1	root
+ 99.73	14199	0	-	131567	  cellular organisms
+ 99.73	14199	2	D	2	    Bacteria
+ 99.70	14195	0	P	1224	      Proteobacteria
+ 99.70	14195	1	C	1236	        Gammaproteobacteria
+ 99.65	14187	4	O	91347	          Enterobacterales
+ 99.55	14173	15	F	543	            Enterobacteriaceae
+ 99.24	14129	15	G	590	              Salmonella
+ 99.07	14105	14105	S	28901	                Salmonella enterica
+  0.06	9	9	S	54736	                Salmonella bongori
+  0.12	17	0	G	561	              Escherichia
+  0.12	17	17	S	562	                Escherichia coli
+  0.02	3	1	G	544	              Citrobacter
+  0.01	1	1	S	35703	                Citrobacter amalonaticus
+  0.01	1	1	S	67825	                Citrobacter rodentium
+  0.02	3	0	G	547	              Enterobacter
+  0.02	3	0	S	354276	                Enterobacter cloacae complex
+  0.02	3	3	S	61645	                  Enterobacter asburiae
+  0.02	3	0	G	570	              Klebsiella
+  0.01	2	2	S	571	                Klebsiella oxytoca
+  0.01	1	1	S	573	                Klebsiella pneumoniae
+  0.01	1	0	-	191675	              unclassified Enterobacteriaceae
+  0.01	1	0	-	84563	                ant, tsetse, mealybug, aphid, etc. endosymbionts
+  0.01	1	0	-	146507	                  aphid secondary symbionts
+  0.01	1	1	S	1199245	                    secondary endosymbiont of Ctenarytaina eucalypti
+  0.01	1	0	G	1048757	              Candidatus Moranella
+  0.01	1	1	S	1048758	                Candidatus Moranella endobia
+  0.01	1	0	G	1330547	              Kosakonia
+  0.01	1	1	S	1158459	                Kosakonia sacchari
+  0.03	4	0	F	1903411	            Yersiniaceae
+  0.02	3	0	G	629	              Yersinia
+  0.01	2	0	S	1649845	                Yersinia pseudotuberculosis complex
+  0.01	1	1	S	632	                  Yersinia pestis
+  0.01	1	1	S	367190	                  Yersinia similis
+  0.01	1	1	S	630	                Yersinia enterocolitica
+  0.01	1	0	G	613	              Serratia
+  0.01	1	1	S	82996	                Serratia plymuthica
+  0.02	3	0	F	1903412	            Hafniaceae
+  0.02	3	1	G	635	              Edwardsiella
+  0.01	1	1	S	636	                Edwardsiella tarda
+  0.01	1	1	S	93378	                Edwardsiella hoshinae
+  0.01	2	0	F	1903409	            Erwiniaceae
+  0.01	1	0	G	551	              Erwinia
+  0.01	1	1	S	215689	                Erwinia sp. Ejp617
+  0.01	1	0	G	53335	              Pantoea
+  0.01	1	1	S	553	                Pantoea ananatis
+  0.01	1	0	F	1903410	            Pectobacteriaceae
+  0.01	1	0	G	84565	              Sodalis
+  0.01	1	1	S	1486991	                Candidatus Sodalis pierantonius
+  0.02	3	0	O	135623	          Vibrionales
+  0.02	3	0	F	641	            Vibrionaceae
+  0.01	2	0	G	657	              Photobacterium
+  0.01	2	2	S	74109	                Photobacterium profundum
+  0.01	1	0	G	662	              Vibrio
+  0.01	1	1	S	55601	                Vibrio anguillarum
+  0.01	2	0	O	118969	          Legionellales
+  0.01	2	0	F	444	            Legionellaceae
+  0.01	2	0	G	445	              Legionella
+  0.01	1	1	S	446	                Legionella pneumophila
+  0.01	1	1	S	96230	                Legionella fallonii
+  0.01	1	0	O	135613	          Chromatiales
+  0.01	1	0	F	255526	            Halothiobacillaceae
+  0.01	1	0	G	109262	              Halothiobacillus
+  0.01	1	1	S	927	                Halothiobacillus neapolitanus
+  0.01	1	0	O	135618	          Methylococcales
+  0.01	1	1	F	403	            Methylococcaceae
+  0.01	2	0	-	1783272	      Terrabacteria group
+  0.01	2	0	P	1239	        Firmicutes
+  0.01	2	0	C	186801	          Clostridia
+  0.01	2	0	O	186802	            Clostridiales
+  0.01	1	0	F	186803	              Lachnospiraceae
+  0.01	1	0	G	698776	                Cellulosilyticum
+  0.01	1	1	S	29360	                  Cellulosilyticum lentocellum
+  0.01	1	0	F	186807	              Peptococcaceae
+  0.01	1	0	G	1562	                Desulfotomaculum
+  0.01	1	1	S	58138	                  Desulfotomaculum acetoxidans
+  0.02	3	0	D	10239	  Viruses
+  0.02	3	0	-	35237	    dsDNA viruses, no RNA stage
+  0.02	3	0	O	28883	      Caudovirales
+  0.01	2	0	F	10662	        Myoviridae
+  0.01	1	0	-	196896	          unclassified Myoviridae
+  0.01	1	1	S	929814	            Salmonella phage RE-2010
+  0.01	1	0	-	857479	          Peduovirinae
+  0.01	1	0	G	140410	            P2virus
+  0.01	1	1	S	227940	              Yersinia phage L-413C
+  0.01	1	0	-	102294	        unclassified Caudovirales
+  0.01	1	1	S	175950	          Salmonella phage ST64B

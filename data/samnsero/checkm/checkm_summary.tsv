@@ -1,0 +1,7 @@
+id	Marker lineage	# genomes	# markers	# marker sets	0	1	2	3	4	5+	Completeness	Contamination	Strain heterogeneity
+barcode10_2038528-1	Salmonella (5)	21	1529	266	37	1482	9	1	0	0	65.43	0.6	0
+barcode11_2037403-1	Salmonella (5)	21	1529	266	59	1461	9	0	0	0	90.65	1.08	0
+barcode12_2038061-1	Salmonella (5)	21	1529	266	77	1446	6	0	0	0	94.96	0.28	0
+barcode7_2037399-4	Salmonella (5)	21	1529	266	35	1488	6	0	0	0	97.66	0.7	0
+barcode8_2038546-2	Salmonella (5)	21	1529	266	74	1447	8	0	0	0	81.92	0.58	0
+barcode9_2038054-2	Salmonella (5)	21	1529	266	90	1432	7	0	0	0	85.51	8.27	0

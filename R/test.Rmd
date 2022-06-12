@@ -1,0 +1,36 @@
+---
+title: "SamnSero QC Report"
+date: "`r date()`"
+output: 
+  html_document:
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+# global opts
+knitr::opts_chunk$set(echo = F, message = F, warning = F)
+```
+
+```{r source}
+library(magrittr)
+library(scales)
+library(jsonlite)
+library(htmltools)
+library(fontawesome)
+library(plotly)
+library(ggplot2)
+library(reactable)
+library(crosstalk)
+library(here)
+knitr::current_input()
+here()
+
+```
+
+```{r main}
+default_args <- commandArgs(trailingOnly = F)
+args <- commandArgs(trailingOnly = T)
+src_dir <- dirname(gsub('.*\\(\"|\",.*', "", default_args[grep(".Rmd", default_args)]))
+print(src_dir)
+print(getwd())
+```
