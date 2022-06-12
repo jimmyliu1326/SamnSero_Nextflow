@@ -76,7 +76,8 @@ Optional arguments:
                                    columns describing database name and path to FASTA.
     --nanohq                       Input reads were basecalled using Guppy v5 SUP models
     --qc                           Perform quality check on genome assemblies
-    --centrifuge                   Path to DIRECTORY containing Centrifuge database index (required if using --qc)
+    --centrifuge PATH              Path to DIRECTORY containing Centrifuge database index (required if using
+                                   --qc)
     --notrim                       Skip adaptor trimming by Porechop
     --gpu                          Accelerate specific processes that utilize GPU computing. Must have NVIDIA
                                    Container Toolkit installed to enable GPU computing, otherwise use CPU.
