@@ -2,10 +2,10 @@
 process abricate {
     tag "Abricate ${db} prediction for ${assembly.simpleName}"
     label "process_low"
-    publishDir "$params.outdir"+"/abricate", mode: "copy"
+    publishDir "$params.outdir"+"/annotations/abricate", mode: "copy"
 
     input:
-        tuple path(assembly), val(db)
+        tuple val(sample_id), path(assembly), val(db)
     output:
         tuple val(db), file("${db}/${assembly.simpleName}.tab")
     shell:
@@ -32,10 +32,10 @@ process makeblastdb {
 process abricate_custom {
     tag "Abricate ${db} prediction for ${assembly.simpleName}"
     label "process_low"
-    publishDir "$params.outdir"+"/abricate", mode: "copy"
+    publishDir "$params.outdir"+"/annotations/abricate", mode: "copy"
 
     input:
-        tuple path(assembly), path(db)
+        tuple val(sample_id), path(assembly), path(db)
     output:
         tuple val("${db.baseName}"), file("${db.baseName}/${assembly.simpleName}.tab")
     shell:

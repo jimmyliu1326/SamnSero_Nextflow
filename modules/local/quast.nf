@@ -1,16 +1,27 @@
 // genetic risk factor prediction
 process quast {
-    tag "Computing assembly statistics for ${assembly.baseName}"
+    tag "Computing assembly statistics for ${assembly.simpleName}"
     label "process_low"
 
     input:
-        path(assembly)
+        tuple val(sample_id), path(assembly), path(reads)
     output:
-        file("${assembly.baseName}.tsv")
+        tuple val(sample_id), file("${assembly.simpleName}.tsv")
     shell:
         """
-        quast.py --fast -o . -t ${task.cpus} ${assembly}
-        mv transposed_report.tsv ${assembly.baseName}.tsv
+        quast.py \
+            -o . \
+            -t ${task.cpus} \
+            --nanopore ${reads} \
+            --no-plots \
+            --no-html \
+            --no-icarus \
+            --no-snps \
+            --no-gc \
+            --no-sv \
+            ${assembly}
+        
+        mv transposed_report.tsv ${assembly.simpleName}.tsv
         """   
 }
 
