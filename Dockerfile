@@ -1,4 +1,4 @@
-FROM rocker/r-ver:4.0.2
+FROM rocker/r-ver:4.1.3
 
 RUN apt-get update -y && \
     apt-get install -y libcairo2-dev \
@@ -7,27 +7,22 @@ RUN apt-get update -y && \
     rm -rf /var/lib/apt/lists/*
 
 RUN R -e "install.packages(c( \
-                'dplyr', \
-                'tidyr', \
-                'tibble', \
-                'ggplot2', \
-                'purrr', \
-                'gt', \
-                'data.table', \
-                'knitr', \
-                'BiocManager', \
-                'circlize', \
-                'plotly', \
-                'RColorBrewer', \
-                'stringr', \
-                'rmarkdown', \
-                'bit64', \
-                'Cairo'))" && \
-    R -e "BiocManager::install('ComplexHeatmap')"
+                'dplyr', 'tidyr', \
+                'tibble', 'ggplot2', \
+                'purrr', 'data.table', \
+                'knitr', 'BiocManager', \
+                'plotly', 'bit64', \
+                'RColorBrewer', 'stringr', \
+                'Cairo', 'scales', \
+                'scales', 'jsonlite', \
+                'htmltools', 'fontawesome', \
+                'crosstalk', 'remotes'))" \
+    && R -e "remotes::install_github('jokergoo/circlize')" \
+    && R -e "remotes::install_github(c( \
+        'jokergoo/ComplexHeatmap', \
+        'glin/reactable', \
+        'rstudio/rmarkdown'))"
 
-ADD src/abricate_plot.R  \
-    src/annot_report.Rmd \
-    src/samnsero_load.R \
-    src/qc_report.Rmd \
-    src/samnsero_combine.R \
-    /src/
+ADD R/ /R/
+
+WORKDIR /data
