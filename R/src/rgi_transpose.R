@@ -1,6 +1,9 @@
+#!/usr/bin/env Rscript
+
 # parse args
 default_args <- commandArgs(trailingOnly = F)
 src_dir <- dirname(gsub("--file=", "",default_args[grep("--file", default_args)]))
+
 args <- commandArgs(trailingOnly = T)
 input_path <- args[1]
 samples_path <- args[2]

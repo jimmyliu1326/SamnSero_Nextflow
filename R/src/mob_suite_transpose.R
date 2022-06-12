@@ -1,17 +1,19 @@
+#!/usr/bin/env Rscript
+
 # parse args
 default_args <- commandArgs(trailingOnly = F)
 src_dir <- dirname(gsub("--file=", "",default_args[grep("--file", default_args)]))
+
 args <- commandArgs(trailingOnly = T)
-work_dir <- args[1]
-input_path <- args[2]
-samples_path <- args[3]
-output_path <- args[4]
+input_path <- args[1]
+samples_path <- args[2]
+output_path <- args[3]
 
 # load pkgs
 source(file.path(src_dir, "samnsero_load.R"))
 
 # set wd
-setwd(work_dir)
+#setwd(work_dir)
 
 # load data
 samples <- readLines(samples_path)
