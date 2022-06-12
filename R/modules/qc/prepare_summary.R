@@ -1,0 +1,7 @@
+source(file.path(src_dir, "src/samnsero_summary.R"))
+combined_res <- combine_sistr_qc(quast_res, checkm_res, sistr_res)
+kreport_summary <- kreport_sum(kreport_res)
+kreport_class_res <- kreport_class_sum(kreport_res)
+sistr_cols <- c("serogroup", "serovar", "qc_status", "qc_messages")
+sistr_df <- combined_res %>% select(id, all_of(sistr_cols))
+stats_df <- combined_res %>% select(-sistr_cols)

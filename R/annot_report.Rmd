@@ -1,0 +1,246 @@
+---
+title: "SamnSero Annotation Report"
+date: "`r date()`"
+output: 
+  html_document:
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+# global opts
+knitr::opts_chunk$set(echo = F, message = F, warning = F)
+```
+
+```{r load-pkgs}
+library(scales)
+library(jsonlite)
+library(htmltools)
+library(fontawesome)
+library(plotly)
+library(ggplot2)
+library(reactable)
+library(crosstalk)
+library(dplyr)
+library(purrr)
+library(stringr)
+library(tidyr)
+library(tibble)
+library(data.table)
+library(magrittr)
+
+source("src/heatmap_plot.R")
+source("src/reactable-helper.R")
+```
+
+```{r args}
+# set test = 1 if running interactively
+test=1
+
+if (test != 0) {
+	args <- c(getwd(),
+						"../data/samnsero/sistr_res_aggregate.csv",
+						"../data/samnsero/annotations/")
+	src_dir <- dirname(knitr::current_input(dir = T))
+} else {
+	args <- commandArgs(trailingOnly = T)
+	src_dir <- dirname(knitr::current_input(dir = T))
+}
+
+```
+
+```{r main}
+source(file.path(src_dir, "modules/annot/parse_args.R"))
+source(file.path(src_dir, "workflow/annot_report_workflow.R"))
+```
+
+## {.tabset}
+
+### Antimicrobial Resistance
+
+```{r amr-html}
+bscols(
+	tagList(
+		muiDependency(),
+		amr_tbl),
+	tagList(
+				tags$button(tagList(fontawesome::fa("download"), "Download as CSV"),
+  						onclick = "Reactable.downloadDataCSV('amr-table', 'SamnSero_AMR_annot.csv')"),
+				tags$button(tagList(fontawesome::fa("filter"), "Clear Filters"),
+										onclick = "Reactable.setAllFilters('amr-table', [])"),
+				tags$button(tagList(fontawesome::fa("plus-circle"), "Expand/Collapse All"),
+      							onclick = "Reactable.toggleAllRowsExpanded('amr-front')")),
+	widths = c(12, 6)
+)
+```
+
+<br>
+
+#### {.tabset}
+##### Feature Matrix
+
+<font size="4"> 
+`r fa("bell")`  **Note**: *Only genetic elements with variable presence are shown.*
+</font> 
+
+```{r amr-heatmap,fig.width=12, fig.height=12, fig.align = 'right'}
+if (nrow(amr_summary != 0)) {
+	plot_type(amr_summary, sistr_res_clean)
+} else {
+	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+}
+```
+
+##### Drug Class Matrix
+```{r amr-drug-heatmap, fig.width =12, fig.height = 10, fig.align = 'right'}
+if (nrow(amr_summary != 0)) {
+	plot_class(amr_drug_summary, sistr_res_clean)
+} else {
+	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+}
+```
+
+### Virulence Factor
+
+```{r vf-html}
+bscols(
+	tagList(
+		muiDependency(),
+		vf_tbl),
+	tagList(
+				tags$button(tagList(fontawesome::fa("download"), "Download as CSV"),
+  						onclick = "Reactable.downloadDataCSV('vf-table', 'SamnSero_VF_annot.csv')"),
+				tags$button(tagList(fontawesome::fa("filter"), "Clear Filters"),
+										onclick = "Reactable.setAllFilters('vf-table', [])"),
+				tags$button(tagList(fontawesome::fa("plus-circle"), "Expand/Collapse All"),
+      							onclick = "Reactable.toggleAllRowsExpanded('vf-front')")),
+	widths = c(12, 6)
+)
+```
+
+<br>
+
+#### {.tabset}
+##### Feature Matrix
+
+<font size="4"> 
+`r fa("bell")`  **Note**: *Only genetic elements with variable presence are shown.*
+</font> 
+
+```{r vf-heatmap,fig.width=12, fig.height=12, fig.align = 'center'}
+if (nrow(vf_summary != 0)) {
+	plot_type(vf_summary, sistr_res_clean)
+} else {
+	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+}
+```
+
+### Plasmid
+
+```{r plasmid-html}
+bscols(
+	tagList(
+		muiDependency(),
+		plasmid_tbl),
+	tagList(
+				tags$button(tagList(fontawesome::fa("download"), "Download as CSV"),
+  						onclick = "Reactable.downloadDataCSV('plasmid-table', 'SamnSero_Plasmid_annot.csv')"),
+				tags$button(tagList(fontawesome::fa("filter"), "Clear Filters"),
+										onclick = "Reactable.setAllFilters('plasmid-table', [])")),
+	widths = c(12, 6)
+)
+```
+
+<br>
+
+#### {.tabset}
+##### Feature Matrix
+
+<font size="4"> 
+`r fa("bell")`  **Note**: *Only genetic elements with variable presence are shown.*
+</font> 
+
+```{r plasmid-heatmap,fig.width=12, fig.height=12, fig.align = 'center'}
+if (nrow(plasmid_summary != 0)) {
+	plot_type(plasmid_summary, sistr_res_clean)
+} else {
+	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+}
+```
+
+### Combined Matrix
+
+<font size="4"> 
+`r fa("bell")`  **Note**: *Only genetic elements with variable presence are shown.*
+</font> 
+
+```{r plot-full-heatmap, fig.width=15, fig.height=15, fig.align = 'center'}
+if (nrow(tidy_res != 0)) {
+	plot_full(tidy_res, sistr_res_clean)
+} else {
+	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+}
+```
+
+## {-}
+
+```{js}
+// JavaScript code for the Material UI range filter. This is a js language
+// chunk, but you could also inline this in R using `tags$script(HTML("..."))`
+
+const muiRangeFilter = (column, state) => {
+  // Get min and max values from raw table data and memoize so it doesn't
+  // have to be recalculated each time
+  const range = React.useMemo(() => {
+    let min = Infinity
+    let max = -Infinity
+    state.data.forEach(row => {
+      const value = row[column.id]
+      if (value < min) {
+        min = Math.floor(value)
+      } else if (value > max) {
+        max = Math.ceil(value)
+      }
+    })
+    return [min, max]
+  }, [state.data])
+
+  const value = column.filterValue ? column.filterValue : range
+  const valueLabel = `[${value[0]}, ${value[1]}]`
+
+  return React.createElement(
+    'div',
+    // Add some margin so the tooltips don't get cut off
+    { style: { margin: '0 8px' } },
+    [
+      valueLabel,
+      React.createElement(
+        MaterialUI.Slider,
+        {
+          value: value,
+          min: range[0],
+          max: range[1],
+          step: 0.1,
+          valueLabelDisplay: 'auto',
+          onChange: (e, val) => column.setFilter(val),
+          'aria-label': `Filter ${column.name}`
+        }
+      )
+    ]
+  )
+}
+
+const filterRange = (rows, columnId, filterValue) => {
+  const [min, max] = filterValue
+  return rows.filter(row => {
+    const value = row.values[columnId]
+    return value >= min && value <= max
+  })
+}
+```
+
+```{css}
+.main-container {
+	max-width: 1200px
+}
+```
+

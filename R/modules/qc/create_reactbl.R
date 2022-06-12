@@ -1,0 +1,6 @@
+source(file.path(src_dir, "src/reactable-helper.R"))
+source(file.path(src_dir, "src/samnsero_qc_rtbl.R"))
+sistr_tbl <- sistr_reactable(sistr_data)
+stats_tbl <- stats_reactable(stats_data)
+kreport_class_tbl <- kreport_class_reactable(kreport_class_res)
+kreport_summary_tbl <- kreport_summary_reactable(kreport_summary)

@@ -6,10 +6,15 @@ suppressPackageStartupMessages(library(data.table))
 
 # parse args
 args <- commandArgs(trailingOnly = T)
+work_dir <- args[1]
+files <- args[2:length(args)]
+
+# change work dir
+setwd(work_dir)
 
 # join all files by column modified id
 # IDs in quast results have _ instead of -
-combined_res <- map(rev(args), function(x) {
+combined_res <- map(rev(files), function(x) {
 	fread(x, header = T) %>% 
 		mutate(mod_id = str_replace_all(id, "-", "_"))
 	}) %>% 
@@ -24,4 +29,4 @@ combined_res <- combined_res %>%
 	select(id, serovar, qc_status, qc_messages, everything())
 
 # write out
-write.table(combined_res, row.names = F, quote = F, sep = ",")
+fwrite(combined_res, row.names = F, sep = ",")
