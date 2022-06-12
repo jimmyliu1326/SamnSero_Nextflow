@@ -25,4 +25,5 @@ RUN R -e "install.packages(c( \
 
 ADD R/ /R/
 
-WORKDIR /data
+RUN cp /R/src/*.R /usr/bin/ \
+    && chmod +x /usr/bin/*.R
