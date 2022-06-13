@@ -27,28 +27,27 @@ library(tidyr)
 library(tibble)
 library(data.table)
 library(magrittr)
-
-source("src/heatmap_plot.R")
-source("src/reactable-helper.R")
 ```
 
 ```{r args}
 # set test = 1 if running interactively
-test=1
+test=0
 
+# get where the .Rmd file is
+src_dir <- dirname(knitr::current_input(dir = T))
+
+# get positional arguments
 if (test != 0) {
-	args <- c(getwd(),
-						"../data/samnsero/sistr_res_aggregate.csv",
+	args <- c("../data/samnsero/sistr_res_aggregate.csv",
 						"../data/samnsero/annotations/")
-	src_dir <- dirname(knitr::current_input(dir = T))
 } else {
 	args <- commandArgs(trailingOnly = T)
-	src_dir <- dirname(knitr::current_input(dir = T))
 }
-
 ```
 
 ```{r main}
+source(file.path(src_dir, "src/heatmap_plot.R"))
+source(file.path(src_dir, "src/reactable-helper.R"))
 source(file.path(src_dir, "modules/annot/parse_args.R"))
 source(file.path(src_dir, "workflow/annot_report_workflow.R"))
 ```

@@ -10,8 +10,7 @@ vf_clean <- function(df) {
 					 "identity" = "%IDENTITY"
 		) %>% 
 		mutate(PRODUCT = str_replace_all(PRODUCT, " \\[.*", ""),
-					 PRODUCT = str_replace_all(PRODUCT, ".*\\) ", ""),
-					 id = str_replace(id, ".fasta", "")) %>% 
+					 PRODUCT = str_replace_all(PRODUCT, ".*\\) ", "")) %>% 
 		select(1, 6, 8, 7, 2, 9, 10, 3:5) %>% 
 		mutate(idx = paste(id, contig, sep = "-"))
 	colnames(df) <- tolower(colnames(df))

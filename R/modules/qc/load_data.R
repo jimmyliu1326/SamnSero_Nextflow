@@ -1,5 +1,4 @@
 source(file.path(src_dir, "src/samnsero_load.R"))
-setwd(work_dir)
 checkm_res <- load_checkm(checkm_path)
 quast_res <- load_quast(quast_path)
 sistr_res <- load_sistr(sistr_path)

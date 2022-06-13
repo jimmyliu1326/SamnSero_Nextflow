@@ -1,5 +1,4 @@
 source(file.path(src_dir, "src/samnsero_load.R"))
-setwd(work_dir)
 
 # read sistr results
 sistr_res <- load_sistr(sistr_path)
