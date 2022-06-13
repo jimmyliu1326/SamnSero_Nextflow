@@ -25,5 +25,5 @@ RUN R -e "install.packages(c( \
 
 ADD R/ /R/
 
-RUN cp /R/src/*.R /usr/bin/ \
-    && chmod +x /usr/bin/*.R
+RUN chmod 777 -R /R \
+    && cp -p /R/src/*.R /usr/bin/
