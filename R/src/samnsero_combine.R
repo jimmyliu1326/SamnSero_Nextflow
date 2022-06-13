@@ -1,3 +1,5 @@
+#!/usr/bin/env Rscript
+
 # load pkgs
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(purrr))
@@ -6,15 +8,10 @@ suppressPackageStartupMessages(library(data.table))
 
 # parse args
 args <- commandArgs(trailingOnly = T)
-work_dir <- args[1]
-files <- args[2:length(args)]
-
-# change work dir
-setwd(work_dir)
 
 # join all files by column modified id
 # IDs in quast results have _ instead of -
-combined_res <- map(rev(files), function(x) {
+combined_res <- map(rev(args), function(x) {
 	fread(x, header = T) %>% 
 		mutate(mod_id = str_replace_all(id, "-", "_"))
 	}) %>% 
