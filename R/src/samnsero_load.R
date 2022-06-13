@@ -53,7 +53,7 @@ load_abricate_summary <- function(path) {
 
 load_kreport <- function(path) {
 	# parse sample id
-	sample <- gsub(".kreport", "", basename(path))
+	sample <- gsub(".kraken.report", "", basename(path))
 	# read file
 	df <- fread(path) %>% 
 		mutate("id" = as.character(sample))
