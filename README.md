@@ -14,7 +14,7 @@ The nextflow pipeline processes raw Nanopore sequencing reads for *Salmonella en
  - Git
 
 # Get the latest version of the pipeline
-ver=$(git ls-remote -t https://github.com/jimmyliu1326/SamnSero_Nextflow.git | cut -f3 -d'/')
+ver=$(git ls-remote -t https://github.com/jimmyliu1326/SamnSero_Nextflow.git | cut -f3 -d'/' | sort -r | head -n 1)
 
 # Install the latest version of SamnSero
 nextflow pull -hub github jimmyliu1326/SamnSero_Nextflow -r $ver
