@@ -17,10 +17,6 @@ def helpMessage() {
 
         Optional arguments:
         --annot                         Annotate genome assemblies using Abricate
-        --custom_db PATH                Path to a headerless .csv that lists custom databases (.FASTA) to
-                                        search against for genome annotation instead of default Abricate
-                                        databases (card, vfdb, plasmidfinder). The .csv should contain two
-                                        columns describing database name and path to FASTA.
         --qc                            Perform quality check on genome assemblies.
         --centrifuge                   Path to DIRECTORY containing Centrifuge database index (required if using --qc)
         --nanohq                        Input reads were basecalled using Guppy v5 SUP models
@@ -63,7 +59,6 @@ log.info """\
          nanohq              : ${params.nanohq}
          quality check       : ${params.qc}
          annotation          : ${params.annot}
-         custom annot db     : ${params.custom_db}
          gpu                 : ${params.gpu}
          """
          .stripIndent()
