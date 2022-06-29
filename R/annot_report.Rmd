@@ -104,7 +104,7 @@ if (tryCatch(ncol(amr_summary) <= 1, error = function(e) return(T))) {
 
 ##### Drug Class Matrix
 ```{r amr-drug-heatmap, fig.width =12, fig.height = 10, fig.align = 'right'}
-if (exists("amr_drug_summary")) {
+if (!exists("amr_drug_summary")) {
 	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
 	
