@@ -7,9 +7,20 @@ workflow ASSEMBLY_QC {
         assembly
         reads
     main:
-        checkm(assembly.map { it[1] }.collect())
-        quast(assembly.join(reads))
-        aggregate_quast(quast.out.map { it[1] }.collect())
+        assembly \
+            | map { it[1] } \
+            | collect \
+            | checkm
+
+        assembly \
+            | join(reads) \
+            | quast
+
+        quast.out \
+            | map { it[1] } \
+            | collect \
+            | aggregate_quast
+
     emit:
         checkm_res = checkm.out
         quast_res = aggregate_quast.out
@@ -22,8 +33,12 @@ workflow READ_QC {
     take: reads
     main:
         centrifuge_db=file(params.centrifuge, checkIfExists: true)
+
         centrifuge(reads, centrifuge_db)
-        krona(centrifuge.out.krona.collect())
+
+        centrifuge.out.krona \
+            | collect \
+            | krona
     emit:
-        centrifuge_res = centrifuge.out.kreport
+        kreport = centrifuge.out.kreport
 }

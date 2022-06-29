@@ -6,11 +6,21 @@ workflow ASSEMBLY {
     take: reads
     main:
         dragonflye(reads)
+        
         if (params.gpu) {
-            medaka_gpu(dragonflye.out.join(reads))
+
+            dragonflye.out \
+                | join(reads) \
+                | medaka_gpu
+
             assembly_out = medaka_gpu.out
+
         } else {
-            medaka(dragonflye.out.join(reads))
+            
+            dragonflye.out \
+                | join(reads) \
+                | medaka
+
             assembly_out = medaka.out
         }
         

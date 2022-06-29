@@ -22,12 +22,13 @@ process quast {
             ${assembly}
         
         mv transposed_report.tsv ${assembly.simpleName}.tsv
-        """   
+        """
 }
 
 process aggregate_quast {
     tag "Aggregating QUAST results"
     label "process_low"
+    publishDir "$params.outdir"+"/qc/", mode: "copy"
 
     input:
         path(quast_res)

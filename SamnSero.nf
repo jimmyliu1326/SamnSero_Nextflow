@@ -3,7 +3,7 @@ nextflow.enable.dsl=2
 
 // define global var
 pipeline_name = "SamnSero"
-version = "1.0"
+version = "1.1"
 
 // print help message
 def helpMessage() {
@@ -51,10 +51,6 @@ if (params.version) {
 
 if( !params.outdir ) { error pipeline_name+": Missing --outdir parameter" }
 if( !params.input ) { error pipeline_name+": Missing --input parameter" }
-if( params.qc ) { 
-    db_dir = new File(params.centrifuge)
-    assert db_dir.exists() : pipeline_name+": Directory path to Centrifuge database cannot be found."
-}
 
 // print log info
 log.info """\
@@ -86,7 +82,7 @@ workflow {
     // read data
     data = channel
         .fromPath(params.input, checkIfExists: true)
-        .splitCsv(header: false)
+        .splitCsv(header: false)       
     
     // analysis start
     combine(data)
@@ -111,7 +107,11 @@ workflow {
         
         ANNOT(ASSEMBLY.out)
         
-        annot_report(SEROTYPING.out, ANNOT.out.collect())
+        if ( !params.noreport) {
+
+            annot_report(SEROTYPING.out, ANNOT.out)
+        
+        }
 
     }
 
@@ -132,9 +132,16 @@ workflow {
 
         }
 
-        results = ASSEMBLY_QC.out.checkm_res.concat(ASSEMBLY_QC.out.quast_res, SEROTYPING.out).collect()
+        results = ASSEMBLY_QC.out.checkm_res \
+                    | concat(ASSEMBLY_QC.out.quast_res, SEROTYPING.out) \
+                    | collect
 
-        qc_report(SEROTYPING.out, ASSEMBLY_QC.out.checkm_res, ASSEMBLY_QC.out.quast_res)
+        if ( !params.noreport) {
+            
+            qc_report(SEROTYPING.out, ASSEMBLY_QC.out.checkm_res, ASSEMBLY_QC.out.quast_res, READ_QC.out.kreport.collect())
+
+        }
+        
 
     } else {
         
