@@ -1,2 +1,0 @@
-Assembly	# contigs (>= 0 bp)	# contigs (>= 1000 bp)	# contigs (>= 5000 bp)	# contigs (>= 10000 bp)	# contigs (>= 25000 bp)	# contigs (>= 50000 bp)	Total length (>= 0 bp)	Total length (>= 1000 bp)	Total length (>= 5000 bp)	Total length (>= 10000 bp)	Total length (>= 25000 bp)	Total length (>= 50000 bp)	# contigs	Largest contig	Total length	N50	N75	L50	L75	# N's per 100 kbp
-barcode11_2037403_1	2	2	2	2	2	1	4741158	4741158	4741158	4741158	4741158	4695270	2	4695270	4741158	4695270	4695270	1	1	0.00
