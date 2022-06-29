@@ -70,10 +70,6 @@ Required arguments:
 
 Optional arguments:
     --annot                        Annotate genome assemblies using Abricate
-    --custom_db PATH               Path to a headerless .csv that lists custom databases (.FASTA)
-                                   to search against for genome annotation instead of default Abricate
-                                   databases (card, vfdb, plasmidfinder). The .csv should contain two
-                                   columns describing database name and path to FASTA.
     --nanohq                       Input reads were basecalled using Guppy v5 SUP models
     --qc                           Perform quality check on genome assemblies
     --centrifuge PATH              Path to DIRECTORY containing Centrifuge database index (required if using
