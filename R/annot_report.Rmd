@@ -31,7 +31,7 @@ library(magrittr)
 
 ```{r args}
 # set interactive = 1 if running interactively
-interactive=1
+interactive=0
 
 # get where the .Rmd file is
 src_dir <- dirname(knitr::current_input(dir = T))
@@ -50,6 +50,11 @@ source(file.path(src_dir, "src/heatmap_plot.R"))
 source(file.path(src_dir, "src/reactable-helper.R"))
 source(file.path(src_dir, "modules/annot/parse_args.R"))
 source(file.path(src_dir, "workflow/annot_report_workflow.R"))
+```
+
+
+```{r}
+vf_summary
 ```
 
 ## {.tabset}
@@ -86,7 +91,7 @@ if (exists("amr_tbl")) {
 </font> 
 
 ```{r amr-heatmap,fig.width=12, fig.height=12, fig.align = 'right'}
-if (tryCatch(nrow(amr_summary) == 0, error = function(e) return(T))) {
+if (tryCatch(nrow(amr_summary) <= 1, error = function(e) return(T))) {
 	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
 	
@@ -99,7 +104,7 @@ if (tryCatch(nrow(amr_summary) == 0, error = function(e) return(T))) {
 
 ##### Drug Class Matrix
 ```{r amr-drug-heatmap, fig.width =12, fig.height = 10, fig.align = 'right'}
-if (tryCatch(nrow(amr_drug_summary) == 0, error = function(e) return(T))) {
+if (tryCatch(nrow(amr_drug_summary) <= 1, error = function(e) return(T))) {
 	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
 	
@@ -142,7 +147,7 @@ if (exists("vf_tbl")) {
 </font> 
 
 ```{r vf-heatmap,fig.width=12, fig.height=12, fig.align = 'center'}
-if (tryCatch(nrow(vf_summary) == 0, error = function(e) return(T))) {
+if (tryCatch(nrow(vf_summary) <= 1, error = function(e) return(T))) {
 	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
 	
@@ -183,7 +188,7 @@ if (exists("plasmid_tbl")) {
 </font> 
 
 ```{r plasmid-heatmap,fig.width=12, fig.height=12, fig.align = 'center'}
-if (tryCatch(nrow(plasmid_summary) == 0, error = function(e) return(T))) {
+if (tryCatch(nrow(plasmid_summary) <= 1, error = function(e) return(T))) {
 	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
 	
@@ -201,7 +206,7 @@ if (tryCatch(nrow(plasmid_summary) == 0, error = function(e) return(T))) {
 </font> 
 
 ```{r plot-full-heatmap, fig.width=15, fig.height=15, fig.align = 'center'}
-if (tryCatch(nrow(tidy_res != 0), error = function(e) return(T))) {
+if (tryCatch(nrow(tidy_res) <= 1, error = function(e) return(T))) {
 	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
 	
