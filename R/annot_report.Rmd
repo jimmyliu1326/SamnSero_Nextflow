@@ -30,14 +30,14 @@ library(magrittr)
 ```
 
 ```{r args}
-# set test = 1 if running interactively
-test=0
+# set interactive = 1 if running interactively
+interactive=1
 
 # get where the .Rmd file is
 src_dir <- dirname(knitr::current_input(dir = T))
 
 # get positional arguments
-if (test != 0) {
+if (interactive != 0) {
 	args <- c("../data/samnsero/sistr_res_aggregate.csv",
 						"../data/samnsero/annotations/")
 } else {
@@ -57,19 +57,23 @@ source(file.path(src_dir, "workflow/annot_report_workflow.R"))
 ### Antimicrobial Resistance
 
 ```{r amr-html}
-bscols(
-	tagList(
-		muiDependency(),
-		amr_tbl),
-	tagList(
-				tags$button(tagList(fontawesome::fa("download"), "Download as CSV"),
-  						onclick = "Reactable.downloadDataCSV('amr-table', 'SamnSero_AMR_annot.csv')"),
-				tags$button(tagList(fontawesome::fa("filter"), "Clear Filters"),
-										onclick = "Reactable.setAllFilters('amr-table', [])"),
-				tags$button(tagList(fontawesome::fa("plus-circle"), "Expand/Collapse All"),
-      							onclick = "Reactable.toggleAllRowsExpanded('amr-front')")),
-	widths = c(12, 6)
-)
+if (exists("amr_tbl")) {
+	
+	bscols(
+		tagList(
+			muiDependency(),
+			amr_tbl),
+		tagList(
+					tags$button(tagList(fontawesome::fa("download"), "Download as CSV"),
+	  						onclick = "Reactable.downloadDataCSV('amr-table', 'SamnSero_AMR_annot.csv')"),
+					tags$button(tagList(fontawesome::fa("filter"), "Clear Filters"),
+											onclick = "Reactable.setAllFilters('amr-table', [])"),
+					tags$button(tagList(fontawesome::fa("plus-circle"), "Expand/Collapse All"),
+	      							onclick = "Reactable.toggleAllRowsExpanded('amr-front')")),
+		widths = c(12, 6)
+	)
+	
+}
 ```
 
 <br>
@@ -82,38 +86,50 @@ bscols(
 </font> 
 
 ```{r amr-heatmap,fig.width=12, fig.height=12, fig.align = 'right'}
-if (nrow(amr_summary != 0)) {
-	plot_type(amr_summary, sistr_res_clean)
-} else {
+if (tryCatch(nrow(amr_summary) == 0, error = function(e) return(T))) {
+	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+	
+} else {
+	
+	plot_type(amr_summary, sistr_res_clean)
+	
 }
 ```
 
 ##### Drug Class Matrix
 ```{r amr-drug-heatmap, fig.width =12, fig.height = 10, fig.align = 'right'}
-if (nrow(amr_summary != 0)) {
-	plot_class(amr_drug_summary, sistr_res_clean)
-} else {
+if (tryCatch(nrow(amr_drug_summary) == 0, error = function(e) return(T))) {
+	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+	
+} else {
+	
+	plot_class(amr_drug_summary, sistr_res_clean)
+	
 }
 ```
 
 ### Virulence Factor
 
 ```{r vf-html}
-bscols(
-	tagList(
-		muiDependency(),
-		vf_tbl),
-	tagList(
-				tags$button(tagList(fontawesome::fa("download"), "Download as CSV"),
-  						onclick = "Reactable.downloadDataCSV('vf-table', 'SamnSero_VF_annot.csv')"),
-				tags$button(tagList(fontawesome::fa("filter"), "Clear Filters"),
-										onclick = "Reactable.setAllFilters('vf-table', [])"),
-				tags$button(tagList(fontawesome::fa("plus-circle"), "Expand/Collapse All"),
-      							onclick = "Reactable.toggleAllRowsExpanded('vf-front')")),
-	widths = c(12, 6)
-)
+if (exists("vf_tbl")) {
+	
+	bscols(
+		tagList(
+			muiDependency(),
+			vf_tbl),
+		tagList(
+					tags$button(tagList(fontawesome::fa("download"), "Download as CSV"),
+	  						onclick = "Reactable.downloadDataCSV('vf-table', 'SamnSero_VF_annot.csv')"),
+					tags$button(tagList(fontawesome::fa("filter"), "Clear Filters"),
+											onclick = "Reactable.setAllFilters('vf-table', [])"),
+					tags$button(tagList(fontawesome::fa("plus-circle"), "Expand/Collapse All"),
+	      							onclick = "Reactable.toggleAllRowsExpanded('vf-front')")),
+		widths = c(12, 6)
+	)
+	
+}
 ```
 
 <br>
@@ -126,27 +142,35 @@ bscols(
 </font> 
 
 ```{r vf-heatmap,fig.width=12, fig.height=12, fig.align = 'center'}
-if (nrow(vf_summary != 0)) {
-	plot_type(vf_summary, sistr_res_clean)
-} else {
+if (tryCatch(nrow(vf_summary) == 0, error = function(e) return(T))) {
+	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+	
+} else {
+	
+	plot_type(vf_summary, sistr_res_clean)
+	
 }
 ```
 
 ### Plasmid
 
 ```{r plasmid-html}
-bscols(
-	tagList(
-		muiDependency(),
-		plasmid_tbl),
-	tagList(
-				tags$button(tagList(fontawesome::fa("download"), "Download as CSV"),
-  						onclick = "Reactable.downloadDataCSV('plasmid-table', 'SamnSero_Plasmid_annot.csv')"),
-				tags$button(tagList(fontawesome::fa("filter"), "Clear Filters"),
-										onclick = "Reactable.setAllFilters('plasmid-table', [])")),
-	widths = c(12, 6)
-)
+if (exists("plasmid_tbl")) {
+	
+	bscols(
+		tagList(
+			muiDependency(),
+			plasmid_tbl),
+		tagList(
+					tags$button(tagList(fontawesome::fa("download"), "Download as CSV"),
+	  						onclick = "Reactable.downloadDataCSV('plasmid-table', 'SamnSero_Plasmid_annot.csv')"),
+					tags$button(tagList(fontawesome::fa("filter"), "Clear Filters"),
+											onclick = "Reactable.setAllFilters('plasmid-table', [])")),
+		widths = c(12, 6)
+	)
+
+}
 ```
 
 <br>
@@ -159,10 +183,14 @@ bscols(
 </font> 
 
 ```{r plasmid-heatmap,fig.width=12, fig.height=12, fig.align = 'center'}
-if (nrow(plasmid_summary != 0)) {
-	plot_type(plasmid_summary, sistr_res_clean)
-} else {
+if (tryCatch(nrow(plasmid_summary) == 0, error = function(e) return(T))) {
+	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+	
+} else {
+	
+	plot_type(plasmid_summary, sistr_res_clean)
+	
 }
 ```
 
@@ -173,10 +201,14 @@ if (nrow(plasmid_summary != 0)) {
 </font> 
 
 ```{r plot-full-heatmap, fig.width=15, fig.height=15, fig.align = 'center'}
-if (nrow(tidy_res != 0)) {
-	plot_full(tidy_res, sistr_res_clean)
-} else {
+if (tryCatch(nrow(tidy_res != 0), error = function(e) return(T))) {
+	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+	
+} else {
+	
+	plot_full(tidy_res, sistr_res_clean)
+	
 }
 ```
 

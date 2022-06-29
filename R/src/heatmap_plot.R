@@ -21,6 +21,14 @@ plot_full <- function(df, sistr_df) {
 							by = "element") %>% 
 		pull(type) %>% 
 		factor(levels = annot_name)
+	# get total sample count
+	n <- nrow(sistr_df)
+	# calculate cell dimensions based on n
+	cell_h <- case_when(n <= 30 ~ 4,
+											between(n, 31, 60) ~ 3,
+											between(n, 61, 90) ~ 2,
+											n >= 90 ~ 1) + 1
+	cell_w <- cell_h
 	
 	p <- df %>% 
 		as.matrix() %>% 
@@ -43,8 +51,8 @@ plot_full <- function(df, sistr_df) {
 			rect_gp = gpar(col = "white"),
 			row_names_gp = gpar(fontsize = 10),
 			column_names_gp = gpar(fontsize = 10),
-			height = unit(4, "mm")*nrow(.),
-			width = unit(5, "mm")*ncol(.),
+			height = unit(cell_h, "mm")*nrow(.),
+			width = unit(cell_w, "mm")*ncol(.),
 			#show_column_names = T
 			heatmap_legend_param = list(
 				title = "",
@@ -80,6 +88,13 @@ plot_type <- function(df, sistr_df) {
 	annotation_cols <- sistr_df %>% 
 		select(id, serovar) %>% 
 		column_to_rownames("id")
+	n <- nrow(sistr_df)
+	# calculate cell dimensions based on n
+	cell_h <- case_when(n <= 30 ~ 4,
+											between(n, 31, 60) ~ 3,
+											between(n, 61, 90) ~ 2,
+											n >= 90 ~ 1) + 1
+	cell_w <- cell_h
 	
 	p <- df %>% 
 		as.matrix() %>% 
@@ -94,8 +109,8 @@ plot_type <- function(df, sistr_df) {
 			rect_gp = gpar(col = "white"),
 			row_names_gp = gpar(fontsize = 10),
 			column_names_gp = gpar(fontsize = 10),
-			height = unit(5, "mm")*nrow(.),
-			width = unit(6, "mm")*ncol(.),
+			height = unit(cell_h, "mm")*nrow(.),
+			width = unit(cell_w, "mm")*ncol(.),
 			#show_column_names = T
 			heatmap_legend_param = list(
 				title = "",
@@ -133,10 +148,18 @@ plot_class <- function(df, sistr_df) {
 		column_to_rownames("id")
 	max_val <- df %>% as.matrix() %>% as.numeric() %>% max(na.rm =T)
 	min_val <- df %>% as.matrix() %>% as.numeric() %>% min(na.rm =T)
+	n <- nrow(sistr_df)
+	# calculate cell dimensions based on n
+	cell_h <- case_when(n <= 30 ~ 4,
+											between(n, 31, 60) ~ 3,
+											between(n, 61, 90) ~ 2,
+											n >= 90 ~ 1) + 1
+	cell_w <- cell_h
+	
 	p <- df %>% 
 		as.matrix() %>% 
 		Heatmap(
-			col = colorRamp2(seq(min_val, max_val, length = 10), 
+			col = colorRamp2(round(seq(min_val, max_val, length = 10)), 
 											 rev(colorRampPalette(c(brewer.pal(n=11,"RdYlBu")[c(2:4,8:10)]))(10))),
 			row_title = NULL,
 			border = T,
@@ -144,8 +167,8 @@ plot_class <- function(df, sistr_df) {
 			rect_gp = gpar(col = "white"),
 			row_names_gp = gpar(fontsize = 10),
 			column_names_gp = gpar(fontsize = 10),
-			height = unit(6, "mm")*nrow(.),
-			width = unit(6, "mm")*ncol(.),
+			height = unit(cell_h, "mm")*nrow(.),
+			width = unit(cell_w, "mm")*ncol(.),
 			na_col = "#878787",
 			#show_column_names = T
 			heatmap_legend_param = list(
