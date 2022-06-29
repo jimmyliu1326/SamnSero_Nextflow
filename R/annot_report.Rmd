@@ -52,11 +52,6 @@ source(file.path(src_dir, "modules/annot/parse_args.R"))
 source(file.path(src_dir, "workflow/annot_report_workflow.R"))
 ```
 
-
-```{r}
-vf_summary
-```
-
 ## {.tabset}
 
 ### Antimicrobial Resistance
