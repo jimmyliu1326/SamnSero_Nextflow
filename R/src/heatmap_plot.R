@@ -176,7 +176,7 @@ plot_class <- function(df, sistr_df) {
 				legend_direction = "horizontal",
 				legend_width = unit(5, "cm"),
 				#labels = c("low", "medium", "high")#,
-				at =seq(1,max_val, length = 4)
+				at =round(seq(1, max_val, length = 4))
 			),
 			top_annotation = HeatmapAnnotation(
 				gp = gpar(col = "gray"),
