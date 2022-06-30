@@ -77,5 +77,6 @@ Optional arguments:
     --notrim                       Skip adaptor trimming by Porechop
     --gpu                          Accelerate specific processes that utilize GPU computing. Must have NVIDIA
                                    Container Toolkit installed to enable GPU computing, otherwise use CPU.
+    --noreport                     Do not generate interactive reports
     --help                         Print pipeline usage statement
 ```

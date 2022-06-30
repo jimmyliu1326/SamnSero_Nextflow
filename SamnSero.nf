@@ -18,11 +18,12 @@ def helpMessage() {
         Optional arguments:
         --annot                         Annotate genome assemblies using Abricate
         --qc                            Perform quality check on genome assemblies.
-        --centrifuge                   Path to DIRECTORY containing Centrifuge database index (required if using --qc)
+        --centrifuge PATH               Path to DIRECTORY containing Centrifuge database index (required if using --qc)
         --nanohq                        Input reads were basecalled using Guppy v5 SUP models
         --notrim                        Skip adaptor trimming by Porechop
         --gpu                           Accelerate specific processes that utilize GPU computing. Must have
                                         NVIDIA Container Toolkit installed to enable GPU computing.
+        --noreport                      Do not generate interactive reports
         --help                          Print pipeline usage statement
         --version                       Print workflow version
         """.stripIndent()
@@ -60,6 +61,7 @@ log.info """\
          quality check       : ${params.qc}
          annotation          : ${params.annot}
          gpu                 : ${params.gpu}
+         noreport            : ${params.noreport}
          """
          .stripIndent()
 
@@ -131,7 +133,7 @@ workflow {
                     | concat(ASSEMBLY_QC.out.quast_res, SEROTYPING.out) \
                     | collect
 
-        if ( !params.noreport) {
+        if ( !params.noreport ) {
             
             qc_report(SEROTYPING.out, ASSEMBLY_QC.out.checkm_res, ASSEMBLY_QC.out.quast_res, READ_QC.out.kreport.collect())
 
