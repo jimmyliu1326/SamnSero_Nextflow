@@ -36,9 +36,14 @@ workflow READ_QC {
 
         centrifuge(reads, centrifuge_db)
 
-        centrifuge.out.krona \
-            | collect \
-            | krona
+        if ( !params.noreport ) {
+            
+            centrifuge.out.krona \
+                | collect \
+                | krona
+                
+        }
+        
     emit:
         kreport = centrifuge.out.kreport
 }
