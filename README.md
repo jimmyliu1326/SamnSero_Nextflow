@@ -70,10 +70,12 @@ Required arguments:
 
 Optional arguments:
     --annot                        Annotate genome assemblies using Abricate
-    --nanohq                       Input reads were basecalled using Guppy v5 SUP models
+    --species STR                  The target species of analysis. Quote the string if the species name contains
+                                   space characters [Default: "Salmonella enterica"]
     --qc                           Perform quality check on genome assemblies
     --centrifuge PATH              Path to DIRECTORY containing Centrifuge database index (required if using
                                    --qc)
+    --nanohq                       Input reads were basecalled using Guppy v5 SUP models
     --notrim                       Skip adaptor trimming by Porechop
     --gpu                          Accelerate specific processes that utilize GPU computing. Must have NVIDIA
                                    Container Toolkit installed to enable GPU computing, otherwise use CPU.
