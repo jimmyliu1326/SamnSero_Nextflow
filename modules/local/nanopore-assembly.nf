@@ -12,7 +12,7 @@ process flye {
         tuple val(sample_id), file("flye/${reads.simpleName}.fasta")
     shell:
         """
-        flye --nano-raw ${reads} -t ${task.cpus} -i 2 -g 4.8m --out-dir flye
+        flye --nano-raw ${reads} -t ${task.cpus} -i 2 --out-dir flye
         mv flye/assembly.fasta flye/${reads.simpleName}.fasta
         """
 }
@@ -27,7 +27,7 @@ process dragonflye {
         tuple val(sample_id), file("dragonflye/${reads.simpleName}.fasta")
     shell:
         """
-        dragonflye --reads ${reads} --cpus ${task.cpus} --gsize 4.8m --outdir dragonflye ${nanohq}
+        dragonflye --reads ${reads} --cpus ${task.cpus} --outdir dragonflye ${nanohq}
         mv dragonflye/contigs.fa dragonflye/${reads.simpleName}.fasta
         """
 }
