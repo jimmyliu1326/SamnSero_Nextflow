@@ -14,7 +14,7 @@ process checkm {
             -t ${task.cpus} \
             -x fasta \
             -f checkm_res_aggregate.tsv \
-            genus Salmonella \
+            species "${params.species}" \
             . \
             .
         sed -i 's/^Bin Id/id/g' checkm_res_aggregate.tsv

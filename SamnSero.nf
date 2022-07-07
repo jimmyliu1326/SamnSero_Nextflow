@@ -3,7 +3,7 @@ nextflow.enable.dsl=2
 
 // define global var
 pipeline_name = "SamnSero"
-version = "1.2"
+version = "1.3"
 
 // print help message
 def helpMessage() {
@@ -17,12 +17,14 @@ def helpMessage() {
 
         Optional arguments:
         --annot                         Annotate genome assemblies using Abricate
-        --qc                            Perform quality check on genome assemblies.
+        --qc                            Perform quality check on genome assemblies
+        --species STR                   The target species of analysis. Quote the string if the species name contains
+                                        space characters [Default: "Salmonella enterica"]
         --centrifuge PATH               Path to DIRECTORY containing Centrifuge database index (required if using --qc)
         --nanohq                        Input reads were basecalled using Guppy v5 SUP models
         --notrim                        Skip adaptor trimming by Porechop
         --gpu                           Accelerate specific processes that utilize GPU computing. Must have
-                                        NVIDIA Container Toolkit installed to enable GPU computing.
+                                        NVIDIA Container Toolkit installed to enable GPU computing
         --noreport                      Do not generate interactive reports
         --help                          Print pipeline usage statement
         --version                       Print workflow version
@@ -56,6 +58,7 @@ log.info """\
          ========================================
          input               : ${params.input}
          outdir              : ${params.outdir}
+         species             : ${params.species}
          disable trimming    : ${params.notrim}
          nanohq              : ${params.nanohq}
          quality check       : ${params.qc}
