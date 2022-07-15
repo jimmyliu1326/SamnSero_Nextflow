@@ -31,7 +31,7 @@ library(magrittr)
 
 ```{r args}
 # set interactive = 1 if running interactively
-interactive=1
+interactive=0
 
 # get where the .Rmd file is
 src_dir <- dirname(knitr::current_input(dir = T))
