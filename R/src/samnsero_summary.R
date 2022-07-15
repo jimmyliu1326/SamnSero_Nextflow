@@ -1,17 +1,33 @@
-annot_sum2mat <- function(df) {
-	df %>%  
-		reduce(left_join, by = "id") %>% 
-		column_to_rownames("id") %>% 
-		t() %>%
-		as.data.frame() %>% 
-		rownames_to_column("id") %>% 
-		mutate_at(vars(2:ncol(.)), ~ifelse(. == ".", 0, 1)) %>% 
-		rowwise() %>% 
-		mutate(var = var(c_across(2:ncol(.)))) %>% 
-		filter(var != 0) %>% 
-		select(-var) %>% 
-		mutate_at(vars(2:ncol(.)), ~ifelse(. == 0, "A", "P")) %>% 
-		column_to_rownames("id")
+annot_sum2mat <- function(df, var_only=F) {
+	
+		var_df <- df %>%  
+			reduce(left_join, by = "id") %>% 
+			column_to_rownames("id") %>% 
+			t() %>%
+			as.data.frame() %>% 
+			rownames_to_column("id") %>% 
+			mutate_at(vars(2:ncol(.)), ~ifelse(. == ".", 0, 1)) %>% 
+			rowwise() %>% 
+			mutate(var = var(c_across(2:ncol(.))))
+			
+	if (var_only == T) {
+		
+		var_df %>% 
+			filter(var != 0) %>% 
+			select(-var) %>% 
+			filter(!(id %in% c("GENE", "NUM_FOUND"))) %>% 
+			mutate_at(vars(2:ncol(.)), ~ifelse(. == 0, "A", "P")) %>% 
+			column_to_rownames("id")	
+		
+	} else {
+		
+		var_df %>% 
+			select(-var) %>% 
+			filter(!(id %in% c("GENE", "NUM_FOUND"))) %>% 
+			mutate_at(vars(2:ncol(.)), ~ifelse(. == 0, "A", "P")) %>% 
+			column_to_rownames("id")	
+		
+	}
 }
 
 amr_class_sum <- function(df) {
@@ -40,8 +56,8 @@ amr_class_sum <- function(df) {
 		column_to_rownames("Drug Class")
 }
 
-getSummaryType <- function(type_id) {
-	tidy_res %>% 
+getSummaryType <- function(df, type_id) {
+	df %>% 
 		rownames_to_column("id") %>% 
 		filter(id %in% (annot_types %>% 
 											filter(type == type_id) %>% 

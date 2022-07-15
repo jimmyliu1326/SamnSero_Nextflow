@@ -31,7 +31,7 @@ library(magrittr)
 
 ```{r args}
 # set interactive = 1 if running interactively
-interactive=0
+interactive=1
 
 # get where the .Rmd file is
 src_dir <- dirname(knitr::current_input(dir = T))
@@ -56,7 +56,7 @@ source(file.path(src_dir, "workflow/annot_report_workflow.R"))
   .container {
     overflow: scroll !important;
     white-space: nowrap;
-    max-width: 1000px;
+    max-width: 1200px;
     max-height: 1000px;
   }
   img {
@@ -64,9 +64,9 @@ source(file.path(src_dir, "workflow/annot_report_workflow.R"))
   }
 </style>
 
-## {.tabset}
+# {.tabset}
 
-### Antimicrobial Resistance
+## Antimicrobial Resistance
 
 ```{r amr-html}
 if (exists("amr_tbl")) {
@@ -90,12 +90,45 @@ if (exists("amr_tbl")) {
 
 <br>
 
-#### {.tabset}
-##### Feature Matrix
+### {.tabset}
+#### Feature Matrix
+
+##### {.tabset .tabset-pills .tabset-fade}
+###### Variable only
+
+<br>
 
 <font size="4"> 
 `r fa("bell")`  **Note**: *Only genetic elements with variable presence are shown.*
 </font> 
+
+<div class="container">
+```{r amr-heatmap-var, fig.align = 'right'}
+if (tryCatch(nrow(amr_summary_var) == 0 | ncol(amr_summary_var) <= 1, error = function(e) return(T))) {
+	
+	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+	
+} else {
+	
+	p <- plot_type(amr_summary_var, sistr_res_clean)
+	p_dim <- calc_ht_size(p)
+	
+}
+```
+
+```{r amr-heatmap-var-plot,  fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'right'}
+if (!tryCatch(nrow(amr_summary_var) == 0 | ncol(amr_summary_var) <= 1, error = function(e) return(T))) {
+	
+	draw(p, heatmap_legend_side = "top",annotation_legend_side = "left")
+}
+```
+</div>
+
+###### Variable + Invariable
+
+<br>
+
+<br>
 
 <div class="container">
 ```{r amr-heatmap, fig.align = 'right'}
@@ -115,15 +148,18 @@ if (tryCatch(nrow(amr_summary) == 0 | ncol(amr_summary) <= 1, error = function(e
 if (!tryCatch(nrow(amr_summary) == 0 | ncol(amr_summary) <= 1, error = function(e) return(T))) {
 	
 	draw(p, heatmap_legend_side = "top",annotation_legend_side = "left")
+	
 }
 ```
 </div>
 
-##### Drug Class Matrix
+##### {-}
+
+#### Drug Class Matrix
 
 <div class="container">
 ```{r amr-drug-heatmap}
-if (tryCatch(nrow(amr_drug_summary) == 0, error = function(e) return(T))) {
+if (tryCatch(nrow(amr_drug_summary) == 0 | ncol(amr_drug_summary) <= 1, error = function(e) return(T))) {
 	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
 	
@@ -144,7 +180,7 @@ if (!tryCatch(nrow(amr_drug_summary) == 0, error = function(e) return(T))) {
 ```
 </div>
 
-### Virulence Factor
+## Virulence Factor
 
 ```{r vf-html}
 if (exists("vf_tbl")) {
@@ -168,16 +204,50 @@ if (exists("vf_tbl")) {
 
 <br>
 
-#### {.tabset}
-##### Feature Matrix
+### {.tabset}
+#### Feature Matrix
+
+##### {.tabset .tabset-pills}
+###### Variable only
+
+<br>
 
 <font size="4"> 
 `r fa("bell")`  **Note**: *Only genetic elements with variable presence are shown.*
 </font> 
 
 <div class="container">
+```{r vf-heatmap-var}
+if (tryCatch(nrow(vf_summary_var) == 0 | ncol(vf_summary_var) <= 1, error = function(e) return(T))) {
+	
+	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+	
+} else {
+	
+	p <- plot_type(vf_summary_var, sistr_res_clean)
+	p_dim <- calc_ht_size(p)
+	
+}
+```
+
+```{r vf-heatmap-var-plot, fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'center'}
+if (!tryCatch(nrow(vf_summary_var) == 0 | ncol(vf_summary_var) <= 1, error = function(e) return(T))) {
+	
+	draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
+	
+}
+```
+</div>
+
+###### Variable + Invariable
+
+<br>
+
+<br>
+
+<div class="container">
 ```{r vf-heatmap}
-if (tryCatch(nrow(amr_summary) == 0 | ncol(vf_summary) <= 1, error = function(e) return(T))) {
+if (tryCatch(nrow(vf_summary) == 0 | ncol(vf_summary) <= 1, error = function(e) return(T))) {
 	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
 	
@@ -190,7 +260,7 @@ if (tryCatch(nrow(amr_summary) == 0 | ncol(vf_summary) <= 1, error = function(e)
 ```
 
 ```{r vf-heatmap-plot, fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'center'}
-if (!tryCatch(nrow(amr_summary) == 0 | ncol(vf_summary) <= 1, error = function(e) return(T))) {
+if (!tryCatch(nrow(vf_summary) == 0 | ncol(vf_summary) <= 1, error = function(e) return(T))) {
 	
 	draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
 	
@@ -198,7 +268,8 @@ if (!tryCatch(nrow(amr_summary) == 0 | ncol(vf_summary) <= 1, error = function(e
 ```
 </div>
 
-### Plasmid
+
+## Plasmid
 
 ```{r plasmid-html}
 if (exists("plasmid_tbl")) {
@@ -220,16 +291,50 @@ if (exists("plasmid_tbl")) {
 
 <br>
 
-#### {.tabset}
-##### Feature Matrix
+### {.tabset}
+#### Feature Matrix
+
+##### {.tabset .tabset-pills}
+###### Variable only
+
+<br>
 
 <font size="4"> 
 `r fa("bell")`  **Note**: *Only genetic elements with variable presence are shown.*
 </font> 
 
 <div class="container">
+```{r plasmid-heatmap-var}
+if (tryCatch(nrow(plasmid_summary_var) == 0 | ncol(plasmid_summary_var) <= 1, error = function(e) return(T))) {
+	
+	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+	
+} else {
+	
+	p <- plot_type(plasmid_summary_var, sistr_res_clean)
+	p_dim <- calc_ht_size(p)
+	
+}
+```
+
+```{r plasmid-heatmap-var-plot, fig.width=p_dim[1], fig.height=p_dim[2]+1, fig.align = 'center'}
+if (!tryCatch(nrow(plasmid_summary_var) == 0 | ncol(plasmid_summary_var) <= 1, error = function(e) return(T))) {
+	
+	draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
+	
+} 
+```
+</div>
+
+###### Variable + Invariable
+
+<br>
+
+<br>
+
+<div class="container">
 ```{r plasmid-heatmap}
-if (tryCatch(nrow(amr_summary) == 0 | ncol(plasmid_summary) <= 1, error = function(e) return(T))) {
+if (tryCatch(nrow(plasmid_summary) == 0 | ncol(plasmid_summary) <= 1, error = function(e) return(T))) {
 	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
 	
@@ -242,7 +347,7 @@ if (tryCatch(nrow(amr_summary) == 0 | ncol(plasmid_summary) <= 1, error = functi
 ```
 
 ```{r plasmid-heatmap-plot, fig.width=p_dim[1], fig.height=p_dim[2]+1, fig.align = 'center'}
-if (!tryCatch(nrow(amr_summary) == 0 | ncol(plasmid_summary) <= 1, error = function(e) return(T))) {
+if (!tryCatch(nrow(plasmid_summary) == 0 | ncol(plasmid_summary) <= 1, error = function(e) return(T))) {
 	
 	draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
 	
@@ -250,15 +355,51 @@ if (!tryCatch(nrow(amr_summary) == 0 | ncol(plasmid_summary) <= 1, error = funct
 ```
 </div>
 
-### Combined Matrix
+
+## Combined Matrix
+
+### {.tabset .tabset-pills}
+
+#### Variable only
+
+<br>
 
 <font size="4"> 
 `r fa("bell")`  **Note**: *Only genetic elements with variable presence are shown.*
 </font> 
 
 <div class="container">
+```{r full-heatmap-var}
+if (tryCatch(ncol(tidy_res_var) <= 1 | nrow(tidy_res_var) == 0, error = function(e) return(T))) {
+	
+	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+	
+} else {
+	
+	p <- plot_full(tidy_res_var, sistr_res_clean)
+	p_dim <- calc_ht_size(p)
+	
+}
+```
+
+```{r plot-full-heatmap-var, fig.width=p_dim[1], fig.height=p_dim[2]+1, fig.align = 'center'}
+if (!tryCatch(ncol(tidy_res_var) <= 1 | nrow(tidy_res_var) == 0, error = function(e) return(T))) {
+	
+	draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
+	
+}
+```
+</div>
+
+#### Variable + Invariable
+
+<br>
+
+<br>
+
+<div class="container">
 ```{r full-heatmap}
-if (tryCatch(ncol(tidy_res) <= 1, error = function(e) return(T))) {
+if (tryCatch(ncol(tidy_res) <= 1 | nrow(tidy_res) == 0, error = function(e) return(T))) {
 	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
 	
@@ -271,7 +412,7 @@ if (tryCatch(ncol(tidy_res) <= 1, error = function(e) return(T))) {
 ```
 
 ```{r plot-full-heatmap, fig.width=p_dim[1], fig.height=p_dim[2]+1, fig.align = 'center'}
-if (!tryCatch(ncol(tidy_res) <= 1, error = function(e) return(T))) {
+if (!tryCatch(ncol(tidy_res) <= 1 | nrow(tidy_res) == 0, error = function(e) return(T))) {
 	
 	draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
 	
@@ -279,7 +420,7 @@ if (!tryCatch(ncol(tidy_res) <= 1, error = function(e) return(T))) {
 ```
 </div>
 
-## {-}
+# {-}
 
 ```{js}
 // JavaScript code for the Material UI range filter. This is a js language
