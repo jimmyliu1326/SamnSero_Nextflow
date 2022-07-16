@@ -10,7 +10,7 @@ process centrifuge {
     output:
         path("*.report", emit: report)
         path("*.krona", emit: krona)
-        path("*.kraken.report", emit: kreport)
+        path("*.kraken.report"), emit: kreport
     shell:
         """
         db_path=\$(find -L ${database_dir} -name "*.1.cf" -not -name "._*"  | sed 's/.1.cf//')
