@@ -43,6 +43,9 @@ if (interactive != 0) {
 } else {
 	args <- commandArgs(trailingOnly = T)
 }
+
+# set p_dim default values
+p_dim <- c(1,1)
 ```
 
 ```{r main}
@@ -107,20 +110,19 @@ if (exists("amr_tbl")) {
 if (tryCatch(nrow(amr_summary_var) == 0 | ncol(amr_summary_var) <= 1, error = function(e) return(T))) {
 	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+	heatmap_eval = F
 	
 } else {
 	
 	p <- plot_type(amr_summary_var, sistr_res_clean)
 	p_dim <- calc_ht_size(p)
+	heatmap_eval = T
 	
 }
 ```
 
-```{r amr-heatmap-var-plot,  fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'right'}
-if (!tryCatch(nrow(amr_summary_var) == 0 | ncol(amr_summary_var) <= 1, error = function(e) return(T))) {
-	
-	draw(p, heatmap_legend_side = "top",annotation_legend_side = "left")
-}
+```{r amr-heatmap-var-plot, eval=heatmap_eval, fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'right'}
+draw(p, heatmap_legend_side = "top",annotation_legend_side = "left")
 ```
 </div>
 
@@ -135,21 +137,19 @@ if (!tryCatch(nrow(amr_summary_var) == 0 | ncol(amr_summary_var) <= 1, error = f
 if (tryCatch(nrow(amr_summary) == 0 | ncol(amr_summary) <= 1, error = function(e) return(T))) {
 	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+	heatmap_eval = F
 	
 } else {
 	
 	p <- plot_type(amr_summary, sistr_res_clean)
 	p_dim <- calc_ht_size(p)
+	heatmap_eval = T
 	
 }
 ```
 
-```{r amr-heatmap-plot,  fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'right'}
-if (!tryCatch(nrow(amr_summary) == 0 | ncol(amr_summary) <= 1, error = function(e) return(T))) {
-	
-	draw(p, heatmap_legend_side = "top",annotation_legend_side = "left")
-	
-}
+```{r amr-heatmap-plot,  fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'right', eval = heatmap_eval}
+draw(p, heatmap_legend_side = "top",annotation_legend_side = "left")
 ```
 </div>
 
@@ -157,26 +157,28 @@ if (!tryCatch(nrow(amr_summary) == 0 | ncol(amr_summary) <= 1, error = function(
 
 #### Drug Class Matrix
 
+<br>
+
+<br>
+
 <div class="container">
 ```{r amr-drug-heatmap}
 if (tryCatch(nrow(amr_drug_summary) == 0 | ncol(amr_drug_summary) <= 1, error = function(e) return(T))) {
 	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+	heatmap_eval = F
 	
 } else {
 	
 	p <- plot_class(amr_drug_summary, sistr_res_clean)
 	p_dim <- calc_ht_size(p)
+	heatmap_eval = T
 	
 }
 ```
 
-```{r amr-drug-heatmap-plot, fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'right'}
-if (!tryCatch(nrow(amr_drug_summary) == 0, error = function(e) return(T))) {
-	
-	draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
-	
-}
+```{r amr-drug-heatmap-plot, fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'right', eval=heatmap_eval}
+draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
 ```
 </div>
 
@@ -221,21 +223,19 @@ if (exists("vf_tbl")) {
 if (tryCatch(nrow(vf_summary_var) == 0 | ncol(vf_summary_var) <= 1, error = function(e) return(T))) {
 	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+	heatmap_eval = F
 	
 } else {
 	
 	p <- plot_type(vf_summary_var, sistr_res_clean)
 	p_dim <- calc_ht_size(p)
+	heatmap_eval = T
 	
 }
 ```
 
-```{r vf-heatmap-var-plot, fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'center'}
-if (!tryCatch(nrow(vf_summary_var) == 0 | ncol(vf_summary_var) <= 1, error = function(e) return(T))) {
-	
-	draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
-	
-}
+```{r vf-heatmap-var-plot, fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'center', eval=heatmap_eval}
+draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
 ```
 </div>
 
@@ -250,21 +250,19 @@ if (!tryCatch(nrow(vf_summary_var) == 0 | ncol(vf_summary_var) <= 1, error = fun
 if (tryCatch(nrow(vf_summary) == 0 | ncol(vf_summary) <= 1, error = function(e) return(T))) {
 	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+	heatmap_eval = F
 	
 } else {
 	
 	p <- plot_type(vf_summary, sistr_res_clean)
 	p_dim <- calc_ht_size(p)
+	heatmap_eval = T
 	
 }
 ```
 
-```{r vf-heatmap-plot, fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'center'}
-if (!tryCatch(nrow(vf_summary) == 0 | ncol(vf_summary) <= 1, error = function(e) return(T))) {
-	
-	draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
-	
-}
+```{r vf-heatmap-plot, fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'center', eval=heatmap_eval}
+draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
 ```
 </div>
 
@@ -308,21 +306,19 @@ if (exists("plasmid_tbl")) {
 if (tryCatch(nrow(plasmid_summary_var) == 0 | ncol(plasmid_summary_var) <= 1, error = function(e) return(T))) {
 	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+	heatmap_eval = F
 	
 } else {
 	
 	p <- plot_type(plasmid_summary_var, sistr_res_clean)
 	p_dim <- calc_ht_size(p)
+	heatmap_eval = T
 	
 }
 ```
 
-```{r plasmid-heatmap-var-plot, fig.width=p_dim[1], fig.height=p_dim[2]+1, fig.align = 'center'}
-if (!tryCatch(nrow(plasmid_summary_var) == 0 | ncol(plasmid_summary_var) <= 1, error = function(e) return(T))) {
-	
-	draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
-	
-} 
+```{r plasmid-heatmap-var-plot, fig.width=p_dim[1], fig.height=p_dim[2]+1, fig.align = 'center', eval=heatmap_eval}
+draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
 ```
 </div>
 
@@ -337,21 +333,19 @@ if (!tryCatch(nrow(plasmid_summary_var) == 0 | ncol(plasmid_summary_var) <= 1, e
 if (tryCatch(nrow(plasmid_summary) == 0 | ncol(plasmid_summary) <= 1, error = function(e) return(T))) {
 	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+	heatmap_eval = F
 	
 } else {
 	
 	p <- plot_type(plasmid_summary, sistr_res_clean)
 	p_dim <- calc_ht_size(p)
+	heatmap_eval = T
 	
 }
 ```
 
-```{r plasmid-heatmap-plot, fig.width=p_dim[1], fig.height=p_dim[2]+1, fig.align = 'center'}
-if (!tryCatch(nrow(plasmid_summary) == 0 | ncol(plasmid_summary) <= 1, error = function(e) return(T))) {
-	
-	draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
-	
-} 
+```{r plasmid-heatmap-plot, fig.width=p_dim[1], fig.height=p_dim[2]+1, fig.align = 'center', eval=heatmap_eval}
+draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
 ```
 </div>
 
@@ -373,21 +367,19 @@ if (!tryCatch(nrow(plasmid_summary) == 0 | ncol(plasmid_summary) <= 1, error = f
 if (tryCatch(ncol(tidy_res_var) <= 1 | nrow(tidy_res_var) == 0, error = function(e) return(T))) {
 	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+	heatmap_eval = F
 	
 } else {
 	
 	p <- plot_full(tidy_res_var, sistr_res_clean)
 	p_dim <- calc_ht_size(p)
+	heatmap_eval = T
 	
 }
 ```
 
-```{r plot-full-heatmap-var, fig.width=p_dim[1], fig.height=p_dim[2]+1, fig.align = 'center'}
-if (!tryCatch(ncol(tidy_res_var) <= 1 | nrow(tidy_res_var) == 0, error = function(e) return(T))) {
-	
-	draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
-	
-}
+```{r plot-full-heatmap-var, fig.width=p_dim[1], fig.height=p_dim[2]+1, fig.align = 'center', eval=heatmap_eval}
+draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
 ```
 </div>
 
@@ -402,21 +394,19 @@ if (!tryCatch(ncol(tidy_res_var) <= 1 | nrow(tidy_res_var) == 0, error = functio
 if (tryCatch(ncol(tidy_res) <= 1 | nrow(tidy_res) == 0, error = function(e) return(T))) {
 	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+	heatmap_eval = F
 	
 } else {
 	
 	p <- plot_full(tidy_res, sistr_res_clean)
 	p_dim <- calc_ht_size(p)
+	heatmap_eval = T
 	
 }
 ```
 
-```{r plot-full-heatmap, fig.width=p_dim[1], fig.height=p_dim[2]+1, fig.align = 'center'}
-if (!tryCatch(ncol(tidy_res) <= 1 | nrow(tidy_res) == 0, error = function(e) return(T))) {
-	
-	draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
-	
-}
+```{r plot-full-heatmap, fig.width=p_dim[1], fig.height=p_dim[2]+1, fig.align = 'center', eval=heatmap_eval}
+draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
 ```
 </div>
 
