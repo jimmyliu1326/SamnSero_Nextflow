@@ -70,8 +70,9 @@ Required arguments:
 
 Optional arguments:
     --annot                        Annotate genome assemblies using Abricate
-    --species STR                  The target species of analysis. Quote the string if the species name contains
+    --taxon_name STR               Name of the target organism sequenced. Quote the string if the name contains
                                    space characters [Default: "Salmonella enterica"]
+    --taxon_level STR              Taxon level of the target organism sequenced. [Default: species]
     --qc                           Perform quality check on genome assemblies
     --centrifuge PATH              Path to DIRECTORY containing Centrifuge database index (required if using
                                    --qc)
