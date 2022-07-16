@@ -15,7 +15,7 @@ process qc_report {
         """
         mkdir kreport && mv *.kraken.report kreport/
 
-        Rscript -e 'rmarkdown::render("/R/qc_report.Rmd", output_dir=getwd(), knit_root_dir=getwd())' ${checkm_res} ${quast_res}  ${sistr_res} kreport/
+        Rscript -e 'rmarkdown::render("/R/qc_report.Rmd", output_dir=getwd(), knit_root_dir=getwd())' ${checkm_res} ${quast_res} ${sistr_res} kreport/
         """   
 }
 
@@ -31,9 +31,12 @@ process annot_report {
         file("annot_report.html")
     shell:
         """
-        mkdir -p annotations/results/ annotations/summary/ \
-            && mv *_summary.tsv annotations/summary \
-            && mv {vfdb,mob_suite,rgi}_res_aggregate.tsv annotations/results/
+        mkdir -p annotations/results/ annotations/summary/
+
+        for x in vfdb mob_suite rgi; do
+            if test -f \${x}_summary.tsv; then mv \${x}_summary.tsv annotations/summary; fi
+            if test -f \${x}_res_aggregate.tsv; then mv \${x}_res_aggregate.tsv annotations/results; fi
+        done
 
         Rscript -e 'rmarkdown::render("/R/annot_report.Rmd", output_dir=getwd(), knit_root_dir=getwd())' ${sistr_res} annotations
         """
