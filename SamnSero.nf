@@ -3,7 +3,7 @@ nextflow.enable.dsl=2
 
 // define global var
 pipeline_name = "SamnSero"
-version = "1.3"
+version = "1.4"
 
 // print help message
 def helpMessage() {
@@ -18,8 +18,9 @@ def helpMessage() {
         Optional arguments:
         --annot                         Annotate genome assemblies using Abricate
         --qc                            Perform quality check on genome assemblies
-        --species STR                   The target species of analysis. Quote the string if the species name contains
+        --taxon_name STR                Name of the target organism sequenced. Quote the string if the name contains
                                         space characters [Default: "Salmonella enterica"]
+        --taxon_level STR               Taxon level of the target organism sequenced. [Default: species]
         --centrifuge PATH               Path to DIRECTORY containing Centrifuge database index (required if using --qc)
         --nanohq                        Input reads were basecalled using Guppy v5 SUP models
         --notrim                        Skip adaptor trimming by Porechop
@@ -58,7 +59,8 @@ log.info """\
          ========================================
          input               : ${params.input}
          outdir              : ${params.outdir}
-         species             : ${params.species}
+         taxon_level         : ${params.taxon_level}
+         taxon_name          : ${params.taxon_name}
          disable trimming    : ${params.notrim}
          nanohq              : ${params.nanohq}
          quality check       : ${params.qc}
@@ -139,7 +141,7 @@ workflow {
         if ( !params.noreport ) {
             
             qc_report(SEROTYPING.out, ASSEMBLY_QC.out.checkm_res, ASSEMBLY_QC.out.quast_res, READ_QC.out.kreport.collect())
-
+            
         }
         
 
