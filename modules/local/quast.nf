@@ -21,7 +21,7 @@ process quast {
             --no-sv \
             ${assembly}
         
-        mv transposed_report.tsv ${assembly.simpleName}.tsv
+        cat transposed_report.tsv | awk 'BEGIN{OFS="\t"} NR==2{\$1="${sample_id}"}1' > ${sample_id}.tsv
         """
 }
 
