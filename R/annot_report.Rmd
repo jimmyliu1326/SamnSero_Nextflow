@@ -106,7 +106,7 @@ if (exists("amr_tbl")) {
 </font> 
 
 <div class="container">
-```{r amr-heatmap-var, fig.align = 'right'}
+```{r amr-heatmap-var}
 if (tryCatch(nrow(amr_summary_var) == 0 | ncol(amr_summary_var) <= 1, error = function(e) return(T))) {
 	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
@@ -121,7 +121,7 @@ if (tryCatch(nrow(amr_summary_var) == 0 | ncol(amr_summary_var) <= 1, error = fu
 }
 ```
 
-```{r amr-heatmap-var-plot, eval=heatmap_eval, fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'right'}
+```{r amr-heatmap-var-plot, eval=heatmap_eval, fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'center'}
 draw(p, heatmap_legend_side = "top",annotation_legend_side = "left")
 ```
 </div>
@@ -133,7 +133,7 @@ draw(p, heatmap_legend_side = "top",annotation_legend_side = "left")
 <br>
 
 <div class="container">
-```{r amr-heatmap, fig.align = 'right'}
+```{r amr-heatmap}
 if (tryCatch(nrow(amr_summary) == 0 | ncol(amr_summary) <= 1, error = function(e) return(T))) {
 	
 	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
@@ -148,7 +148,7 @@ if (tryCatch(nrow(amr_summary) == 0 | ncol(amr_summary) <= 1, error = function(e
 }
 ```
 
-```{r amr-heatmap-plot,  fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'right', eval = heatmap_eval}
+```{r amr-heatmap-plot,  fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'center', eval = heatmap_eval}
 draw(p, heatmap_legend_side = "top",annotation_legend_side = "left")
 ```
 </div>
@@ -177,7 +177,7 @@ if (tryCatch(nrow(amr_drug_summary) == 0 | ncol(amr_drug_summary) <= 1, error = 
 }
 ```
 
-```{r amr-drug-heatmap-plot, fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'right', eval=heatmap_eval}
+```{r amr-drug-heatmap-plot, fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'center', eval=heatmap_eval}
 draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
 ```
 </div>
