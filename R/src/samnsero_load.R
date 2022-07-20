@@ -18,7 +18,8 @@ load_sistr <- function(path) {
 		#rename("id" = "genome") %>% 
 		select(id, serovar, serovar_antigen,
 					 serovar_cgmlst, serogroup, qc_status, 
-					 qc_messages)
+					 qc_messages) %>% 
+		mutate(id = as.character(id))
 	# return
 	return(df)
 }
@@ -26,11 +27,9 @@ load_sistr <- function(path) {
 # load checkm
 load_checkm <- function(path) {
 	# read file
-	df <- fread(path)
-	# clean df
-	df <- df %>% 
-		#rename("id" = `Bin Id`) %>% 
-		select(id, everything())
+	df <- fread(path) %>% 
+		select(id, everything()) %>% 
+		mutate(id = as.character(id))
 	# return
 	return(df)
 }
@@ -38,7 +37,8 @@ load_checkm <- function(path) {
 # load quast
 load_quast <- function(path) {
 	# read file
-	df <- fread(path)
+	df <- fread(path) %>% 
+		mutate(id = as.character(id))
 	# return
 	return(df)
 }
@@ -46,7 +46,8 @@ load_quast <- function(path) {
 # load abricate summary
 load_abricate_summary <- function(path) {
 	# read file
-	df <- fread(path)
+	df <- fread(path) %>% 
+		mutate(id = as.character(id))
 	# return
 	return(df)
 }
@@ -66,7 +67,8 @@ load_kreport <- function(path) {
 # load abricate res
 load_abricate_res <- function(path) {
 	# read file
-	df <- fread(path)
+	df <- fread(path) %>% 
+		mutate(id = as.character(id))
 	# return
 	return(df)
 }
@@ -76,7 +78,8 @@ load_mob_suite_res <- function(path) {
 	# read file
 	df <- fread(path) %>% 
 		# remove the ids after :
-		mutate(id = str_replace(id, ":.*", ""))
+		mutate(id = str_replace(id, ":.*", "")) %>% 
+		mutate(id = as.character(id))
 	# return
 	return(df)
 }
@@ -106,7 +109,8 @@ load_rgi <- function(path) {
 					 	} else {
 					 		return(x)
 					 	}
-					 }))
+					 })) %>% 
+		mutate(id = as.character(id))
 	# return
 	return(df)
 }

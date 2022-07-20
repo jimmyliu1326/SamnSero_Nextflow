@@ -32,7 +32,7 @@ src_dir <- dirname(knitr::current_input(dir = T))
 
 # get positional arguments
 if (interactive != 0) {
-	args <- c("../data/samnsero/checkm/checkm_summary.tsv",
+	args <- c("../data/samnsero/checkm_res_aggregate.tsv",
 						"../data/samnsero/quast_res_aggregate.tsv",
 						"../data/samnsero/sistr_res_aggregate.csv",
 						"../data/samnsero/kreport")

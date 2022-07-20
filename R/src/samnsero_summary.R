@@ -68,20 +68,11 @@ getSummaryType <- function(df, type_id) {
 combine_sistr_qc <- function(quast_res, checkm_res, sistr_res) {
 	quast_res %>%
 		select(id, "# contigs", "Total length", "# N's per 100 kbp", "N50", "Avg. coverage depth") %>%
-		left_join(checkm_res %>%
-								select(id, Completeness, Contamination, "Strain heterogeneity") %>%
-								mutate(mod_id = str_replace_all(id, "-", "_")) %>% 
-								rename("correct_id" = id),
-							by = c("id" = "mod_id")
-		) %>%
-		# replace IDs in Quast with original IDs
-		# Quast replaces - with _
-		mutate(id = correct_id) %>% 
+		left_join(checkm_res, by = "id") %>%
 		left_join(sistr_res %>%
 								select(id, serogroup, serovar, qc_status, qc_messages),
 							by = "id"
 		) %>%
-		select(-correct_id) %>% # remove column
 		select(id, serogroup, serovar, qc_status,
 					 qc_messages, "Total length",
 					 Completeness, Contamination, 
