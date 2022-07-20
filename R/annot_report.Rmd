@@ -136,7 +136,7 @@ draw(p, heatmap_legend_side = "top",annotation_legend_side = "left")
 ```{r amr-heatmap}
 if (tryCatch(nrow(amr_summary) == 0 | ncol(amr_summary) <= 1, error = function(e) return(T))) {
 	
-	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+	print("Heatmap was not plotted either because only a single sample was analyzed or no elements were found")
 	heatmap_eval = F
 	
 } else {
@@ -165,7 +165,7 @@ draw(p, heatmap_legend_side = "top",annotation_legend_side = "left")
 ```{r amr-drug-heatmap}
 if (tryCatch(nrow(amr_drug_summary) == 0 | ncol(amr_drug_summary) <= 1, error = function(e) return(T))) {
 	
-	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+	print("Heatmap was not plotted either because only a single sample was analyzed or no elements were found")
 	heatmap_eval = F
 	
 } else {
@@ -249,7 +249,7 @@ draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
 ```{r vf-heatmap}
 if (tryCatch(nrow(vf_summary) == 0 | ncol(vf_summary) <= 1, error = function(e) return(T))) {
 	
-	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+	print("Heatmap was not plotted either because only a single sample was analyzed or no elements were found")
 	heatmap_eval = F
 	
 } else {
@@ -332,7 +332,7 @@ draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
 ```{r plasmid-heatmap}
 if (tryCatch(nrow(plasmid_summary) == 0 | ncol(plasmid_summary) <= 1, error = function(e) return(T))) {
 	
-	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+	print("Heatmap was not plotted either because only a single sample was analyzed or no elements were found")
 	heatmap_eval = F
 	
 } else {
@@ -393,7 +393,7 @@ draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
 ```{r full-heatmap}
 if (tryCatch(ncol(tidy_res) <= 1 | nrow(tidy_res) == 0, error = function(e) return(T))) {
 	
-	print("Heatmap was not plotted either because only a single sample was analyzed or no variable presence elements were found")
+	print("Heatmap was not plotted either because only a single sample was analyzed or no elements were found")
 	heatmap_eval = F
 	
 } else {
