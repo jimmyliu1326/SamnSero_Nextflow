@@ -3,7 +3,7 @@ nextflow.enable.dsl=2
 
 // define global var
 pipeline_name = "SamnSero"
-version = "1.4"
+version = "1.5"
 
 // print help message
 def helpMessage() {
