@@ -18,7 +18,7 @@ combined_res <- map(rev(args), ~fread(., header = T)) %>%
 xtra_cols <- c("fasta_filepath")
 
 combined_res <- combined_res %>% 
-	select(-id_cols, -xtra_cols) %>%
+	select(-xtra_cols) %>% # remove xtra cols
 	select(id, serovar, qc_status, qc_messages, everything())
 
 # write out
