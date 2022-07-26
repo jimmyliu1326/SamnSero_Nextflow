@@ -68,7 +68,8 @@ getSummaryType <- function(df, type_id) {
 combine_sistr_qc <- function(quast_res, checkm_res, sistr_res) {
 	quast_res %>%
 		select(id, "# contigs", "Total length", "# N's per 100 kbp", "N50", "Avg. coverage depth") %>%
-		left_join(checkm_res, by = "id") %>%
+		left_join(checkm_res %>% 
+								select(id, Completeness, Contamination, `Strain heterogeneity`), by = "id") %>%
 		left_join(sistr_res %>%
 								select(id, serogroup, serovar, qc_status, qc_messages),
 							by = "id"
