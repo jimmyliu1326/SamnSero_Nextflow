@@ -38,8 +38,8 @@ src_dir <- dirname(knitr::current_input(dir = T))
 
 # get positional arguments
 if (interactive != 0) {
-	args <- c("../data/ecoli/sistr_res_aggregate.csv",
-						"../data/ecoli/annotations/")
+	args <- c("../data/samnsero_annot/sistr_res_aggregate.csv",
+						"../data/samnsero_annot/annotations/")
 } else {
 	args <- commandArgs(trailingOnly = T)
 }

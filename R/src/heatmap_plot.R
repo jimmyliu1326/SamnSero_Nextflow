@@ -59,7 +59,7 @@ plot_full <- function(df, sistr_df) {
 			left_annotation = rowAnnotation(
 				"foo" = anno_block(
 					gp = gpar(fill = 2:4),
-					labels = annot_name,
+					labels = unique(annotation_rows),
 					labels_gp = gpar(col = "white", fontsize = 10)
 				)),
 			clustering_distance_rows = dist_str,
