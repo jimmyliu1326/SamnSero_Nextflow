@@ -3,7 +3,7 @@ nextflow.enable.dsl=2
 
 // define global var
 pipeline_name = "SamnSero"
-version = "1.5.2"
+version = "1.5.3"
 
 // print help message
 def helpMessage() {
@@ -47,6 +47,14 @@ if (params.help) {
 if (params.version) {
     versionPrint()
     exit 0
+}
+
+if ( params.qc & !(params.taxon_level ==~ '(species|kingdom|class|order|genus|domain)') ) {
+    error pipeline_name+": The taxon_level parameter contains invalid value"
+}
+
+if ( params.qc & params.taxon_name == true ) {
+    error pipeline_name+": The taxon_name parameter is empty"
 }
 
 if( !params.outdir ) { error pipeline_name+": Missing --outdir parameter" }
