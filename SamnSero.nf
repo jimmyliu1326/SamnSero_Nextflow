@@ -49,7 +49,7 @@ if (params.version) {
     exit 0
 }
 
-if ( params.qc & !(params.taxon_level ==~ '(species|kingdom|class|order|genus|domain)') ) {
+if ( params.qc & !(params.taxon_level ==~ '(species|kingdom|phylum|class|order|family|genus|domain)') ) {
     error pipeline_name+": The taxon_level parameter contains invalid value"
 }
 
