@@ -83,7 +83,7 @@ if (exists("amr_tbl")) {
 	  						onclick = "Reactable.downloadDataCSV('amr-table', 'SamnSero_AMR_annot.csv')"),
 					tags$button(tagList(fontawesome::fa("filter"), "Clear Filters"),
 											onclick = "Reactable.setAllFilters('amr-table', [])"),
-					tags$button(tagList(fontawesome::fa("plus-circle"), "Expand/Collapse All"),
+					tags$button(tagList(fontawesome::fa("circle-plus"), "Expand/Collapse All"),
 	      							onclick = "Reactable.toggleAllRowsExpanded('amr-front')")),
 		widths = c(12, 6)
 	)
@@ -196,7 +196,7 @@ if (exists("vf_tbl")) {
 	  						onclick = "Reactable.downloadDataCSV('vf-table', 'SamnSero_VF_annot.csv')"),
 					tags$button(tagList(fontawesome::fa("filter"), "Clear Filters"),
 											onclick = "Reactable.setAllFilters('vf-table', [])"),
-					tags$button(tagList(fontawesome::fa("plus-circle"), "Expand/Collapse All"),
+					tags$button(tagList(fontawesome::fa("circle-plus"), "Expand/Collapse All"),
 	      							onclick = "Reactable.toggleAllRowsExpanded('vf-front')")),
 		widths = c(12, 6)
 	)
