@@ -27,7 +27,7 @@ process medaka_gpu {
         tuple val(sample_id), file("${reads.simpleName}.fasta")
     shell:
         """
-        medaka_consensus -i ${reads} -d ${assembly} -o . -t ${task.cpus}
+        medaka_consensus -i ${reads} -d ${assembly} -o . -t ${task.cpus} -b ${params.medaka_batchsize}
         mv consensus.fasta ${reads.simpleName}.fasta
         """
 }
