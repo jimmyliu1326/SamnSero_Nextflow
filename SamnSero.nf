@@ -3,7 +3,7 @@ nextflow.enable.dsl=2
 
 // define global var
 pipeline_name = "SamnSero"
-version = "1.5.2"
+version = "1.5.4"
 
 // print help message
 def helpMessage() {
@@ -26,6 +26,7 @@ def helpMessage() {
         --notrim                        Skip adaptor trimming by Porechop
         --gpu                           Accelerate specific processes that utilize GPU computing. Must have
                                         NVIDIA Container Toolkit installed to enable GPU computing
+        --medaka_batchsize              Medaka batch size (smaller value reduces memory use)
         --noreport                      Do not generate interactive reports
         --help                          Print pipeline usage statement
         --version                       Print workflow version
@@ -49,6 +50,14 @@ if (params.version) {
     exit 0
 }
 
+if ( params.qc & !(params.taxon_level ==~ '(species|kingdom|phylum|class|order|family|genus|domain)') ) {
+    error pipeline_name+": The taxon_level parameter contains invalid value"
+}
+
+if ( params.qc & params.taxon_name == true ) {
+    error pipeline_name+": The taxon_name parameter is empty"
+}
+
 if( !params.outdir ) { error pipeline_name+": Missing --outdir parameter" }
 if( !params.input ) { error pipeline_name+": Missing --input parameter" }
 
@@ -67,6 +76,7 @@ log.info """\
          annotation          : ${params.annot}
          gpu                 : ${params.gpu}
          noreport            : ${params.noreport}
+         medaka_batchsize    : ${params.medaka_batchsize}
          """
          .stripIndent()
 
