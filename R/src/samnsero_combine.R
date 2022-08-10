@@ -9,9 +9,15 @@ suppressPackageStartupMessages(library(data.table))
 # parse args
 args <- commandArgs(trailingOnly = T)
 
+# parse file extensions
+file_ext <- str_split(args, "\\.") %>% 
+	map_chr(~return(.[[length(.)]]))
+
+# get delimiter based on file ext
+delim <- if_else(file_ext == "tsv", "\t", ",")
+
 # join all files by column modified id
-# IDs in quast results have _ instead of -
-combined_res <- map(rev(args), ~fread(., header = T)) %>% 
+combined_res <- map2(rev(args), rev(delim), ~fread(.x, header = T, sep = .y)) %>% 
 	reduce(left_join, by = "id")
 
 # remove xtra columns
