@@ -15,13 +15,14 @@ RUN R -e "install.packages(c( \
                 'RColorBrewer', 'stringr', \
                 'Cairo', 'scales', \
                 'scales', 'jsonlite', \
-                'htmltools', 'fontawesome', \
+                'htmltools', \
                 'crosstalk', 'remotes'))" \
     && R -e "remotes::install_github('jokergoo/circlize')" \
     && R -e "remotes::install_github(c( \
         'jokergoo/ComplexHeatmap', \
         'glin/reactable', \
-        'rstudio/rmarkdown'))"
+        'rstudio/rmarkdown', \
+        'rstudio/fontawesome'))"
 
 ADD R/ /R/
 
