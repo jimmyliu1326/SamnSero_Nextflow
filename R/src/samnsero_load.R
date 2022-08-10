@@ -12,14 +12,13 @@ library(magrittr)
 # load sistr res
 load_sistr <- function(path) {
 	# read data
-	df <- fread(path, sep = ",", header = T)
+	df <- fread(path, sep = ",", header = T, colClasses = c(id = "character"))
 	# clean df
 	df <- df %>% 
 		#rename("id" = "genome") %>% 
 		select(id, serovar, serovar_antigen,
 					 serovar_cgmlst, serogroup, qc_status, 
-					 qc_messages) %>% 
-		mutate(id = as.character(id))
+					 qc_messages)
 	# return
 	return(df)
 }
@@ -27,9 +26,8 @@ load_sistr <- function(path) {
 # load checkm
 load_checkm <- function(path) {
 	# read file
-	df <- fread(path) %>% 
-		select(id, everything()) %>% 
-		mutate(id = as.character(id))
+	df <- fread(path, colClasses = c(id = "character")) %>% 
+		select(id, everything())
 	# return
 	return(df)
 }
@@ -37,8 +35,7 @@ load_checkm <- function(path) {
 # load quast
 load_quast <- function(path) {
 	# read file
-	df <- fread(path) %>% 
-		mutate(id = as.character(id))
+	df <- fread(path, colClasses = c(id = "character"))
 	# return
 	return(df)
 }
@@ -46,8 +43,7 @@ load_quast <- function(path) {
 # load abricate summary
 load_abricate_summary <- function(path) {
 	# read file
-	df <- fread(path) %>% 
-		mutate(id = as.character(id))
+	df <- fread(path, colClasses = c(id = "character"))
 	# return
 	return(df)
 }
@@ -56,7 +52,7 @@ load_kreport <- function(path) {
 	# parse sample id
 	sample <- gsub(".kraken.report", "", basename(path))
 	# read file
-	df <- fread(path) %>% 
+	df <- fread(path, header = F) %>% 
 		mutate("id" = as.character(sample))
 	# rename first 6 cols
 	colnames(df)[1:6] <- c("percent", "count", "count_direct", "level", "taxid", "name")
@@ -67,8 +63,7 @@ load_kreport <- function(path) {
 # load abricate res
 load_abricate_res <- function(path) {
 	# read file
-	df <- fread(path) %>% 
-		mutate(id = as.character(id))
+	df <- fread(path, colClasses = c(id = "character"))
 	# return
 	return(df)
 }
@@ -76,10 +71,9 @@ load_abricate_res <- function(path) {
 # load mob suite res
 load_mob_suite_res <- function(path) {
 	# read file
-	df <- fread(path) %>% 
+	df <- fread(path, colClasses = c(id = "character")) %>% 
 		# remove the ids after :
-		mutate(id = str_replace(id, ":.*", "")) %>% 
-		mutate(id = as.character(id))
+		mutate(id = str_replace(id, ":.*", ""))
 	# return
 	return(df)
 }
@@ -88,7 +82,7 @@ load_mob_suite_res <- function(path) {
 load_rgi <- function(path) {
 	# read file
 	# read file
-	df <- fread(path, sep = "\t") %>% 
+	df <- fread(path, sep = "\t", colClasses = c(id = "character")) %>% 
 		# clean contig name
 		# remove ids after _
 		mutate(Contig = str_replace(Contig,"_.*",""),
@@ -109,8 +103,7 @@ load_rgi <- function(path) {
 					 	} else {
 					 		return(x)
 					 	}
-					 })) %>% 
-		mutate(id = as.character(id))
+					 }))
 	# return
 	return(df)
 }

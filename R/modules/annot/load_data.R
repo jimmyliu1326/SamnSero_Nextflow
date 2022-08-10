@@ -6,7 +6,7 @@ sistr_res <- load_sistr(sistr_path)
 # load annotation results - one row per feature
 if (file.exists(plasmid_res_path)) plasmid_res <- load_mob_suite_res(plasmid_res_path)
 if (file.exists(amr_res_path)) amr_res <- load_rgi(amr_res_path)
-if (file.exists(vf_res_path)) vf_res <- fread(vf_res_path) %>% mutate(id = as.character(id))
+if (file.exists(vf_res_path)) vf_res <- fread(vf_res_path, colClasses = c(id = "character"))
 # CARD ontology ID mapping
 aro_path <- file.path(src_dir, "data/aro/aro.tsv")
 aro <- fread(aro_path, sep = "\t", header = T)
