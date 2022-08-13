@@ -262,12 +262,12 @@ plotly_type <- function(df, sistr_df) {
 	if (row_n <= 15) { 
 		col_annot_size = 1/row_n*0.7
 		col_sum_size = 1/row_n*1.1
-		y_len = 1/row_n*1.5
+		y_len = 1/row_n*5
 		label_buffer = 1/row_n*0.1
 	} else { 
 		col_annot_size = 1/row_n*1.75
 		col_sum_size = 1/row_n*3.5
-		y_len = 1/row_n*2
+		y_len = 1/row_n*5
 		label_buffer = 1/row_n*0.5
 	}
 	
