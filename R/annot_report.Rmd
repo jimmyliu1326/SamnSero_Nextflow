@@ -30,16 +30,16 @@ library(magrittr)
 ```
 
 ```{r args}
-# set interactive = 1 if running interactively
-interactive=0
+# set interactive to 1 if running interactively
+interactive = 0
 
 # get where the .Rmd file is
 src_dir <- dirname(knitr::current_input(dir = T))
 
 # get positional arguments
-if (interactive != 0) {
-	args <- c("../data/samnsero_annot/sistr_res_aggregate.csv",
-						"../data/samnsero_annot/annotations/")
+if (interactive == 1) {
+	args <- c("../data/samnsero_annot_081222/sistr_res_aggregate.csv",
+						"../data/samnsero_annot_081222/annotations/")
 } else {
 	args <- commandArgs(trailingOnly = T)
 }
@@ -96,7 +96,7 @@ if (exists("amr_tbl")) {
 ### {.tabset}
 #### Feature Matrix
 
-##### {.tabset .tabset-pills .tabset-fade}
+##### {.tabset .tabset-pills}
 ###### Variable only
 
 <br>
@@ -105,7 +105,6 @@ if (exists("amr_tbl")) {
 `r fa("bell")`  **Note**: *Only genetic elements with variable presence are shown.*
 </font> 
 
-<div class="container">
 ```{r amr-heatmap-var}
 if (tryCatch(nrow(amr_summary_var) == 0 | ncol(amr_summary_var) <= 1, error = function(e) return(T))) {
 	
@@ -114,15 +113,18 @@ if (tryCatch(nrow(amr_summary_var) == 0 | ncol(amr_summary_var) <= 1, error = fu
 	
 } else {
 	
-	p <- plot_type(amr_summary_var, sistr_res_clean)
-	p_dim <- calc_ht_size(p)
+	#p <- plotly_type(amr_summary_var, sistr_res_clean)
+	#p_dim <- calc_ht_size(p)
+	p_dim <- c(ncol(amr_summary_var)*0.9+2, nrow(amr_summary_var)*0.25+2)
 	heatmap_eval = T
 	
 }
 ```
 
-```{r amr-heatmap-var-plot, eval=heatmap_eval, fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'center'}
-draw(p, heatmap_legend_side = "top",annotation_legend_side = "left")
+<div class="container">
+```{r amr-heatmap-var-plot, eval=heatmap_eval, fig.width = p_dim[1], fig.height = p_dim[2], fig.align = 'right'}
+#draw(p, heatmap_legend_side = "top",annotation_legend_side = "left")
+plotly_type(amr_summary_var, sistr_res_clean)
 ```
 </div>
 
@@ -132,7 +134,6 @@ draw(p, heatmap_legend_side = "top",annotation_legend_side = "left")
 
 <br>
 
-<div class="container">
 ```{r amr-heatmap}
 if (tryCatch(nrow(amr_summary) == 0 | ncol(amr_summary) <= 1, error = function(e) return(T))) {
 	
@@ -141,15 +142,18 @@ if (tryCatch(nrow(amr_summary) == 0 | ncol(amr_summary) <= 1, error = function(e
 	
 } else {
 	
-	p <- plot_type(amr_summary, sistr_res_clean)
-	p_dim <- calc_ht_size(p)
+	#p <- plotly_type(amr_summary, sistr_res_clean)
+	#p_dim <- calc_ht_size(p)
+	p_dim <- c(ncol(amr_summary)*0.9+2, nrow(amr_summary)*0.25+2)
 	heatmap_eval = T
 	
 }
 ```
 
-```{r amr-heatmap-plot,  fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'center', eval = heatmap_eval}
-draw(p, heatmap_legend_side = "top",annotation_legend_side = "left")
+<div class="container">
+```{r amr-heatmap-plot,  fig.width = p_dim[1], fig.height = p_dim[2], fig.align = 'right', eval = heatmap_eval}
+#draw(p, heatmap_legend_side = "top",annotation_legend_side = "left")
+plotly_type(amr_summary, sistr_res_clean)
 ```
 </div>
 
@@ -170,15 +174,17 @@ if (tryCatch(nrow(amr_drug_summary) == 0 | ncol(amr_drug_summary) <= 1, error = 
 	
 } else {
 	
-	p <- plot_class(amr_drug_summary, sistr_res_clean)
-	p_dim <- calc_ht_size(p)
+	#p <- plot_class(amr_drug_summary, sistr_res_clean)
+	#p_dim <- calc_ht_size(p)
+	p_dim <- c(ncol(amr_drug_summary)*0.9+2, nrow(amr_drug_summary)*0.25+2)
 	heatmap_eval = T
 	
 }
 ```
 
-```{r amr-drug-heatmap-plot, fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'center', eval=heatmap_eval}
-draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
+```{r amr-drug-heatmap-plot, fig.width = p_dim[1], fig.height = p_dim[2], fig.align = 'center', eval=heatmap_eval}
+#draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
+plotly_class(amr_drug_summary, sistr_res_clean)
 ```
 </div>
 
@@ -227,15 +233,16 @@ if (tryCatch(nrow(vf_summary_var) == 0 | ncol(vf_summary_var) <= 1, error = func
 	
 } else {
 	
-	p <- plot_type(vf_summary_var, sistr_res_clean)
-	p_dim <- calc_ht_size(p)
+	#p <- plot_type(vf_summary_var, sistr_res_clean)
+	p_dim <- c(ncol(vf_summary_var)*0.9+2, nrow(vf_summary_var)*0.25+2)
 	heatmap_eval = T
 	
 }
 ```
 
-```{r vf-heatmap-var-plot, fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'center', eval=heatmap_eval}
-draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
+```{r vf-heatmap-var-plot, fig.width = p_dim[1], fig.height = p_dim[2], fig.align = 'center', eval=heatmap_eval}
+#draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
+plotly_type(vf_summary_var, sistr_res_clean)
 ```
 </div>
 
@@ -254,15 +261,17 @@ if (tryCatch(nrow(vf_summary) == 0 | ncol(vf_summary) <= 1, error = function(e) 
 	
 } else {
 	
-	p <- plot_type(vf_summary, sistr_res_clean)
-	p_dim <- calc_ht_size(p)
+	#p <- plot_type(vf_summary, sistr_res_clean)
+	#p_dim <- calc_ht_size(p)
+	p_dim <- c(ncol(vf_summary)*0.9+2, nrow(vf_summary)*0.25+2)
 	heatmap_eval = T
 	
 }
 ```
 
-```{r vf-heatmap-plot, fig.width = p_dim[1], fig.height = p_dim[2]+1, fig.align = 'center', eval=heatmap_eval}
-draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
+```{r vf-heatmap-plot, fig.width = p_dim[1], fig.height = p_dim[2], fig.align = 'center', eval=heatmap_eval}
+#draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
+plotly_type(vf_summary, sistr_res_clean)
 ```
 </div>
 
@@ -310,15 +319,17 @@ if (tryCatch(nrow(plasmid_summary_var) == 0 | ncol(plasmid_summary_var) <= 1, er
 	
 } else {
 	
-	p <- plot_type(plasmid_summary_var, sistr_res_clean)
-	p_dim <- calc_ht_size(p)
+	#p <- plot_type(plasmid_summary_var, sistr_res_clean)
+	#p_dim <- calc_ht_size(p)
+	p_dim <- c(ncol(plasmid_summary_var)*0.9+2, nrow(plasmid_summary_var)*0.25+2)
 	heatmap_eval = T
 	
 }
 ```
 
 ```{r plasmid-heatmap-var-plot, fig.width=p_dim[1], fig.height=p_dim[2]+1, fig.align = 'center', eval=heatmap_eval}
-draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
+#draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
+plotly_type(plasmid_summary_var, sistr_res_clean)
 ```
 </div>
 
@@ -337,15 +348,17 @@ if (tryCatch(nrow(plasmid_summary) == 0 | ncol(plasmid_summary) <= 1, error = fu
 	
 } else {
 	
-	p <- plot_type(plasmid_summary, sistr_res_clean)
-	p_dim <- calc_ht_size(p)
+	#p <- plot_type(plasmid_summary, sistr_res_clean)
+	#p_dim <- calc_ht_size(p)
+	p_dim <- c(ncol(plasmid_summary)*0.9+2, nrow(plasmid_summary)*0.25+2)
 	heatmap_eval = T
 	
 }
 ```
 
 ```{r plasmid-heatmap-plot, fig.width=p_dim[1], fig.height=p_dim[2]+1, fig.align = 'center', eval=heatmap_eval}
-draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
+#draw(p, heatmap_legend_side = "top", annotation_legend_side = "left")
+plotly_type(plasmid_summary, sistr_res_clean)
 ```
 </div>
 

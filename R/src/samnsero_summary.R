@@ -16,7 +16,7 @@ annot_sum2mat <- function(df, var_only=F) {
 			filter(var != 0) %>% 
 			select(-var) %>% 
 			filter(!(id %in% c("GENE", "NUM_FOUND"))) %>% 
-			mutate_at(vars(2:ncol(.)), ~ifelse(. == 0, "A", "P")) %>% 
+			#mutate_at(vars(2:ncol(.)), ~ifelse(. == 0, "A", "P")) %>% 
 			column_to_rownames("id")	
 		
 	} else {
@@ -24,7 +24,7 @@ annot_sum2mat <- function(df, var_only=F) {
 		var_df %>% 
 			select(-var) %>% 
 			filter(!(id %in% c("GENE", "NUM_FOUND"))) %>% 
-			mutate_at(vars(2:ncol(.)), ~ifelse(. == 0, "A", "P")) %>% 
+			#mutate_at(vars(2:ncol(.)), ~ifelse(. == 0, "A", "P")) %>% 
 			column_to_rownames("id")	
 		
 	}
@@ -48,7 +48,7 @@ amr_class_sum <- function(df) {
 		rename("Drug Class" = "Drug.Class") %>% 
 		group_by(id, `Drug Class`) %>% 
 		tally() %>%
-		mutate(id = factor(id, levels = samples),) %>% 
+		mutate(id = factor(id, levels = samples)) %>% 
 		pivot_wider(names_from = "id",
 								values_from = "n",
 								values_fill = 0,
