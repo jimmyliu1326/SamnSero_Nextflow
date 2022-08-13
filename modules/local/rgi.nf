@@ -10,7 +10,8 @@ process rgi {
     shell:
         """
         rgi main -i ${assembly} -o ./out -t contig --num_threads ${task.cpus}
-        sed '1s/\$/\tid/; 2,\$s/\$/\t${sample_id}/' out.txt > ${sample_id}.tsv
+        sed 's/\\r//g' out.txt > ${sample_id}.tsv
+        sed -i '1s/\$/\tid/; 2,\$s/\$/\t${sample_id}/' ${sample_id}.tsv
         if [[ \$(cat ${sample_id}.tsv | wc -l) -lt 2 ]]; then rm ${sample_id}.tsv; fi
         """
 }
