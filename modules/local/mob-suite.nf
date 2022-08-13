@@ -29,7 +29,6 @@ process aggregate_mob_suite {
         file("mob_suite_res_aggregate.tsv")
     shell:
         """
-        mkdir -p annotations/results/
         awk 'NR == 1 || FNR > 1' *.mobtyper > mob_suite_res_aggregate.tsv
         """
 }
@@ -46,7 +45,6 @@ process mob_suite_summary {
         file("mob_suite_summary.tsv")
     shell:
         """
-        mkdir -p annotations/summary/
         cat ${samples} | cut -f1 -d',' > samples.list
         mob_suite_transpose.R ${mob_suite_res} samples.list mob_suite_summary.tsv
         """

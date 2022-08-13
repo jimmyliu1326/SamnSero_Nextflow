@@ -26,7 +26,6 @@ process aggregate_rgi {
         file("rgi_res_aggregate.tsv")
     shell:
         """
-        mkdir -p annotations/results/
         awk 'NR == 1 || FNR > 1' *.tsv > rgi_res_aggregate.tsv
         """
 }
@@ -43,7 +42,6 @@ process rgi_summary {
         file("rgi_summary.tsv")
     shell:
         """
-        mkdir -p annotations/summary/
         cat ${samples} | cut -f1 -d',' > samples.list
         rgi_transpose.R ${rgi_res} samples.list rgi_summary.tsv
         """

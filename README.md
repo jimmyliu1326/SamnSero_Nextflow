@@ -80,6 +80,8 @@ Optional arguments:
     --notrim                       Skip adaptor trimming by Porechop
     --gpu                          Accelerate specific processes that utilize GPU computing. Must have NVIDIA
                                    Container Toolkit installed to enable GPU computing, otherwise use CPU.
+    --medaka_batchsize             Medaka batch size (smaller value reduces memory use) [Default: 100]
+    --meta                         Optimize assembly parameters for metagenomic samples
     --noreport                     Do not generate interactive reports
     --help                         Print pipeline usage statement
 ```

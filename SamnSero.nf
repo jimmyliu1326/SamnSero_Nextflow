@@ -3,7 +3,6 @@ nextflow.enable.dsl=2
 
 // define global var
 pipeline_name = "SamnSero"
-version = "1.5.4"
 
 // print help message
 def helpMessage() {
@@ -27,6 +26,7 @@ def helpMessage() {
         --gpu                           Accelerate specific processes that utilize GPU computing. Must have
                                         NVIDIA Container Toolkit installed to enable GPU computing
         --medaka_batchsize              Medaka batch size (smaller value reduces memory use)
+        --meta                          Optimize assembly parameters for metagenomic samples
         --noreport                      Do not generate interactive reports
         --help                          Print pipeline usage statement
         --version                       Print workflow version
@@ -35,7 +35,7 @@ def helpMessage() {
 
 def versionPrint() {
     log.info """
-        $pipeline_name v$version
+        $pipeline_name v${workflow.manifest.version}
     """.stripIndent()
 }
 
@@ -58,13 +58,13 @@ if ( params.qc & params.taxon_name == true ) {
     error pipeline_name+": The taxon_name parameter is empty"
 }
 
-if( !params.outdir ) { error pipeline_name+": Missing --outdir parameter" }
-if( !params.input ) { error pipeline_name+": Missing --input parameter" }
+if ( !params.outdir ) { error pipeline_name+": Missing --outdir parameter" }
+if ( !params.input ) { error pipeline_name+": Missing --input parameter" }
 
 // print log info
 log.info """\
          ========================================
-         S A M N S E R O   P I P E L I N E  v${version}
+         S A M N S E R O   P I P E L I N E  v${workflow.manifest.version}
          ========================================
          input               : ${params.input}
          outdir              : ${params.outdir}
@@ -74,6 +74,7 @@ log.info """\
          nanohq              : ${params.nanohq}
          quality check       : ${params.qc}
          annotation          : ${params.annot}
+         meta                : ${params.meta}
          gpu                 : ${params.gpu}
          noreport            : ${params.noreport}
          medaka_batchsize    : ${params.medaka_batchsize}
