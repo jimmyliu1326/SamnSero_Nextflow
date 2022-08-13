@@ -1,7 +1,7 @@
 // import modules
 include { abricate; abricate_summary; abricate_custom; makeblastdb } from '../modules/local/abricate.nf'
 include { annot_report } from '../modules/local/report.nf'
-include { mob_suite; aggregate_mob_suite; mob_suite_summary } from '../modules/local/mob-suite.nf'
+include { mob_suite; aggregate_mob_suite; mob_suite_summary; mob_suite_merge } from '../modules/local/mob-suite.nf'
 include { rgi; aggregate_rgi; rgi_summary } from '../modules/local/rgi.nf'
 include { cctyper; tnblast; aggregate_cctyper } from '../modules/local/crisprs.nf'
 include { mafft } from '../modules/local/msa.nf'
@@ -39,6 +39,7 @@ workflow ANNOT {
         // run mob-suite for plasmid prediction
         assembly
             | mob_suite
+            | mob_suite_merge
             | map { it[1] }
             | collect
             | aggregate_mob_suite
