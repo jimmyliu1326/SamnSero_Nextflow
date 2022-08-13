@@ -15,7 +15,7 @@ aro <- fread(aro_path, sep = "\t", header = T)
 annot_summary <- map(annot_summary_files, function(x) {
 	file_path <- file.path(annot_dir, "summary", x)
 	if (file.exists(file_path)) {
-		fread(file.path(annot_dir, "summary", x)) %>%
+		fread(file.path(annot_dir, "summary", x), colClasses = c(id = "character")) %>%
 			mutate_all(~as.character(.))
 	}
 })
