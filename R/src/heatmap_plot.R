@@ -370,7 +370,7 @@ plotly_class <- function(df, sistr_df) {
 		add_col_summary(summary_function = "sum",
 										size = col_sum_size,
 										buffer = label_buffer) %>% 
-		add_col_title("Total features per class", side = "top") %>% 
+		add_col_title("Total features per sample", side = "top") %>% 
 		add_col_clustering(side = "bottom")
 	
 	if (row_n != 1) { p <- p %>% add_row_clustering(side = "right") }
