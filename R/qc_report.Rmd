@@ -24,14 +24,11 @@ library(crosstalk)
 ```
 
 ```{r args}
-# set interactive = 1 if running interactively
-interactive=0
-
 # get where the .Rmd file is
 src_dir <- dirname(knitr::current_input(dir = T))
 
 # get positional arguments
-if (interactive != 0) {
+if (Sys.getenv("RSTUDIO") == "1") {
 	args <- c("../data/samnsero/checkm_res_aggregate.tsv",
 						"../data/samnsero/quast_res_aggregate.tsv",
 						"../data/samnsero/sistr_res_aggregate.csv",
