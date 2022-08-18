@@ -1,6 +1,3 @@
- // set nanohq param value for dragonflye
-if( params.nanohq ) { nanohq = "--nanohq" } else { nanohq = '' }
-
 // assembly methods for Nanopore workflows
 process flye {
     tag "Flye assembly on ${reads.simpleName}"
