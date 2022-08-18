@@ -25,7 +25,7 @@ process dragonflye {
         tuple val(sample_id), file("dragonflye/${reads.simpleName}.fasta")
     shell:
         """
-        dragonflye --reads ${reads} --cpus ${task.cpus} --outdir dragonflye ${nanohq} ${flye_opts}    
+        dragonflye --reads ${reads} --cpus ${task.cpus} --outdir dragonflye ${flye_opts}    
         mv dragonflye/contigs.fa dragonflye/${reads.simpleName}.fasta
         """
 }
