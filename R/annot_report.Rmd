@@ -31,22 +31,28 @@ library(magrittr)
 
 ```{r args}
 # set interactive to 1 if running interactively
-interactive = 0
+interactive = 1
 
 # get where the .Rmd file is
 src_dir <- dirname(knitr::current_input(dir = T))
 
 # get positional arguments
 if (interactive == 1) {
-	args <- c("../data/samnsero_annot_081222/sistr_res_aggregate.csv",
-						"../data/samnsero_annot_081222/annotations/")
+	args <- c("../data/samnsero_annot_081522/sistr_res_aggregate.csv",
+						"../data/samnsero_annot_081522/annotations/")
 } else {
 	args <- commandArgs(trailingOnly = T)
 }
-
-# set p_dim default values
-p_dim <- c(1,1)
 ```
+
+```{r heatmap-params}
+p_dim <- c(1,1)
+h_base <- 7
+h_factor <- 0.2
+w_base <- 2
+w_factor <- 0.6
+```
+
 
 ```{r main}
 source(file.path(src_dir, "src/heatmap_plot.R"))
@@ -115,7 +121,7 @@ if (tryCatch(nrow(amr_summary_var) == 0 | ncol(amr_summary_var) <= 1, error = fu
 	
 	#p <- plotly_type(amr_summary_var, sistr_res_clean)
 	#p_dim <- calc_ht_size(p)
-	p_dim <- c(ncol(amr_summary_var)*0.85+2, nrow(amr_summary_var)*0.25+2)
+	p_dim <- c(ncol(amr_summary_var)*w_factor+w_base, nrow(amr_summary_var)*h_factor+h_base)
 	heatmap_eval = T
 	
 }
@@ -144,7 +150,7 @@ if (tryCatch(nrow(amr_summary) == 0 | ncol(amr_summary) <= 1, error = function(e
 	
 	#p <- plotly_type(amr_summary, sistr_res_clean)
 	#p_dim <- calc_ht_size(p)
-	p_dim <- c(ncol(amr_summary)*0.85+2, nrow(amr_summary)*0.25+2)
+	p_dim <- c(ncol(amr_summary)*w_factor+w_base, nrow(amr_summary)*h_factor+h_base)
 	heatmap_eval = T
 	
 }
@@ -176,7 +182,7 @@ if (tryCatch(nrow(amr_drug_summary) == 0 | ncol(amr_drug_summary) <= 1, error = 
 	
 	#p <- plot_class(amr_drug_summary, sistr_res_clean)
 	#p_dim <- calc_ht_size(p)
-	p_dim <- c(ncol(amr_drug_summary)*0.85+2, nrow(amr_drug_summary)*0.25+2)
+	p_dim <- c(ncol(amr_drug_summary)*w_factor+w_base, nrow(amr_drug_summary)*h_factor+h_base)
 	heatmap_eval = T
 	
 }
@@ -234,7 +240,7 @@ if (tryCatch(nrow(vf_summary_var) == 0 | ncol(vf_summary_var) <= 1, error = func
 } else {
 	
 	#p <- plot_type(vf_summary_var, sistr_res_clean)
-	p_dim <- c(ncol(vf_summary_var)*0.85+2, nrow(vf_summary_var)*0.25+2)
+	p_dim <- c(ncol(vf_summary_var)*w_factor+w_base, nrow(vf_summary_var)*h_factor+h_base)
 	heatmap_eval = T
 	
 }
@@ -263,7 +269,7 @@ if (tryCatch(nrow(vf_summary) == 0 | ncol(vf_summary) <= 1, error = function(e) 
 	
 	#p <- plot_type(vf_summary, sistr_res_clean)
 	#p_dim <- calc_ht_size(p)
-	p_dim <- c(ncol(vf_summary)*0.85+2, nrow(vf_summary)*0.25+2)
+	p_dim <- c(ncol(vf_summary)*w_factor+w_base, nrow(vf_summary)*h_factor+h_base)
 	heatmap_eval = T
 	
 }
@@ -321,7 +327,7 @@ if (tryCatch(nrow(plasmid_summary_var) == 0 | ncol(plasmid_summary_var) <= 1, er
 	
 	#p <- plot_type(plasmid_summary_var, sistr_res_clean)
 	#p_dim <- calc_ht_size(p)
-	p_dim <- c(ncol(plasmid_summary_var)*0.85+2, nrow(plasmid_summary_var)*0.25+2)
+	p_dim <- c(ncol(plasmid_summary_var)*w_factor+w_base, nrow(plasmid_summary_var)*h_factor+h_base)
 	heatmap_eval = T
 	
 }
@@ -350,7 +356,7 @@ if (tryCatch(nrow(plasmid_summary) == 0 | ncol(plasmid_summary) <= 1, error = fu
 	
 	#p <- plot_type(plasmid_summary, sistr_res_clean)
 	#p_dim <- calc_ht_size(p)
-	p_dim <- c(ncol(plasmid_summary)*0.85+2, nrow(plasmid_summary)*0.25+2)
+	p_dim <- c(ncol(plasmid_summary)*w_factor+w_base, nrow(plasmid_summary)*h_factor+h_base)
 	heatmap_eval = T
 	
 }

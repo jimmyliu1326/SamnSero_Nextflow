@@ -260,15 +260,15 @@ plotly_type <- function(df, sistr_df) {
 	col_n <- ncol(df)
 	
 	if (row_n <= 15) { 
-		col_annot_size = 1/row_n*0.7
+		col_annot_size = 1/row_n*0.4
 		col_sum_size = 1/row_n*1.1
-		y_len = 1/row_n*5
+		y_len = 1/row_n*0.25*length(unique(sistr_df$serovar))
 		label_buffer = 1/row_n*0.1
 	} else { 
-		col_annot_size = 1/row_n*1.75
-		col_sum_size = 1/row_n*3.5
-		y_len = 1/row_n*5
-		label_buffer = 1/row_n*0.5
+		col_annot_size = (1/row_n+0.0095)*0.85
+		col_sum_size = (1/row_n+0.0075)*3
+		y_len = (1/row_n+0.0075)*0.5*length(unique(sistr_df$serovar))
+		label_buffer = (1/row_n+0.0075)*0.5
 	}
 	
 	# draw plotly heatmap
@@ -301,12 +301,15 @@ plotly_type <- function(df, sistr_df) {
 		add_col_summary(summary_function = "sum",
 										size = col_sum_size,
 										buffer = label_buffer) %>% 
-		add_col_title("Number of unique features", side = "top") %>% 
-		add_col_labels(side = "bottom",
-									 buffer = label_buffer) %>% 
-		add_col_clustering(side = "bottom")
+		add_col_title("Number of unique features", side = "top")
 	
 	if (row_n != 1) { p <- p %>% add_row_clustering(side = "right") }
+	
+	
+	p <- p %>% 
+		add_col_clustering(side = "bottom") %>% 
+		add_col_labels(side = "bottom",
+									 buffer = label_buffer) 
 	
 	# return
 	p
@@ -327,12 +330,12 @@ plotly_class <- function(df, sistr_df) {
 	# }
 	
 	if (row_n <= 15) { 
-		col_annot_size = 1/c(row_n)*0.7
+		col_annot_size = 1/row_n*0.5
 		col_sum_size = 1/c(row_n)*1.1
 		y_len = 1/c(row_n)*0.6
 		label_buffer = 1/row_n*0.1
 	} else { 
-		col_annot_size = 1/c(row_n)*1.5
+		col_annot_size = 1/row_n*1+0.0075
 		col_sum_size = 1/c(row_n)*3.5
 		y_len = 1/c(row_n)*1.75
 		label_buffer = 1/row_n*0.5
@@ -365,15 +368,19 @@ plotly_class <- function(df, sistr_df) {
 									 name = "Serovar",
 									 size = col_annot_size,
 									 buffer = label_buffer) %>% 
-		add_col_labels(buffer = label_buffer) %>% 
 		add_row_labels() %>% 
 		add_col_summary(summary_function = "sum",
 										size = col_sum_size,
 										buffer = label_buffer) %>% 
-		add_col_title("Total features per sample", side = "top") %>% 
-		add_col_clustering(side = "bottom")
+		add_col_title("Total features per sample", side = "top")
 	
 	if (row_n != 1) { p <- p %>% add_row_clustering(side = "right") }
+	
+	p <- p %>% 
+		add_col_clustering(side = "bottom") %>% 
+		add_col_labels(side = "bottom",
+									 buffer = label_buffer) 
+		
 	
 	# return
 	p
