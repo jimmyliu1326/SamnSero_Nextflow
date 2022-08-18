@@ -6,8 +6,11 @@ workflow ASSEMBLY {
     take: reads
     main:
         // define assembly opts for target wgs and metagenomics
-        if (params.meta) { flye_opts="--depth 0 --opts '--meta'" } else { flye_opts="" }
+        flye_opts=""
+        if (params.meta) { flye_opts = flye_opts + "--depth 0 --opts '--meta'" }
+        if( params.nanohq ) { flye_opts = flye_opts + " --nanohq" }
         
+        // run assembly workflow
         dragonflye(reads, flye_opts)
         
         if (params.gpu) {
