@@ -9,10 +9,16 @@ process quast {
         tuple val(sample_id), file("${assembly.simpleName}.tsv")
     shell:
         """
+        if [[ ${params.seq_platform} == "illumina" ]]; then
+            input="-1 ${reads[0]} -2 ${reads[1]}"
+        else
+            input="--nanopore ${reads}"
+        fi
+
         quast.py \
             -o . \
             -t ${task.cpus} \
-            --nanopore ${reads} \
+            \$input \
             --no-plots \
             --no-html \
             --no-icarus \

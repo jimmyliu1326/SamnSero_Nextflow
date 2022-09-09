@@ -17,15 +17,16 @@ process flye {
 process dragonflye {
     tag "DragonFlye assembly on ${reads.simpleName}"
     label "process_medium"
+    publishDir "$params.outdir"+"/assembly/", mode: "copy"
 
     input:
         tuple val(sample_id), path(reads)
         val(flye_opts)
     output:
-        tuple val(sample_id), file("dragonflye/${reads.simpleName}.fasta")
+        tuple val(sample_id), file("${reads.simpleName}.fasta")
     shell:
         """
-        dragonflye --reads ${reads} --cpus ${task.cpus} --outdir dragonflye ${flye_opts}    
-        mv dragonflye/contigs.fa dragonflye/${reads.simpleName}.fasta
+        dragonflye --reads ${reads} --cpus ${task.cpus} --outdir dragonflye --ram ${task.memory.toGiga()} ${flye_opts}    
+        mv dragonflye/contigs.fa ${reads.simpleName}.fasta
         """
 }

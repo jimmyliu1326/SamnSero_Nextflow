@@ -2,7 +2,7 @@
 nextflow.enable.dsl=2
 
 // define global var
-pipeline_name = "SamnSero"
+pipeline_name = workflow.manifest.name
 
 // print help message
 def helpMessage() {
@@ -15,6 +15,8 @@ def helpMessage() {
         --outdir PATH                   Output directory path
 
         Optional arguments:
+        --seq_platform                  Sequencing platform that generated the input data (Options: nanopore|illumina) 
+                                        [Default = nanopore]
         --annot                         Annotate genome assemblies using Abricate
         --qc                            Perform quality check on genome assemblies
         --taxon_name STR                Name of the target organism sequenced. Quote the string if the name contains
@@ -22,10 +24,10 @@ def helpMessage() {
         --taxon_level STR               Taxon level of the target organism sequenced. [Default: species]
         --centrifuge PATH               Path to DIRECTORY containing Centrifuge database index (required if using --qc)
         --nanohq                        Input reads were basecalled using Guppy v5 SUP models
-        --notrim                        Skip adaptor trimming by Porechop
+        --trim                          Perform read trimming
         --gpu                           Accelerate specific processes that utilize GPU computing. Must have
                                         NVIDIA Container Toolkit installed to enable GPU computing
-        --medaka_batchsize              Medaka batch size (smaller value reduces memory use)
+        --medaka_batchsize              Medaka batch size (smaller value reduces memory use) [Default = 100]
         --meta                          Optimize assembly parameters for metagenomic samples
         --noreport                      Do not generate interactive reports
         --help                          Print pipeline usage statement
@@ -50,11 +52,15 @@ if (params.version) {
     exit 0
 }
 
-if ( params.qc & !(params.taxon_level ==~ '(species|kingdom|phylum|class|order|family|genus|domain)') ) {
-    error pipeline_name+": The taxon_level parameter contains invalid value"
+if ( params.qc == true & !(params.taxon_level ==~ '(species|kingdom|phylum|class|order|family|genus|domain)') ) {
+    error pipeline_name+": The taxon_level parameter contains invalid values"
 }
 
-if ( params.qc & params.taxon_name == true ) {
+if ( !(params.seq_platform ==~ '(nanopore|illumina)') ) {
+    error pipeline_name+": The seq_platform parameter contains invalid values"
+}
+
+if ( params.qc == true & params.taxon_name == true ) {
     error pipeline_name+": The taxon_name parameter is empty"
 }
 
@@ -68,9 +74,10 @@ log.info """\
          ========================================
          input               : ${params.input}
          outdir              : ${params.outdir}
+         seq_platform        : ${params.seq_platform}
          taxon_level         : ${params.taxon_level}
          taxon_name          : ${params.taxon_name}
-         disable trimming    : ${params.notrim}
+         trim                : ${params.trim}
          nanohq              : ${params.nanohq}
          quality check       : ${params.qc}
          annotation          : ${params.annot}
@@ -81,87 +88,30 @@ log.info """\
          """
          .stripIndent()
 
-// import modules
-include { porechop; combine } from './modules/local/nanopore-base.nf'
-include { combine_res } from './modules/local/parse.nf'
-include { qc_report; annot_report } from './modules/local/report.nf'
 // import workflows
-include { ASSEMBLY } from './workflow/genome_assembly.nf'
-include { SEROTYPING } from './workflow/serotyping.nf'
-include { ANNOT } from './workflow/genome_annotation.nf'
-include { ASSEMBLY_QC; READ_QC } from './workflow/sequence_qc.nf'
+include { nanopore } from './workflow/nanopore.nf'
+include { illumina } from './workflow/illumina.nf'
+include { post_asm_process } from './workflow/post_asm_process.nf'
+
 // define main workflow
 workflow {
+    
     // read data
     data = channel
         .fromPath(params.input, checkIfExists: true)
-        .splitCsv(header: false)       
+        .splitCsv(header: false)
+
+    // start analysis
+    if ( params.seq_platform == "nanopore" ) {
+
+        nanopore(data)
+        post_asm_process(nanopore.out.assembly, nanopore.out.reads)
+
+    } else if ( params.seq_platform == "illumina" ) {
+        
+        illumina(data)
+        post_asm_process(illumina.out.assembly, illumina.out.reads)
+
+    }
     
-    // analysis start
-    combine(data)
-
-    // trimming and assembly
-    if ( params.trim ) { 
-        
-        porechop(data)
-        
-        ASSEMBLY(porechop.out)
-
-    } else {
-        
-        ASSEMBLY(combine.out)
-
-    }    
-    // in-silico serotyping
-    SEROTYPING(ASSEMBLY.out)
-
-    // genome annotation
-    if ( params.annot ) { 
-        
-        ANNOT(ASSEMBLY.out)
-        
-        if ( !params.noreport) {
-
-            annot_report(SEROTYPING.out, ANNOT.out)
-        
-        }
-
-    }
-
-    // sequence QC
-    if ( params.qc ) { 
-        
-        if ( params.trim ) {
-            
-            READ_QC(porechop.out)
-
-            ASSEMBLY_QC(ASSEMBLY.out, porechop.out)
-        
-        } else {
-            
-            READ_QC(combine.out)
-
-            ASSEMBLY_QC(ASSEMBLY.out, combine.out)
-
-        }
-
-        results = ASSEMBLY_QC.out.checkm_res \
-                    | concat(ASSEMBLY_QC.out.quast_res, SEROTYPING.out) \
-                    | collect
-
-        if ( !params.noreport ) {
-            
-            qc_report(SEROTYPING.out, ASSEMBLY_QC.out.checkm_res, ASSEMBLY_QC.out.quast_res, READ_QC.out.kreport.collect())
-            
-        }
-        
-
-    } else {
-        
-        results = SEROTYPING.out
-
-    }
-
-    // combine results into a master file
-    combine_res(results)
 }
