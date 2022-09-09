@@ -69,6 +69,8 @@ Required arguments:
     --outdir PATH                  Output directory path
 
 Optional arguments:
+    --seq_platform                 Sequencing platform that generated the input data (Options: nanopore|illumina) 
+                                   [Default = nanopore]
     --annot                        Annotate genome assemblies using Abricate
     --taxon_name STR               Name of the target organism sequenced. Quote the string if the name contains
                                    space characters [Default: "Salmonella enterica"]
@@ -77,7 +79,7 @@ Optional arguments:
     --centrifuge PATH              Path to DIRECTORY containing Centrifuge database index (required if using
                                    --qc)
     --nanohq                       Input reads were basecalled using Guppy v5 SUP models
-    --notrim                       Skip adaptor trimming by Porechop
+    --trim                         Perform read trimming
     --gpu                          Accelerate specific processes that utilize GPU computing. Must have NVIDIA
                                    Container Toolkit installed to enable GPU computing, otherwise use CPU.
     --medaka_batchsize             Medaka batch size (smaller value reduces memory use) [Default: 100]
