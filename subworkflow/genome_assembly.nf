@@ -1,8 +1,9 @@
 // import modules
 include { flye; dragonflye } from '../modules/local/nanopore-assembly.nf'
 include { medaka; medaka_gpu } from '../modules/local/nanopore-polish.nf'
+include { shovill } from '../modules/local/illumina-assembly.nf'
 
-workflow ASSEMBLY {
+workflow ASSEMBLY_nanopore {
     take: reads
     main:
         // define assembly opts for target wgs and metagenomics
@@ -29,6 +30,21 @@ workflow ASSEMBLY {
 
             assembly_out = medaka.out
         }
+        
+    emit:
+        assembly_out
+}
+
+workflow ASSEMBLY_illumina {
+    take: reads
+
+    main:
+        // define assembly opts for target wgs and metagenomics
+        shovill_opts=""
+        if (params.meta) { shovill_opts = shovill_opts + "--opts '--meta'" }
+        
+        // run assembly workflow
+        assembly_out = shovill(reads, shovill_opts)
         
     emit:
         assembly_out

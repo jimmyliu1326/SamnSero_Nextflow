@@ -1,6 +1,8 @@
 // import modules
 include { checkm } from '../modules/local/checkm.nf'
 include { quast; aggregate_quast } from '../modules/local/quast.nf'
+include { fastqc; multiqc } from '../modules/local/fastqc.nf'
+include { nanocomp } from '../modules/local/nanopore-base.nf'
 
 workflow ASSEMBLY_QC {
     take: 
@@ -27,7 +29,7 @@ workflow ASSEMBLY_QC {
 }
 
 // import modules
-include { centrifuge; krona } from '../modules/local/nanopore-taxonomy.nf'
+include { centrifuge; krona } from '../modules/local/taxonomy_class.nf'
 
 workflow READ_QC {
     take: reads
@@ -43,7 +45,17 @@ workflow READ_QC {
                 | krona
                 
         }
+
+        // run fastqc and multiqc
+        if (params.seq_platform == "illumina" ) {
+            fastqc(reads)
+            read_qc = multiqc(fastqc.out.collect())
+        } else {
+            read_qc = nanocomp(reads.map{ it[1] }.collect())
+        }
+        
         
     emit:
         kreport = centrifuge.out.kreport
+        read_qc = read_qc
 }
