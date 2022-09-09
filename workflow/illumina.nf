@@ -9,14 +9,23 @@ workflow illumina {
 
     main:
         
-        // parse data 
-        data
-            | map { 
-                id = it[0]
-                path = file(it[1], checkIfExists: true).listFiles().toList()
-                return tuple(id, path)
-                }
-            | set { data_pe }
+        // parse data
+        // get fastq dir column from input csv
+        fq_dirs = data.map{ file(it[1]) }
+
+        // create a tuple of R1/R2 fastq files grouped by sample ID
+        fq_dirs.flatMap{ 
+            file = file(it, checkIfExists: true)
+                .listFiles()
+            }
+            .filter{ it.name =~ /.fastq*/ }
+            .map{ tuple file(it.getParent()), it}
+            .groupTuple()
+            // join the tuples by FASTQ directories
+            .join(data.map{ tuple file(it[1]), it[0] }, by: 0)
+            .map{ tuple it[2], it[1] }
+            .set { data_pe }
+        
 
         // trimming and assembly
         fastp_opts=""
