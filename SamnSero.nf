@@ -7,31 +7,44 @@ pipeline_name = workflow.manifest.name
 // print help message
 def helpMessage() {
     log.info """
-        Usage: nextflow run jimmyliu1326/SamnSero_Nextflow --input samples.csv --outdir /path/to/output
+    Usage: nextflow run jimmyliu1326/SamnSero_Nextflow --input samples.csv --outdir /path/to/output -profile standard
 
-        Required arguments:
+    I/O:
         --input PATH                    Path to a .csv containing two columns describing Sample ID and path
                                         to raw reads directory
         --outdir PATH                   Output directory path
 
-        Optional arguments:
+    Sequencing info:
         --seq_platform                  Sequencing platform that generated the input data (Options: nanopore|illumina) 
                                         [Default = nanopore]
-        --annot                         Annotate genome assemblies using Abricate
-        --qc                            Perform quality check on genome assemblies
+        --meta                          Optimize assembly parameters for metagenomic samples
         --taxon_name STR                Name of the target organism sequenced. Quote the string if the name contains
-                                        space characters [Default: "Salmonella enterica"]
-        --taxon_level STR               Taxon level of the target organism sequenced. [Default: species]
-        --centrifuge PATH               Path to DIRECTORY containing Centrifuge database index (required if using --qc)
+                                        space characters [Default = "Salmonella enterica"]
+        --taxon_level STR               Taxon level of the target organism sequenced. [Default = species]
         --nanohq                        Input reads were basecalled using Guppy v5 SUP models
+
+    Data quality check:
         --trim                          Perform read trimming
+        
+        --qc                            Perform quality check on genome assemblies
+        --centrifuge PATH               Path to DIRECTORY containing Centrifuge database index (required if using --qc)
+
+    Genome annotation:
+        --annot                         Annotate genome assemblies
+
+    GPU acceleration:
         --gpu                           Accelerate specific processes that utilize GPU computing. Must have
                                         NVIDIA Container Toolkit installed to enable GPU computing
         --medaka_batchsize              Medaka batch size (smaller value reduces memory use) [Default = 100]
-        --meta                          Optimize assembly parameters for metagenomic samples
+        
+    Slurm HPC:
+        --account STR                   Slurm account name
+
+    Other:
         --noreport                      Do not generate interactive reports
         --help                          Print pipeline usage statement
         --version                       Print workflow version
+         
         """.stripIndent()
 }
 
