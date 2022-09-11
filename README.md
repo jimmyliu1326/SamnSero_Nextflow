@@ -10,7 +10,7 @@ The nextflow pipeline processes raw Nanopore sequencing reads for *Salmonella en
 ```bash
 # Install pre-requisites
  - Nextflow >= 21.0
- - Docker
+ - Docker or Singularity
  - Git
 
 # Get the latest version of the pipeline
@@ -52,38 +52,58 @@ Given the `samples.csv` above, your data directory should be set up like the fol
 
 Once you have set up the data directory as described and created the `samples.csv`, you are ready to run the pipeline.
 
-Here is a standard command line call to the `SamnSero` pipeline:
+## Pipeline Usage
+
+The pipeline executes process in Docker containers by default. Usage of Singularity containers is also supported, but only configured for HPC environments that use Slurm scheduler.
+
+**With Docker (Default)**
 
 ```bash
 nextflow run jimmyliu1326/SamnSero_Nextflow --input samples.csv --outdir results
 ```
 
-## Pipeline Usage Details
+**With Slurm HPC**
+
+```bash
+nextflow run jimmyliu1326/SamnSero_Nextflow --input samples.csv --outdir results -profile slurm
+```
 
 Below is the complete list of pipeline options available:
 
 ```
-Required arguments:
-    --input PATH                   Path to a .csv containing two columns describing Sample ID and path
-                                   to raw reads directory
-    --outdir PATH                  Output directory path
+    I/O:
+        --input PATH                    Path to a .csv containing two columns describing Sample ID and path
+                                        to raw reads directory
+        --outdir PATH                   Output directory path
 
-Optional arguments:
-    --seq_platform                 Sequencing platform that generated the input data (Options: nanopore|illumina) 
-                                   [Default = nanopore]
-    --annot                        Annotate genome assemblies using Abricate
-    --taxon_name STR               Name of the target organism sequenced. Quote the string if the name contains
-                                   space characters [Default: "Salmonella enterica"]
-    --taxon_level STR              Taxon level of the target organism sequenced. [Default: species]
-    --qc                           Perform quality check on genome assemblies
-    --centrifuge PATH              Path to DIRECTORY containing Centrifuge database index (required if using
-                                   --qc)
-    --nanohq                       Input reads were basecalled using Guppy v5 SUP models
-    --trim                         Perform read trimming
-    --gpu                          Accelerate specific processes that utilize GPU computing. Must have NVIDIA
-                                   Container Toolkit installed to enable GPU computing, otherwise use CPU.
-    --medaka_batchsize             Medaka batch size (smaller value reduces memory use) [Default: 100]
-    --meta                         Optimize assembly parameters for metagenomic samples
-    --noreport                     Do not generate interactive reports
-    --help                         Print pipeline usage statement
+    Sequencing info:
+        --seq_platform                  Sequencing platform that generated the input data (Options: nanopore|illumina) 
+                                        [Default = nanopore]
+        --meta                          Optimize assembly parameters for metagenomic samples
+        --taxon_name STR                Name of the target organism sequenced. Quote the string if the name contains
+                                        space characters [Default = "Salmonella enterica"]
+        --taxon_level STR               Taxon level of the target organism sequenced. [Default = species]
+        --nanohq                        Input reads were basecalled using Guppy v5 SUP models
+
+    Data quality check:
+        --trim                          Perform read trimming
+        
+        --qc                            Perform quality check on genome assemblies
+        --centrifuge PATH               Path to DIRECTORY containing Centrifuge database index (required if using --qc)
+
+        Genome annotation:
+        --annot                         Annotate genome assemblies
+
+    GPU acceleration:
+        --gpu                           Accelerate specific processes that utilize GPU computing. Must have
+                                        NVIDIA Container Toolkit installed to enable GPU computing
+        --medaka_batchsize              Medaka batch size (smaller value reduces memory use) [Default = 100]
+        
+    Slurm HPC:
+        --account STR                   Slurm account name (required if running in Slurm HPC)
+
+    Other:
+        --noreport                      Do not generate interactive reports
+        --help                          Print pipeline usage statement
+        --version                       Print workflow version
 ```
