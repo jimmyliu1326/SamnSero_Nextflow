@@ -10,7 +10,12 @@ process shovill {
         tuple val(sample_id), path("${sample_id}.fasta")
     shell:
         """
-        shovill --R1 ${reads[0]} --R2 ${reads[1]} --cpus ${task.cpus} --outdir shovill --ram ${task.memory.toGiga()} ${opts} 
+        shovill --R1 ${reads[0]} \
+            --R2 ${reads[1]} \
+            --cpus ${task.cpus} \
+            --outdir shovill \
+            --ram ${task.memory.toGiga()} \
+            ${opts} 
         mv shovill/contigs.fa ${sample_id}.fasta
         """
 }
