@@ -88,7 +88,7 @@ Below is the complete list of pipeline options available:
     Data quality check:
         --trim                          Perform read trimming
         
-        --qc                            Perform quality check on genome assemblies
+        --qc                            Quality check input reads and genome assemblies
         --centrifuge PATH               Path to DIRECTORY containing Centrifuge database index (required if using --qc)
 
     Genome annotation:
