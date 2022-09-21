@@ -77,7 +77,7 @@ Below is the complete list of pipeline options available:
         --outdir PATH                   Output directory path
 
     Sequencing info:
-        --seq_platform                  Sequencing platform that generated the input data (Options: nanopore|illumina) 
+        --seq_platform STR              Sequencing platform that generated the input data (Options: nanopore|illumina) 
                                         [Default = nanopore]
         --meta                          Optimize assembly parameters for metagenomic samples
         --taxon_name STR                Name of the target organism sequenced. Quote the string if the name contains
@@ -91,13 +91,13 @@ Below is the complete list of pipeline options available:
         --qc                            Perform quality check on genome assemblies
         --centrifuge PATH               Path to DIRECTORY containing Centrifuge database index (required if using --qc)
 
-        Genome annotation:
+    Genome annotation:
         --annot                         Annotate genome assemblies
 
     GPU acceleration:
         --gpu                           Accelerate specific processes that utilize GPU computing. Must have
                                         NVIDIA Container Toolkit installed to enable GPU computing
-        --medaka_batchsize              Medaka batch size (smaller value reduces memory use) [Default = 100]
+        --medaka_batchsize INT          Medaka batch size (smaller value reduces memory use) [Default = 100]
         
     Slurm HPC:
         --account STR                   Slurm account name (required if running in Slurm HPC)
