@@ -25,7 +25,6 @@ def helpMessage() {
 
     Data quality check:
         --trim                          Perform read trimming
-        
         --qc                            Perform quality check on genome assemblies
         --centrifuge PATH               Path to DIRECTORY containing Centrifuge database index (required if using --qc)
 
