@@ -3,7 +3,7 @@
 # SamnSero (Nextflow)
 
 
-The nextflow pipeline processes raw Nanopore sequencing reads for *Salmonella enterica*. Different modules can be optionally invoked to perform genome annotation and quality control checks. Optionally, interactive reports can be generated in HTML format to view genome assembly/raw read quality metrics and genome annotations.
+The nextflow pipeline processes raw Nanopore sequencing reads for *Salmonella enterica*. Different modules can be optionally invoked to perform genome annotation and quality control checks. Optionally, interactive reports can be generated in HTML format to view data quality metrics and genome annotations.
 
 ## Installation
 
@@ -87,7 +87,6 @@ Below is the complete list of pipeline options available:
 
     Data quality check:
         --trim                          Perform read trimming
-        
         --qc                            Quality check input reads and genome assemblies
         --centrifuge PATH               Path to DIRECTORY containing Centrifuge database index (required if using --qc)
 
