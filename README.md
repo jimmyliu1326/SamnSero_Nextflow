@@ -48,24 +48,24 @@ Given the `samples.csv` above, your data directory should be set up like the fol
 *Note:*
 * The sequencing data for each sample must be placed within a unique subdirectory
 * The names of the sample subdirectories do not have to match the sample ID listed in the `samples.csv`
-* You can have multiple .FASTA files associated with a single sample. The pipeline will aggregate all .FASTQ files within the same directory before proceeding
+* You can have multiple .FASTQ files associated with a single sample. The pipeline will aggregate all .FASTQ files within the same directory before proceeding (for Nanopore data only)
 
 Once you have set up the data directory as described and created the `samples.csv`, you are ready to run the pipeline.
 
 ## Pipeline Usage
 
-The pipeline executes process in Docker containers by default. Usage of Singularity containers is also supported, but only configured for HPC environments that use Slurm scheduler.
+The pipeline executes process in Docker containers by default. Usage of Singularity containers is also supported, but only configured for HPC environments that use Slurm scheduler. Note that a pipeline version must be specified when calling the pipeline.
 
 **With Docker (Default)**
 
 ```bash
-nextflow run jimmyliu1326/SamnSero_Nextflow --input samples.csv --outdir results
+nextflow run jimmyliu1326/SamnSero_Nextflow -r v1.6.3 --input samples.csv --outdir results
 ```
 
 **With Slurm HPC**
 
 ```bash
-nextflow run jimmyliu1326/SamnSero_Nextflow --input samples.csv --outdir results -profile slurm
+nextflow run jimmyliu1326/SamnSero_Nextflow -r v1.6.3 --input samples.csv --outdir results -profile slurm
 ```
 
 Below is the complete list of pipeline options available:
