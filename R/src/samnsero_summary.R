@@ -117,6 +117,9 @@ kreport_sum <- function(df) {
 			# calc archaeal reads
 			archaea <- x %>% filter(name == "Archaea") %>% pull(percent)
 			if (length(archaea) == 0) archaea <- 0
+			# calc synthetic reads
+			artificial <- x %>% filter(name == "artificial sequences") %>% pull(percent)
+			if (length(archaea) == 0) artificial <- 0
 			
 			data.frame(id = id,
 								 total = total_count,
@@ -125,7 +128,8 @@ kreport_sum <- function(df) {
 								 bacteria = bacteria,
 								 virus = virus,
 								 eukaryota = eukaryota,
-								 archaea = archaea
+								 archaea = archaea,
+								 artificial = artificial
 			)
 		})
 }
@@ -133,6 +137,10 @@ kreport_sum <- function(df) {
 kreport_class_sum <- function(df) {
 	# create classification results table by domain
 	kreport_class_res <- df %>% 
+		# change domain level of 'artificial sequences' from '-' to 'D'
+		mutate(level = case_when(name == "artificial sequences" ~ "D",
+														 T ~ level),
+					 name = str_replace_all(name, "artificial sequences", "Artificial sequences")) %>% 
 		filter(level %in% c("D","S"))
 	
 	tax_levels <- kreport_class_res$level
