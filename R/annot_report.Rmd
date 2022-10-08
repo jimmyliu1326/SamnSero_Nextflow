@@ -35,8 +35,8 @@ src_dir <- dirname(knitr::current_input(dir = T))
 
 # get positional arguments
 if (Sys.getenv("RSTUDIO") == "1") {
-	args <- c("../data/samnsero_annot_081522/sistr_res_aggregate.csv",
-						"../data/samnsero_annot_081522/annotations/")
+	args <- c("../data/samnsero_annot_100722/sistr_res_aggregate.csv",
+						"../data/samnsero_annot_100722/annotations/")
 } else {
 	args <- commandArgs(trailingOnly = T)
 }
@@ -44,10 +44,10 @@ if (Sys.getenv("RSTUDIO") == "1") {
 
 ```{r heatmap-params}
 p_dim <- c(1,1)
-h_base <- 7
-h_factor <- 0.2
-w_base <- 2
-w_factor <- 0.6
+h_base <- 6
+h_factor <- 0.25
+w_base <- 4
+w_factor <- 0.7
 ```
 
 
