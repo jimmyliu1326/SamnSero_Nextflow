@@ -267,7 +267,7 @@ plotly_type <- function(df, sistr_df) {
 	} else { 
 		col_annot_size = (1/row_n+0.0095)*0.85
 		col_sum_size = (1/row_n+0.0075)*3
-		y_len = (1/row_n+0.0075)*0.5*length(unique(sistr_df$serovar))
+		y_len = (1/row_n+0.04)*0.5*length(unique(sistr_df$serovar))
 		label_buffer = (1/row_n+0.0075)*0.5
 	}
 	
