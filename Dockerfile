@@ -22,7 +22,8 @@ RUN R -e "install.packages(c( \
         'jokergoo/ComplexHeatmap', \
         'glin/reactable', \
         'rstudio/rmarkdown', \
-        'rstudio/fontawesome'))"
+        'rstudio/fontawesome', \
+        'ropensci/iheatmapr'))"
 
 ADD R/ /R/
 
