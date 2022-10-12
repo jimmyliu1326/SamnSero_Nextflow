@@ -53,12 +53,20 @@ def versionPrint() {
     """.stripIndent()
 }
 
-// check params
-// if (params.help) {
-//     helpMessage()
-//     exit 0
-// }
+// check if input exists
+if (!params.input) { 
+    exit 1, pipeline_name+': Input sample sheet not specified!' 
+} else {
+    file(params.input, checkIfExists: true)
+}
 
+// check if centrifuge database exists
+// when --qc invoked
+if (params.qc) {
+    file(params.centrifuge, checkIfExists: true)
+}
+
+// print pipeline vers
 if (params.version) {
     versionPrint()
     exit 0
