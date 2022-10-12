@@ -1,0 +1,195 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://raw.githubusercontent.com/SamnSero/master/nextflow_schema.json",
+    "title": "SamnSero pipeline parameters",
+    "description": "Bacterial Genomics Workflow for Infectious Disease Diagnostics and Surveillance",
+    "type": "object",
+    "definitions": {
+        "input_output_options": {
+            "title": "Input/output options",
+            "type": "object",
+            "fa_icon": "fas fa-terminal",
+            "description": "Define where the pipeline should find input data and save output data.",
+            "required": [
+                "input"
+            ],
+            "properties": {
+                "input": {
+                    "type": "string",
+                    "format": "file-path",
+                    "mimetype": "text/csv",
+                    "pattern": "^\\S+\\.csv$",
+                    "schema": "assets/schema_input.json",
+                    "description": "Path to comma-separated file containing information about the samples in the experiment.",
+                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re//usage#samplesheet-input).",
+                    "fa_icon": "fas fa-file-csv"
+                },
+                "outdir": {
+                    "type": "string",
+                    "description": "Path to the output directory where the results will be saved.",
+                    "default": "./results",
+                    "fa_icon": "fas fa-folder-open"
+                }
+            }
+        },
+        "sequencing_info": {
+            "title": "Sequencing Info",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "seq_platform": {
+                    "type": "string",
+                    "default": "nanopore",
+                    "description": "Sequencing platform that generated the input data.",
+                    "enum": [
+                        "nanopore",
+                        "illumina"
+                    ]
+                },
+                "taxon_name": {
+                    "type": "string",
+                    "default": "Salmonella enterica",
+                    "description": "Name of the target organism sequenced. Quote the string if the name contains space characters."
+                },
+                "taxon_level": {
+                    "type": "string",
+                    "default": "species",
+                    "description": "Taxon level of the target organism sequenced.",
+                    "enum": [
+                        "species",
+                        "kingdom",
+                        "phylum",
+                        "class",
+                        "order",
+                        "family",
+                        "genus",
+                        "domain"
+                    ]
+                },
+                "meta": {
+                    "type": "string",
+                    "default": "None"
+                },
+                "nanohq": {
+                    "type": "string",
+                    "default": "None"
+                }
+            },
+            "fa_icon": "fas fa-info-circle"
+        },
+        "data_quality_check": {
+            "title": "Data quality check",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "qc": {
+                    "type": "string",
+                    "default": "None"
+                },
+                "trim": {
+                    "type": "string",
+                    "default": "None"
+                },
+                "centrifuge": {
+                    "type": "string",
+                    "default": "/mnt/e/data/reference/centrifuge/",
+                    "description": "Path to DIRECTORY containing Centrifuge database index (required if using --qc)",
+                    "format": "directory-path"
+                }
+            },
+            "fa_icon": "far fa-check-circle"
+        },
+        "genome_annotation": {
+            "title": "Genome annotation",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "annot": {
+                    "type": "string",
+                    "default": "None"
+                }
+            },
+            "fa_icon": "fas fa-search"
+        },
+        "gpu_acceleration": {
+            "title": "GPU acceleration",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "gpu": {
+                    "type": "string",
+                    "default": "None"
+                },
+                "medaka_batchsize": {
+                    "type": "integer",
+                    "default": 100,
+                    "description": "Medaka batch size (smaller value reduces memory use)"
+                }
+            },
+            "fa_icon": "fas fa-tachometer-alt"
+        },
+        "slurm_hpc": {
+            "title": "Slurm HPC",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "account": {
+                    "type": "string",
+                    "default": "None"
+                }
+            },
+            "fa_icon": "fas fa-server"
+        },
+        "generic_options": {
+            "title": "Generic options",
+            "type": "object",
+            "fa_icon": "fas fa-file-import",
+            "description": "Less common options for the pipeline, typically set in a config file.",
+            "help_text": "These options are common to all nf-core pipelines and allow you to customise some of the core preferences for how the pipeline runs.\n\nTypically these options would be set in a Nextflow config file loaded for all pipeline runs, such as `~/.nextflow/config`.",
+            "properties": {
+                "help": {
+                    "type": "boolean",
+                    "description": "Display help text.",
+                    "fa_icon": "fas fa-question-circle",
+                    "hidden": true
+                },
+                "version": {
+                    "type": "string",
+                    "default": "None"
+                },
+                "noreport": {
+                    "type": "string",
+                    "default": "None"
+                }
+            }
+        }
+    },
+    "allOf": [
+        {
+            "$ref": "#/definitions/input_output_options"
+        },
+        {
+            "$ref": "#/definitions/sequencing_info"
+        },
+        {
+            "$ref": "#/definitions/data_quality_check"
+        },
+        {
+            "$ref": "#/definitions/genome_annotation"
+        },
+        {
+            "$ref": "#/definitions/gpu_acceleration"
+        },
+        {
+            "$ref": "#/definitions/slurm_hpc"
+        },
+        {
+            "$ref": "#/definitions/generic_options"
+        }
+    ]
+}
