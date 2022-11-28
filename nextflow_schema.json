@@ -28,7 +28,8 @@
                     "type": "string",
                     "description": "Path to the output directory where the results will be saved.",
                     "default": "./results",
-                    "fa_icon": "fas fa-folder-open"
+                    "fa_icon": "fas fa-folder-open",
+                    "format": "directory-path"
                 }
             }
         },
@@ -68,12 +69,12 @@
                     ]
                 },
                 "meta": {
-                    "type": "string",
-                    "default": "None"
+                    "type": "boolean",
+                    "description": "Optimize assembly parameters for metagenomic samples"
                 },
                 "nanohq": {
-                    "type": "string",
-                    "default": "None"
+                    "type": "boolean",
+                    "description": "Input reads were basecalled using Guppy v5 SUP models"
                 }
             },
             "fa_icon": "fas fa-info-circle"
@@ -85,12 +86,12 @@
             "default": "",
             "properties": {
                 "qc": {
-                    "type": "string",
-                    "default": "None"
+                    "type": "boolean",
+                    "description": "Perform quality check on genome assemblies"
                 },
                 "trim": {
-                    "type": "string",
-                    "default": "None"
+                    "type": "boolean",
+                    "description": "Perform read trimming"
                 },
                 "centrifuge": {
                     "type": "string",
@@ -104,12 +105,12 @@
         "genome_annotation": {
             "title": "Genome annotation",
             "type": "object",
-            "description": "",
             "default": "",
             "properties": {
                 "annot": {
                     "type": "string",
-                    "default": "None"
+                    "default": "None",
+                    "description": "Annotate genome assemblies"
                 }
             },
             "fa_icon": "fas fa-search"
@@ -121,8 +122,8 @@
             "default": "",
             "properties": {
                 "gpu": {
-                    "type": "string",
-                    "default": "None"
+                    "type": "boolean",
+                    "description": "Accelerate specific processes that utilize GPU computing. Must have NVIDIA Container Toolkit installed to enable GPU computing"
                 },
                 "medaka_batchsize": {
                     "type": "integer",
@@ -140,10 +141,12 @@
             "properties": {
                 "account": {
                     "type": "string",
-                    "default": "None"
+                    "default": "None",
+                    "description": "Slurm group account"
                 }
             },
-            "fa_icon": "fas fa-server"
+            "fa_icon": "fas fa-server",
+            "help_text": ""
         },
         "generic_options": {
             "title": "Generic options",
@@ -159,12 +162,12 @@
                     "hidden": true
                 },
                 "version": {
-                    "type": "string",
-                    "default": "None"
+                    "type": "boolean",
+                    "description": "Print pipeline version"
                 },
                 "noreport": {
-                    "type": "string",
-                    "default": "None"
+                    "type": "boolean",
+                    "description": "Do not generate interactive reports"
                 }
             }
         }

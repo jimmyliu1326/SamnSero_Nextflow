@@ -47,66 +47,38 @@ def helpMessage() {
         """.stripIndent()
 }
 
-def versionPrint() {
-    log.info """
-        $pipeline_name v${workflow.manifest.version}
-    """.stripIndent()
-}
+WorkflowMain.initialise(workflow, params, log)
 
-// check if input exists
-if (!params.input) { 
-    exit 1, pipeline_name+': Input sample sheet not specified!' 
-} else {
-    file(params.input, checkIfExists: true)
-}
+// if ( params.qc == true & !(params.taxon_level ==~ '(species|kingdom|phylum|class|order|family|genus|domain)') ) {
+//     error pipeline_name+": The taxon_level parameter contains invalid values"
+// }
 
-// check if centrifuge database exists
-// when --qc invoked
-if (params.qc) {
-    file(params.centrifuge, checkIfExists: true)
-}
+// if ( !(params.seq_platform ==~ '(nanopore|illumina)') ) {
+//     error pipeline_name+": The seq_platform parameter contains invalid values"
+// }
 
-// print pipeline vers
-if (params.version) {
-    versionPrint()
-    exit 0
-}
 
-if ( params.qc == true & !(params.taxon_level ==~ '(species|kingdom|phylum|class|order|family|genus|domain)') ) {
-    error pipeline_name+": The taxon_level parameter contains invalid values"
-}
-
-if ( !(params.seq_platform ==~ '(nanopore|illumina)') ) {
-    error pipeline_name+": The seq_platform parameter contains invalid values"
-}
-
-if ( params.qc == true & params.taxon_name == true ) {
-    error pipeline_name+": The taxon_name parameter is empty"
-}
-
-// if ( !params.outdir ) { error pipeline_name+": Missing --outdir parameter" }
-// if ( !params.input ) { error pipeline_name+": Missing --input parameter" }
 
 // print log info
-log.info """\
-         ========================================
-         S A M N S E R O   P I P E L I N E  v${workflow.manifest.version}
-         ========================================
-         input               : ${params.input}
-         outdir              : ${params.outdir}
-         seq_platform        : ${params.seq_platform}
-         taxon_level         : ${params.taxon_level}
-         taxon_name          : ${params.taxon_name}
-         trim                : ${params.trim}
-         nanohq              : ${params.nanohq}
-         quality check       : ${params.qc}
-         annotation          : ${params.annot}
-         meta                : ${params.meta}
-         gpu                 : ${params.gpu}
-         noreport            : ${params.noreport}
-         medaka_batchsize    : ${params.medaka_batchsize}
-         """
-         .stripIndent()
+// log.info """\
+//          ========================================
+//          S A M N S E R O   P I P E L I N E  v${workflow.manifest.version}
+//          ========================================
+//          input               : ${params.input}
+//          outdir              : ${params.outdir}
+//          seq_platform        : ${params.seq_platform}
+//          taxon_level         : ${params.taxon_level}
+//          taxon_name          : ${params.taxon_name}
+//          trim                : ${params.trim}
+//          nanohq              : ${params.nanohq}
+//          quality check       : ${params.qc}
+//          annotation          : ${params.annot}
+//          meta                : ${params.meta}
+//          gpu                 : ${params.gpu}
+//          noreport            : ${params.noreport}
+//          medaka_batchsize    : ${params.medaka_batchsize}
+//          """
+//          .stripIndent()
 
 // import workflows
 include { nanopore } from './workflow/nanopore.nf'
