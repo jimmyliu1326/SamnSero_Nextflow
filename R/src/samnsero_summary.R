@@ -92,6 +92,7 @@ kreport_sum <- function(df) {
 		map_dfr(function(x) {
 			# get id
 			id <- x$id[1]
+			#print(id)
 			# calc unclassified reads
 			unclassified <- x %>% 
 				filter(level == "U") %>% 
@@ -119,7 +120,7 @@ kreport_sum <- function(df) {
 			if (length(archaea) == 0) archaea <- 0
 			# calc synthetic reads
 			artificial <- x %>% filter(name == "artificial sequences") %>% pull(percent)
-			if (length(archaea) == 0) artificial <- 0
+			if (length(artificial) == 0) artificial <- 0
 			
 			data.frame(id = id,
 								 total = total_count,
