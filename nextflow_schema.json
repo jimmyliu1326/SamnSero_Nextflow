@@ -108,8 +108,7 @@
             "default": "",
             "properties": {
                 "annot": {
-                    "type": "string",
-                    "default": "None",
+                    "type": "boolean",
                     "description": "Annotate genome assemblies"
                 }
             },
