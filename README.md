@@ -2,7 +2,6 @@
 
 # SamnSero (Nextflow)
 
-
 The nextflow pipeline processes raw Nanopore sequencing reads for *Salmonella enterica*. Different modules can be optionally invoked to perform genome annotation and quality control checks. Optionally, interactive reports can be generated in HTML format to view data quality metrics and genome annotations.
 
 ## Installation
