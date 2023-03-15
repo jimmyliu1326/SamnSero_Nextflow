@@ -1,6 +1,6 @@
 // CRISPR prediction tools
 process tnblast {
-    tag "In-silico CRISPR PCR for ${assembly.simpleName}"
+    tag "In-silico CRISPR PCR for ${sample_id}"
     label "process_low"
     publishDir "$params.outdir"+"/annotations/crisprs/fasta/", mode: "copy"
 
