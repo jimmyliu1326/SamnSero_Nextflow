@@ -1,12 +1,12 @@
 // AMR prediction with rgi
 process rgi {
-    tag "RGI AMR prediction for ${assembly.simpleName}"
+    tag "RGI AMR prediction for ${sample_id}"
     label "process_low"
 
     input:
         tuple val(sample_id), path(assembly)
     output:
-        tuple val(sample_id), file("${assembly.simpleName}.tsv"), optional: true
+        tuple val(sample_id), file("${sample_id}.tsv"), optional: true
     shell:
         """
         rgi main -i ${assembly} -o ./out -t contig --num_threads ${task.cpus}

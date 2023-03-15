@@ -1,18 +1,18 @@
 // genetic risk factor prediction
 process abricate {
-    tag "Abricate ${db} prediction for ${assembly.simpleName}"
+    tag "Abricate ${db} prediction for ${sample_id}"
     label "process_low"
 
     input:
         tuple val(sample_id), path(assembly), val(db)
     output:
-        tuple val(db), file("${db}/${assembly.simpleName}.tsv")
+        tuple val(db), file("${db}/${sample_id}.tsv")
     shell:
         """
         mkdir ${db}
-        abricate --nopath --threads ${task.cpus} --db ${db} ${assembly} > ${db}/${assembly.simpleName}.tsv
-        sed -i 's/.fasta//g' ${db}/${assembly.simpleName}.tsv
-        sed -i 's/#FILE/id/g' ${db}/${assembly.simpleName}.tsv
+        abricate --nopath --threads ${task.cpus} --db ${db} ${assembly} > ${db}/${sample_id}.tsv
+        sed -i 's/.fasta//g' ${db}/${sample_id}.tsv
+        sed -i 's/#FILE/id/g' ${db}/${sample_id}.tsv
         """
 }
 
@@ -31,16 +31,16 @@ process makeblastdb {
 }
 
 process abricate_custom {
-    tag "Abricate ${db} prediction for ${assembly.simpleName}"
+    tag "Abricate ${db} prediction for ${sample_id}"
     label "process_low"
 
     input:
         tuple val(sample_id), path(assembly), path(db)
     output:
-        tuple val("${db.baseName}"), file("${db.baseName}/${assembly.simpleName}.tsv")
+        tuple val("${db.baseName}"), file("${db.baseName}/${sample_id}.tsv")
     shell:
         """
-        abricate --nopath --threads ${task.cpus} --datadir . --db ${db.baseName} ${assembly} > ${db}/${assembly.simpleName}.tsv
+        abricate --nopath --threads ${task.cpus} --datadir . --db ${db.baseName} ${assembly} > ${db}/${sample_id}.tsv
         """
 }
 

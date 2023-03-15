@@ -1,12 +1,12 @@
 // genetic risk factor prediction
 process quast {
-    tag "Computing assembly statistics for ${assembly.simpleName}"
+    tag "Computing assembly statistics for ${sample_id}"
     label "process_low"
 
     input:
         tuple val(sample_id), path(assembly), path(reads)
     output:
-        tuple val(sample_id), file("${assembly.simpleName}.tsv")
+        tuple val(sample_id), file("${sample_id}.tsv")
     shell:
         """
         if [[ ${params.seq_platform} == "illumina" ]]; then

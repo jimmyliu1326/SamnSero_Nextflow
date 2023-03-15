@@ -19,31 +19,31 @@ process combine {
 }
 
 process porechop {
-    tag "Adaptor trimming on ${reads.simpleName}"
+    tag "Adaptor trimming on ${sample_id}"
     label "process_high"
 
     input:
         tuple val(sample_id), path(reads)
     output:
-        tuple val(sample_id), file("${reads.simpleName}_trimmed.fastq")
+        tuple val(sample_id), file("${sample_id}_trimmed.fastq")
     shell:
         """
-        porechop -t ${task.cpus} -i ${reads} -o ${reads.simpleName}_trimmed.fastq
+        porechop -t ${task.cpus} -i ${reads} -o ${sample_id}_trimmed.fastq
         """
 }
 
 process nanoq {
-    tag "Read filtering on ${reads.simpleName}"
+    tag "Read filtering on ${sample_id}"
     label "process_low"
     cache true
 
     input:
         tuple val(sample_id), path(reads)
     output:
-        tuple val(sample_id), file("${reads.simpleName}.filt.fastq.gz")
+        tuple val(sample_id), file("${sample_id}.filt.fastq.gz")
     shell:
         """
-        nanoq -i ${reads} -l 200 -q 7 -O g > ${reads.simpleName}.filt.fastq.gz
+        nanoq -i ${reads} -l 200 -q 7 -O g > ${sample_id}.filt.fastq.gz
         """
 }
 
