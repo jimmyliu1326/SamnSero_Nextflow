@@ -29,10 +29,10 @@ src_dir <- dirname(knitr::current_input(dir = T))
 
 # get positional arguments
 if (Sys.getenv("RSTUDIO") == "1") {
-	args <- c("../data/samnsero/checkm_res_aggregate.tsv",
-						"../data/samnsero/quast_res_aggregate.tsv",
-						"../data/samnsero/sistr_res_aggregate.csv",
-						"../data/samnsero/kreport")
+	args <- c("../data/samnsero_qc_112722/checkm_res_aggregate.tsv",
+						"../data/samnsero_qc_112722/quast_res_aggregate.tsv",
+						"../data/samnsero_qc_112722/sistr_res_aggregate.csv",
+						"../data/samnsero_qc_112722/kreport")
 } else {
 	args <- commandArgs(trailingOnly = T)
 }

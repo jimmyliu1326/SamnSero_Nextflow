@@ -364,19 +364,45 @@ kreport_summary_reactable <- function(kreport_summary_ct) {
 											 format = colFormat(
 											 	suffix = "%",
 											 	digits = 2
-											 )
+											 ),
+											 style = function(value) {
+											 	bar_style(width = value / 100, 
+											 						fill = "hsl(49, 41%, 65%)", # gold
+											 						align = "right")
+											 }
 				),
 				eukaryota = colDef(name = "Eukaryota",
 													 format = colFormat(
 													 	suffix = "%",
 													 	digits = 2
-													 )
+													 ),
+													 style = function(value) {
+													 	bar_style(width = value / 100, 
+													 						fill = "hsl(49, 41%, 65%)", # gold
+													 						align = "right")
+													 }
 				),
 				archaea = colDef(name = "Archaea",
 												 format = colFormat(
 												 	suffix = "%",
 												 	digits = 2
-												 )
+												 ),
+												 style = function(value) {
+												 	bar_style(width = value / 100, 
+												 						fill = "hsl(49, 41%, 65%)", # gold
+												 						align = "right")
+												 }
+				),
+				artificial = colDef(name = "Artificial",
+													 format = colFormat(
+													 	suffix = "%",
+													 	digits = 2
+													 ),
+													 style = function(value) {
+													 	bar_style(width = value / 100, 
+													 						fill = "hsl(49, 41%, 65%)", # gold
+													 						align = "right")
+													 }
 				)
 			), # end of list
 			style = list(#fontFamily = "Arial",

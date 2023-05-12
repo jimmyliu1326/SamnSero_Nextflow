@@ -1,6 +1,6 @@
 // plasmid prediction with mob-suite
 process mob_suite {
-    tag "Plasmid prediction for ${assembly.simpleName}"
+    tag "Plasmid prediction for ${sample_id}"
     label "process_medium"
 
     input:

@@ -1,15 +1,15 @@
 // in-silico serotyping using SISTR
 process sistr {
-    tag "SISTR serotyping for ${assembly.baseName}"
+    tag "SISTR serotyping for ${sample_id}"
     label "process_low"
 
     input:
         tuple val(sample_id), path(assembly)
     output:
-        tuple val(sample_id), file("${assembly.simpleName}.csv")
+        tuple val(sample_id), file("${sample_id}.csv")
     shell:
         """
-        sistr -i ${assembly} ${assembly.simpleName} -o ${assembly.simpleName}.csv -t ${task.cpus} -f csv --qc
+        sistr -i ${assembly} ${sample_id} -o ${sample_id}.csv -t ${task.cpus} -f csv --qc
         """   
 }
 
