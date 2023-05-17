@@ -21,8 +21,8 @@ RUN R -e "install.packages(c( \
     && R -e "remotes::install_github(c( \
         'jokergoo/ComplexHeatmap', \
         'glin/reactable', \
-        'rstudio/rmarkdown', \
-        'rstudio/fontawesome', \
+        'rstudio/rmarkdown@v2.18', \
+        'rstudio/fontawesome@v0.5.1', \
         'ropensci/iheatmapr'))"
 
 ADD R/ /R/
