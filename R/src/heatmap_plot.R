@@ -56,6 +56,8 @@ plot_full <- function(df, sistr_df) {
 		column_to_rownames("element") %>% 
 		as.matrix() %>% 
 		Heatmap(
+			# use custom row labels
+			row_labels = str_replace_all(rownames(df), ".*_", ""),
 			# split rows by gene feature type
 			row_split = annotation_rows,
 			row_title = NULL,

@@ -15,7 +15,7 @@ annot_sum2mat <- function(df, var_only=F) {
 		var_df %>% 
 			filter(var != 0) %>% 
 			select(-var) %>% 
-			filter(!(id %in% c("GENE", "NUM_FOUND"))) %>% 
+			filter(!(str_detect(id, "GENE|NUM_FOUND"))) %>% 
 			#mutate_at(vars(2:ncol(.)), ~ifelse(. == 0, "A", "P")) %>% 
 			column_to_rownames("id")	
 		
@@ -23,7 +23,7 @@ annot_sum2mat <- function(df, var_only=F) {
 		
 		var_df %>% 
 			select(-var) %>% 
-			filter(!(id %in% c("GENE", "NUM_FOUND"))) %>% 
+			filter(!(str_detect(id, "GENE|NUM_FOUND"))) %>% 
 			#mutate_at(vars(2:ncol(.)), ~ifelse(. == 0, "A", "P")) %>% 
 			column_to_rownames("id")	
 		
@@ -62,6 +62,7 @@ getSummaryType <- function(df, type_id) {
 		filter(id %in% (annot_types %>% 
 											filter(type == type_id) %>% 
 											pull(element))) %>% 
+		mutate(id = str_replace_all(id, ".*_", "")) %>% 
 		column_to_rownames("id")
 }
 

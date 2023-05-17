@@ -12,11 +12,15 @@ aro_path <- file.path(src_dir, "data/aro/aro.tsv")
 aro <- fread(aro_path, sep = "\t", header = T)
 
 # read annotation summary
-annot_summary <- map(annot_summary_files, function(x) {
+annot_summary <- map2(annot_summary_files, annot_name, function(x,y) {
 	file_path <- file.path(annot_dir, "summary", x)
 	if (file.exists(file_path)) {
-		fread(file.path(annot_dir, "summary", x), colClasses = c(id = "character")) %>%
+		df <- fread(file.path(annot_dir, "summary", x), colClasses = c(id = "character")) %>%
 			mutate_all(~as.character(.))
+		# rename columns with feature type (AMR/VF/Plasmids)
+		colnames(df)[2:ncol(df)] <- paste0(y, "_", colnames(df)[2:ncol(df)])
+		# return
+		return(df)
 	}
 })
 
