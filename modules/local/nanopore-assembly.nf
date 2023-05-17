@@ -18,6 +18,7 @@ process dragonflye {
     tag "DragonFlye assembly on ${sample_id}"
     label "process_medium"
     publishDir "$params.outdir"+"/assembly/", mode: "copy"
+    errorStrategy 'ignore'
 
     input:
         tuple val(sample_id), path(reads)
