@@ -36,7 +36,7 @@ summary <- function(df) {
 			)
 		}) %>%
 		bind_rows() %>% 
-		mutate(id = factor(id, levels = samples)) %>% 
+		#mutate(id = factor(id, levels = samples)) %>% 
 		pivot_wider(names_from = id,
 								values_from = value,
 								values_fill = ".",

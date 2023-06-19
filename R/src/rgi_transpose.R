@@ -24,7 +24,7 @@ summary <- function(df) {
 		arrange(desc(Best_Identities)) %>% 
 		slice(1) %>% 
 		ungroup() %>% 
-		mutate(id = factor(id, levels = samples),
+		mutate(#id = factor(id, levels = samples),
 					 Best_Identities = as.character(Best_Identities)) %>% 
 		pivot_wider(names_from = "id",
 								values_from = "Best_Identities",
