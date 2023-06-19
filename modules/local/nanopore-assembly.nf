@@ -24,10 +24,12 @@ process dragonflye {
         tuple val(sample_id), path(reads)
         val(flye_opts)
     output:
-        tuple val(sample_id), file("${sample_id}.fasta")
+        tuple val(sample_id), file("${sample_id}.fasta"), emit: fasta
+        tuple val(sample_id), file("${sample_id}.gfa"), emit: gfa
     shell:
         """
         dragonflye --reads ${reads} --cpus ${task.cpus} --outdir dragonflye --ram ${task.memory.toGiga()} ${flye_opts}    
         mv dragonflye/contigs.fa ${sample_id}.fasta
+        mv dragonflye/flye-unpolished.gfa ${sample_id}.gfa
         """
 }

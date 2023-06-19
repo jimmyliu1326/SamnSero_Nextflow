@@ -16,7 +16,7 @@ workflow ASSEMBLY_nanopore {
         
         if (params.gpu) {
 
-            dragonflye.out \
+            dragonflye.out.fasta \
                 | join(reads) \
                 | medaka_gpu
 
@@ -24,7 +24,7 @@ workflow ASSEMBLY_nanopore {
 
         } else {
             
-            dragonflye.out \
+            dragonflye.out.fasta \
                 | join(reads) \
                 | medaka
 
