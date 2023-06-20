@@ -52,6 +52,7 @@ amr_class_sum <- function(df) {
 		pivot_wider(names_from = "id",
 								values_from = "n",
 								values_fill = 0,
+								values_fn = ~return(.[1]),
 								names_expand = T) %>% 
 		column_to_rownames("Drug Class")
 }
