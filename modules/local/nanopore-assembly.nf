@@ -1,16 +1,21 @@
 // assembly methods for Nanopore workflows
-process flye {
-    tag "Flye assembly on ${sample_id}"
+process metaflye {
+    tag "MetaFlye assembly on ${sample_id}"
     label "process_medium"
+    publishDir "$params.outdir"+"/assembly/", mode: "copy"
+    errorStrategy 'ignore'
 
     input:
         tuple val(sample_id), path(reads)
+        val(flye_opts)
     output:
-        tuple val(sample_id), file("flye/${sample_id}.fasta")
+        tuple val(sample_id), file("${sample_id}.fasta"), emit: fasta
+        tuple val(sample_id), file("${sample_id}.gfa"), emit: gfa
     shell:
         """
-        flye --nano-raw ${reads} -t ${task.cpus} -i 2 --out-dir flye
-        mv flye/assembly.fasta flye/${sample_id}.fasta
+        flye --nano-raw ${reads} -t ${task.cpus} -i 0 --meta --keep-haplotypes --no-alt-contigs --out-dir flye ${flye_opts}
+        mv flye/assembly.fasta ${sample_id}.fasta
+        mv flye/assembly_graph.gfa ${sample_id}.gfa
         """
 }
 

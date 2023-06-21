@@ -1,5 +1,5 @@
 // import modules
-include { flye; dragonflye } from '../modules/local/nanopore-assembly.nf'
+include { metaflye; dragonflye } from '../modules/local/nanopore-assembly.nf'
 include { medaka; medaka_gpu } from '../modules/local/nanopore-polish.nf'
 include { shovill } from '../modules/local/illumina-assembly.nf'
 
@@ -8,15 +8,21 @@ workflow ASSEMBLY_nanopore {
     main:
         // define assembly opts for target wgs and metagenomics
         flye_opts=""
-        if (params.meta) { flye_opts = flye_opts + "--depth 0 --opts '--meta --keep-haplotypes -i 0'" }
+        //if (params.meta) { flye_opts = flye_opts + "--depth 0 --opts '--meta --keep-haplotypes -i 0'" }
         if( params.nanohq ) { flye_opts = flye_opts + " --nanohq" }
         
         // run assembly workflow
-        dragonflye(reads, flye_opts)
+        if ( params.meta ) {
+            metaflye(reads, flye_opts)
+            assembly = metaflye.out.fasta
+        } else {
+            dragonflye(reads, flye_opts)
+            assembly = dragonflye.out.fasta
+        }
         
         if (params.gpu) {
 
-            dragonflye.out.fasta \
+            assembly \
                 | join(reads) \
                 | medaka_gpu
 
@@ -24,7 +30,7 @@ workflow ASSEMBLY_nanopore {
 
         } else {
             
-            dragonflye.out.fasta \
+            assembly \
                 | join(reads) \
                 | medaka
 
