@@ -8,9 +8,9 @@ process centrifuge {
         tuple val(sample_id), path(reads)
         path(database_dir)
     output:
-        path("*.report", emit: report)
-        path("*.krona", emit: krona)
-        path("*.kraken.report"), emit: kreport
+        tuple val(sample_id), path("*.report"), emit: report
+        tuple val(sample_id), path("*.krona"), emit: krona
+        tuple val(sample_id), path("*.kraken.report"), emit: kreport
     shell:
         """
         db_path=\$(find -L ${database_dir} -name "*.1.cf" -not -name "._*"  | sed 's/.1.cf//')

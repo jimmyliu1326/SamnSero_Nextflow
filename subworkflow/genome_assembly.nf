@@ -8,7 +8,7 @@ workflow ASSEMBLY_nanopore {
     main:
         // define assembly opts for target wgs and metagenomics
         flye_opts=""
-        if (params.meta) { flye_opts = flye_opts + "--depth 0 --opts '--meta'" }
+        if (params.meta) { flye_opts = flye_opts + "--depth 0 --opts '--meta --keep-haplotypes -i 0'" }
         if( params.nanohq ) { flye_opts = flye_opts + " --nanohq" }
         
         // run assembly workflow

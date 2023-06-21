@@ -43,7 +43,7 @@ workflow post_asm_process {
 
             if ( !params.noreport ) {
                 
-                qc_report(SEROTYPING.out, ASSEMBLY_QC.out.checkm_res, ASSEMBLY_QC.out.quast_res, READ_QC.out.kreport.collect())
+                qc_report(SEROTYPING.out, ASSEMBLY_QC.out.checkm_res, ASSEMBLY_QC.out.quast_res, READ_QC.out.target_res, READ_QC.out.kreport.collect())
                 
             }
             

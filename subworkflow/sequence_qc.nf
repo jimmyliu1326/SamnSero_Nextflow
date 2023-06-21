@@ -30,6 +30,10 @@ workflow ASSEMBLY_QC {
 
 // import modules
 include { centrifuge; krona } from '../modules/local/taxonomy_class.nf'
+include { taxonkit_name2taxid } from '../modules/local/taxonkit/name2taxid.nf'
+include { target_reads_xtract } from '../modules/local/target_reads/xtract.nf'
+include { target_reads_aggregate } from '../modules/local/target_reads/aggregate.nf'
+include { seqkit_fx2tab } from '../modules/local/seqkit/fx2tab.nf'
 
 workflow READ_QC {
     take: reads
@@ -40,12 +44,25 @@ workflow READ_QC {
 
         if ( !params.noreport ) {
             
-            centrifuge.out.krona \
-                | collect \
+            centrifuge.out.krona 
+                | collect
+                | map { it[1] }
                 | krona
                 
         }
 
+        // calculate target bases sequenced
+        taxon_id = taxonkit_name2taxid(params.taxon_name)
+
+        centrifuge.out.krona
+            | combine(taxon_id)
+            | join(reads)
+            | target_reads_xtract
+            | seqkit_fx2tab
+            | map { it[1] }
+            | collect
+            | target_reads_aggregate
+            
         // run fastqc and multiqc
         if (params.seq_platform == "illumina" ) {
             fastqc(reads)
@@ -56,6 +73,7 @@ workflow READ_QC {
         
         
     emit:
-        kreport = centrifuge.out.kreport
+        kreport = centrifuge.out.kreport.map{ it[1] }
         read_qc = read_qc
+        target_res = target_reads_aggregate.out
 }
