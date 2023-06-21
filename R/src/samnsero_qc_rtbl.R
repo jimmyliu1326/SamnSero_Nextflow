@@ -66,6 +66,16 @@ sistr_reactable <- function(sistr_ct) {
 				serovar = colDef(minWidth = 150,
 												 name = "Serovar"
 				),
+				serovar_antigen = colDef(
+					minWidth = 150,
+					html = T,
+					name = "Serovar<br>(antigen)"
+				),
+				serovar_cgmlst = colDef(
+					minWidth = 150,
+					html = T,
+					name = "Serovar<br>(cgMLST)"
+				),
 				serogroup = colDef(minWidth = 110,
 													 name = "Serogroup")
 			), # end of list
@@ -349,6 +359,36 @@ kreport_summary_reactable <- function(kreport_summary_ct) {
 																					align = "right")
 															}
 				),
+				`target_count` = colDef(
+					name = "Target DNA",
+					minWidth = 125,
+					format = colFormat(
+						digits = 1
+					),
+					style = function(value) {
+						bar_style(width = value / max(kreport_summary$target_count),
+											fill = "hsl(49, 41%, 65%)", # gold
+											align = "right")
+					},
+					header = function(value) {
+						units <- div(style = "color: #999", "K reads")
+						div(title = value, value, units)
+				}),
+				`target_bases` = colDef(
+					name = "Target DNA",
+					minWidth = 125,
+					format = colFormat(
+						digits = 1
+					),
+					style = function(value) {
+						bar_style(width = value / max(kreport_summary$target_bases),
+											fill = "hsl(49, 41%, 65%)", # gold
+											align = "right")
+					},
+					header = function(value) {
+						units <- div(style = "color: #999", "Mbps")
+						div(title = value, value, units)
+				}),
 				bacteria = colDef(name = "Bacteria",
 													format = colFormat(
 														suffix = "%",

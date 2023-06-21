@@ -73,10 +73,10 @@ combine_sistr_qc <- function(quast_res, checkm_res, sistr_res) {
 		left_join(checkm_res %>% 
 								select(id, Completeness, Contamination, `Strain heterogeneity`), by = "id") %>%
 		left_join(sistr_res %>%
-								select(id, serogroup, serovar, qc_status, qc_messages),
+								select(id, serogroup, serovar, serovar_antigen, serovar_cgmlst, qc_status, qc_messages),
 							by = "id"
 		) %>%
-		select(id, serogroup, serovar, qc_status,
+		select(id, serogroup, serovar, serovar_antigen, serovar_cgmlst, qc_status,
 					 qc_messages, "Total length",
 					 Completeness, Contamination, 
 					 "Strain heterogeneity", everything()) %>%
