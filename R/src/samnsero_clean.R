@@ -20,7 +20,9 @@ vf_clean <- function(df) {
 
 sistr_clean <- function(df) {
 	df %>% 
-		mutate(serovar = if_else(str_detect(serovar, "\\|"), "Unresolved", serovar))
+		mutate(serovar = if_else(str_detect(serovar, "\\|"), "Unresolved", serovar),
+					 serovar_antigen = if_else(str_detect(serovar_antigen, "\\|"), "Unresolved", serovar_antigen),
+					 serovar_cgmlst = if_else(str_detect(serovar_cgmlst, "\\|"), "Unresolved", serovar_cgmlst))
 }
 
 rgi_clean <- function(df) {

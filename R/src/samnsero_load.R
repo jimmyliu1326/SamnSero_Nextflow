@@ -40,6 +40,14 @@ load_quast <- function(path) {
 	return(df)
 }
 
+# load target reads stats csv file
+load_target <- function(path) {
+	# read file
+	df <- fread(path, colClasses = c(id = "character"))
+	# return
+	return(df)
+}
+
 # load abricate summary
 load_abricate_summary <- function(path) {
 	# read file
