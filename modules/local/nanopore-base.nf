@@ -36,6 +36,7 @@ process nanoq {
     tag "Read filtering on ${sample_id}"
     label "process_low"
     cache true
+    publishDir "$params.outdir"+"/reads/", mode: "copy"
 
     input:
         tuple val(sample_id), path(reads)
@@ -43,7 +44,7 @@ process nanoq {
         tuple val(sample_id), file("${sample_id}.filt.fastq.gz")
     shell:
         """
-        nanoq -i ${reads} -l 200 -q 7 -O g > ${sample_id}.filt.fastq.gz
+        nanoq -i ${reads} -l 1000 -q 10 -O g > ${sample_id}.filt.fastq.gz
         """
 }
 
