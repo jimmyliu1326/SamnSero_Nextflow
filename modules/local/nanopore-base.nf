@@ -36,7 +36,7 @@ process nanoq {
     tag "Read filtering on ${sample_id}"
     label "process_low"
     cache true
-    publishDir "$params.outdir"+"/reads/", mode: "copy"
+    // publishDir "$params.outdir"+"/reads/", mode: "copy"
 
     input:
         tuple val(sample_id), path(reads)
