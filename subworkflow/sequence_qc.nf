@@ -1,8 +1,6 @@
 // import modules
 include { checkm } from '../modules/local/checkm.nf'
 include { quast; aggregate_quast } from '../modules/local/quast.nf'
-include { fastqc; multiqc } from '../modules/local/fastqc.nf'
-include { nanocomp } from '../modules/local/nanopore-base.nf'
 
 workflow ASSEMBLY_QC {
     take: 
@@ -34,6 +32,8 @@ include { taxonkit_name2taxid } from '../modules/local/taxonkit/name2taxid.nf'
 include { target_reads_xtract } from '../modules/local/target_reads/xtract.nf'
 include { target_reads_aggregate } from '../modules/local/target_reads/aggregate.nf'
 include { seqkit_fx2tab } from '../modules/local/seqkit/fx2tab.nf'
+include { fastqc; multiqc } from '../modules/local/fastqc.nf'
+include { nanocomp } from '../modules/local/nanopore-base.nf'
 
 workflow READ_QC {
     take: reads
@@ -66,14 +66,13 @@ workflow READ_QC {
         // run fastqc and multiqc
         if (params.seq_platform == "illumina" ) {
             fastqc(reads)
-            read_qc = multiqc(fastqc.out.collect())
+            read_qc_report = multiqc(fastqc.out.collect())
         } else {
-            read_qc = nanocomp(reads.map{ it[1] }.collect())
+            read_qc_report = nanocomp(reads.map{ it[1] }.collect())
         }
         
         
     emit:
         kreport = centrifuge.out.kreport.map{ it[1] }
-        read_qc = read_qc
         target_res = target_reads_aggregate.out
 }
