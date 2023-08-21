@@ -2,7 +2,7 @@
 process medaka {
     tag "Assembly polishing for ${sample_id}"
     label "process_medium"
-    publishDir "$params.outdir"+"/assembly", mode: "copy"
+    publishDir "$params.outdir"+"/assembly/${sample_id}", mode: "copy"
 
     input:
         tuple val(sample_id), path(assembly), path(reads)
@@ -19,7 +19,7 @@ process medaka_gpu {
     tag "Assembly polishing for ${sample_id}"
     label "process_medium"
     maxForks 1
-    publishDir "$params.outdir"+"/assembly", mode: "copy"
+    publishDir "$params.outdir"+"/assembly/${sample_id}", mode: "copy"
 
     input:
         tuple val(sample_id), path(assembly), path(reads)

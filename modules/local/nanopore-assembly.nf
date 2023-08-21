@@ -2,7 +2,7 @@
 process metaflye {
     tag "MetaFlye assembly on ${sample_id}"
     label "process_medium"
-    publishDir "$params.outdir"+"/assembly/${sample_id}", mode: "copy"
+    publishDir "$params.outdir"+"/assembly/${sample_id}", mode: "copy", pattern: "*.{log,txt,gfa}"
     errorStrategy 'ignore'
 
     input:
@@ -24,7 +24,7 @@ process metaflye {
 process dragonflye {
     tag "DragonFlye assembly on ${sample_id}"
     label "process_medium"
-    publishDir "$params.outdir"+"/assembly/${sample_id}", mode: "copy"
+    publishDir "$params.outdir"+"/assembly/${sample_id}", mode: "copy", pattern: "*.{log,txt,gfa}"
     errorStrategy 'ignore'
 
     input:
