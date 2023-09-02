@@ -22,12 +22,13 @@ sistr_reactable <- function(sistr_ct) {
 		reactable(
 			defaultColDef = colDef(
 				filterable = T,
-				filterInput = function(values, name) reactable_select(values, name, tableId = "sistr-table")
+				resizable = T
 			),
 			columns = list(
 				.selection = colDef( # makes selection box sticky
 					style = list(position = "sticky", left = 0, background = "#fff", zIndex = 1),
-					headerStyle = list(position = "sticky", left = 0, background = "#fff", zIndex = 1),
+					headerStyle = list(position = "sticky", left = 0, background = "#fff", zIndex = 1,
+														 whiteSpace = "nowrap", textOverflow = "ellipsis"),
 					width = 45
 				),
 				id = colDef(width = 200,
@@ -46,15 +47,26 @@ sistr_reactable <- function(sistr_ct) {
 										# Add a right border style to visually distinguish the sticky column
 										# style = list(borderRight = "1px solid #eee"),
 										# headerStyle = list(borderRight = "1px solid #eee"),
-										filterable = F
+										filterable = T,
+										searchable = T,
+										filterInput = dataListFilter("sistr-table")
 				),
 				qc_messages = colDef(minWidth = 2000,
 														 name = "SISTR QC Message(s)",
-														 filterable = F),
+														 searchable = T,
+														 filterMethod = JS("function(rows, columnId, filterValue) {
+												        const pattern = new RegExp(filterValue, 'i')
+												
+												        return rows.filter(function(row) {
+												          return pattern.test(row.values[columnId])
+												        })
+												      }"),
+														 filterable = T),
 				qc_status = colDef(minWidth = 125,
 													 html = T,
 													 name = "SISTR<br>QC Status",
 													 align = "center",
+													 filterInput = function(values, name) reactable_select(values, name, tableId = "sistr-table"),
 													 # 		 header = JS("
 													 #       function(colInfo) {
 													 #         return 'SISTR<br>QC Status'
@@ -64,30 +76,39 @@ sistr_reactable <- function(sistr_ct) {
 													 	div(class = class, value)
 													 }),
 				serovar = colDef(minWidth = 150,
-												 name = "Serovar"
+												 name = "Serovar",
+												 filterInput = function(values, name) reactable_select(values, name, tableId = "sistr-table")
+				),
+				bin = colDef(minWidth = 125,
+										 name = "Bin",
+										 searchable = T,
+										 filterInput = dataListFilter("sistr-table")
 				),
 				serovar_antigen = colDef(
 					minWidth = 150,
 					html = T,
-					name = "Serovar<br>(antigen)"
+					name = "Serovar<br>(antigen)",
+					filterInput = function(values, name) reactable_select(values, name, tableId = "sistr-table")
 				),
 				serovar_cgmlst = colDef(
 					minWidth = 150,
 					html = T,
-					name = "Serovar<br>(cgMLST)"
+					name = "Serovar<br>(cgMLST)",
+					filterInput = function(values, name) reactable_select(values, name, tableId = "sistr-table")
 				),
 				serogroup = colDef(minWidth = 110,
-													 name = "Serogroup")
+													 name = "Serogroup",
+													 filterInput = function(values, name) reactable_select(values, name, tableId = "sistr-table")
+				)
 			), # end of list
 			style = list(#fontFamily = "Arial",
 				fontSize = 16),
 			highlight = T,
 			searchable = T,
+			wrap = F,
 			selection = "multiple",
 			onClick = "select",
 			defaultSelected = c(1:n_select),
-			wrap = F, # if F, force long lines to be wrapped in a single line
-			resizable = T,
 			bordered = T,
 			showPageInfo = FALSE, 
 			showPageSizeOptions = TRUE, 
@@ -98,17 +119,13 @@ sistr_reactable <- function(sistr_ct) {
 		)
 }
 
-
-
-
 stats_reactable <- function(stats_ct) {
 	stats_ct %>% 
 		reactable(
 			defaultColDef = colDef(
-				filterMethod = JS("filterRange"),
-				filterInput = JS("muiRangeFilter"),
 				filterable = T,
-				resizable = F,
+				resizable = T,
+				minWidth = 150
 			),
 			columns = list(
 				.selection = colDef( # makes selection box sticky
@@ -131,8 +148,13 @@ stats_reactable <- function(stats_ct) {
 										# Add a right border style to visually distinguish the sticky column
 										#style = list(borderRight = "1px solid #eee"),
 										#headerStyle = list(borderRight = "1px solid #eee"),
-										filterable = F,
-										resizable = T
+										searchable = T,
+										filterInput = dataListFilter("stats-table")
+				),
+				bin = colDef(minWidth = 125,
+										 name = "Bin",
+										 searchable = T,
+										 filterInput = dataListFilter("stats-table"),
 				),
 				Completeness = colDef(minWidth = 150,
 															format = colFormat(
@@ -147,7 +169,10 @@ stats_reactable <- function(stats_ct) {
 																	color <- gob_pal(normalized, 2)
 																	list(background = color)
 																}
-															}),
+															},
+															filterMethod = JS("filterRange"),
+															filterInput = JS("muiRangeFilter")
+															),
 				Contamination = colDef(minWidth = 150,
 															 format = colFormat(
 															 	suffix = "%",
@@ -161,17 +186,30 @@ stats_reactable <- function(stats_ct) {
 															 		color <- gob_rev_pal(normalized, 1)
 															 		list(background = color)
 															 	}
-															 }),
+															 },
+															 filterMethod = JS("filterRange"),
+															 filterInput = JS("muiRangeFilter")
+															 ),
 				`Strain heterogeneity` = colDef(minWidth = 150,
+																				resizable = F,
+																				header = function(value) {
+																					units <- div("Heterogeneity")
+																					value <- "Strain"
+																					div(title = value, value, units)
+																				},
 																				format = colFormat(
 																					suffix = "%",
 																					digits = 2
-																				)),
+																				),
+																				filterMethod = JS("filterRange"),
+																				filterInput = JS("muiRangeFilter")),
 				`Avg. coverage depth` = colDef(minWidth = 125,
 																			 name = "Avg Coverage",
 																			 format = colFormat(
 																			 	suffix = "x"
-																			 )),
+																			 ),
+																			 filterMethod = JS("filterRange"),
+																			 filterInput = JS("muiRangeFilter")),
 				`Total length` = colDef(
 					minWidth = 150,
 					format = colFormat(
@@ -196,7 +234,10 @@ stats_reactable <- function(stats_ct) {
 							color <- gob_pal(normalized, 1.5)
 							list(background = color)
 						}
-					}),
+					},
+					filterMethod = JS("filterRange"),
+					filterInput = JS("muiRangeFilter")
+					),
 				N50 = colDef(header = function(value) {
 					units <- div(style = "color: #999", "Mbps")
 					div(title = value, value, units)
@@ -207,7 +248,9 @@ stats_reactable <- function(stats_ct) {
 				minWidth = 125,
 				format = colFormat(
 					digits = 2
-				))
+				),
+				filterMethod = JS("filterRange"),
+				filterInput = JS("muiRangeFilter"))
 			), # end of list
 			style = list(#fontFamily = "Arial",
 				fontSize = 16),
@@ -215,8 +258,8 @@ stats_reactable <- function(stats_ct) {
 			searchable = T,
 			selection = "multiple",
 			onClick = "select",
-			#defaultSelected = c(1:n_select),
-			#wrap = F, # if F, force long lines to be wrapped in a single line
+			# defaultSelected = c(1:n_select),
+			#wrap = F,
 			bordered = T,
 			showPageInfo = FALSE, 
 			showPageSizeOptions = TRUE, 
@@ -227,21 +270,17 @@ stats_reactable <- function(stats_ct) {
 		)
 }
 
-
-
-
-
 kreport_class_reactable <- function(kreport_class_df) {
 	kreport_class_df %>% 
 		reactable(
 			defaultColDef = colDef(
-				minWidth = 125,
+				minWidth = 150,
 				resizable = T,
+				headerStyle = list(whiteSpace = "nowrap", textOverflow = "ellipsis"),
 				format = colFormat(
 					suffix = "%",
 					digits = 2
 				),
-				filterInput = function(values, name) reactable_select(values, name, tableId = "kreport-class-table"),
 				style = function(value) {
 					if (is.numeric(value) & value <= 100) {
 						bar_style(width = value / 100, 
@@ -256,12 +295,16 @@ kreport_class_reactable <- function(kreport_class_df) {
 				name = colDef(name = "Species",
 											minWidth = 200,
 											sticky = "left",
+											filterInput = dataListFilter("kreport-class-table"),
+											filterable = T,
 											format = colFormat(
 												suffix = "",
 											)
 				),
 				taxid = colDef(name = "TaxID",
 											 minWidth = 75,
+											 filterInput = dataListFilter("kreport-class-table"),
+											 filterable = T,
 											 format = colFormat(
 											 	suffix = "",
 											 )
@@ -271,7 +314,8 @@ kreport_class_reactable <- function(kreport_class_df) {
 												format = colFormat(
 													suffix = "",
 												),
-												filterable = T
+												filterable = T,
+												filterInput = function(values, name) reactable_select(values, name, tableId = "kreport-class-table")
 				)
 			), # end of list
 			style = list(#fontFamily = "Arial",
@@ -280,9 +324,7 @@ kreport_class_reactable <- function(kreport_class_df) {
 			searchable = T,
 			# selection = "multiple",
 			# 			onClick = "select",
-			wrap = F, # force long lines to be wrapped in a single line
 			bordered = T,
-			resizable = T,
 			showPageInfo = FALSE, 
 			showPageSizeOptions = TRUE, 
 			defaultPageSize = 10,
@@ -297,10 +339,8 @@ kreport_summary_reactable <- function(kreport_summary_ct) {
 	kreport_summary_ct %>% 
 		reactable(
 			defaultColDef = colDef(
-				filterMethod = JS("filterRange"),
-				filterInput = JS("muiRangeFilter"),
 				filterable = T,
-				resizable = F,
+				resizable = T,
 				minWidth = 150
 			),
 			columns = list(
@@ -324,8 +364,8 @@ kreport_summary_reactable <- function(kreport_summary_ct) {
 										# Add a right border style to visually distinguish the sticky column
 										#style = list(borderRight = "1px solid #eee"),
 										#headerStyle = list(borderRight = "1px solid #eee"),
-										filterable = F,
-										resizable = T
+										searchable = T,
+										filterInput = dataListFilter("kreport-summary-table")
 				),
 				total = colDef(name = "Total Reads",
 											 style = function(value) {
@@ -335,7 +375,9 @@ kreport_summary_reactable <- function(kreport_summary_ct) {
 											 },
 											 cell = function(value) {
 											 	div(scales::comma(value))
-											 }
+											 },
+											 filterMethod = JS("filterRange"),
+											 filterInput = JS("muiRangeFilter")
 				),
 				classified = colDef(name = "Classified",
 														format = colFormat(
@@ -346,7 +388,9 @@ kreport_summary_reactable <- function(kreport_summary_ct) {
 															bar_style(width = value / 100, 
 																				fill = "hsl(209, 61%, 77%)", # blue
 																				align = "right")
-														}
+														},
+														filterMethod = JS("filterRange"),
+														filterInput = JS("muiRangeFilter")
 				),
 				unclassified = colDef(name = "Unclassified",
 															format = colFormat(
@@ -357,7 +401,9 @@ kreport_summary_reactable <- function(kreport_summary_ct) {
 																bar_style(width = value / 100, 
 																					fill = "hsl(0, 66%, 76%)", # red
 																					align = "right")
-															}
+															},
+															filterMethod = JS("filterRange"),
+															filterInput = JS("muiRangeFilter")
 				),
 				`target_count` = colDef(
 					name = "Target DNA",
@@ -373,7 +419,10 @@ kreport_summary_reactable <- function(kreport_summary_ct) {
 					header = function(value) {
 						units <- div(style = "color: #999", "K reads")
 						div(title = value, value, units)
-				}),
+					},
+					filterMethod = JS("filterRange"),
+					filterInput = JS("muiRangeFilter")
+				),
 				`target_bases` = colDef(
 					name = "Target DNA",
 					minWidth = 125,
@@ -388,7 +437,10 @@ kreport_summary_reactable <- function(kreport_summary_ct) {
 					header = function(value) {
 						units <- div(style = "color: #999", "Mbps")
 						div(title = value, value, units)
-				}),
+					},
+					filterMethod = JS("filterRange"),
+					filterInput = JS("muiRangeFilter")
+				),
 				bacteria = colDef(name = "Bacteria",
 													format = colFormat(
 														suffix = "%",
@@ -398,7 +450,9 @@ kreport_summary_reactable <- function(kreport_summary_ct) {
 														bar_style(width = value / 100, 
 																			fill = "hsl(49, 41%, 65%)", # gold
 																			align = "right")
-													}
+													},
+													filterMethod = JS("filterRange"),
+													filterInput = JS("muiRangeFilter")
 				),
 				virus = colDef(name = "Virus",
 											 format = colFormat(
@@ -409,7 +463,9 @@ kreport_summary_reactable <- function(kreport_summary_ct) {
 											 	bar_style(width = value / 100, 
 											 						fill = "hsl(49, 41%, 65%)", # gold
 											 						align = "right")
-											 }
+											 },
+											 filterMethod = JS("filterRange"),
+											 filterInput = JS("muiRangeFilter")
 				),
 				eukaryota = colDef(name = "Eukaryota",
 													 format = colFormat(
@@ -420,7 +476,9 @@ kreport_summary_reactable <- function(kreport_summary_ct) {
 													 	bar_style(width = value / 100, 
 													 						fill = "hsl(49, 41%, 65%)", # gold
 													 						align = "right")
-													 }
+													 },
+													 filterMethod = JS("filterRange"),
+													 filterInput = JS("muiRangeFilter")
 				),
 				archaea = colDef(name = "Archaea",
 												 format = colFormat(
@@ -431,7 +489,9 @@ kreport_summary_reactable <- function(kreport_summary_ct) {
 												 	bar_style(width = value / 100, 
 												 						fill = "hsl(49, 41%, 65%)", # gold
 												 						align = "right")
-												 }
+												 },
+												 filterMethod = JS("filterRange"),
+												 filterInput = JS("muiRangeFilter")
 				),
 				artificial = colDef(name = "Artificial",
 													 format = colFormat(
@@ -442,7 +502,9 @@ kreport_summary_reactable <- function(kreport_summary_ct) {
 													 	bar_style(width = value / 100, 
 													 						fill = "hsl(49, 41%, 65%)", # gold
 													 						align = "right")
-													 }
+													 },
+														filterMethod = JS("filterRange"),
+														filterInput = JS("muiRangeFilter")
 				)
 			), # end of list
 			style = list(#fontFamily = "Arial",
@@ -451,7 +513,6 @@ kreport_summary_reactable <- function(kreport_summary_ct) {
 			searchable = T,
 			selection = "multiple",
 			onClick = "select",
-			#wrap = F, # if F, force long lines to be wrapped in a single line
 			bordered = T,
 			showPageInfo = FALSE, 
 			showPageSizeOptions = TRUE, 

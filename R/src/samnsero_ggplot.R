@@ -79,7 +79,7 @@ abline <- function(xmax=1, color = "black") {
 
 checkm_plot <- function(df) {
 	df %>% 
-		plot_ly(x = ~Completeness, y = ~Contamination, name = ~serovar, text = ~I(id),
+		plot_ly(x = ~Completeness, y = ~Contamination, name = ~serovar, text = ~I(labels),
 						hovertemplate = paste('%{text}<br><br>',
 																	'Completeness: %{x}<br>',
 																	'Contamination: %{y}'),
@@ -98,7 +98,7 @@ checkm_plot <- function(df) {
 
 quast_plot <- function(df) {
 	df %>% 
-		plot_ly(x = ~N50, y = ~`Total length`, name = ~serovar, text = ~I(id),
+		plot_ly(x = ~N50, y = ~`Total length`, name = ~serovar, text = ~I(labels),
 						hovertemplate = paste('%{text}<br><br>',
 																	'N50: %{x}<br>',
 																	'Total length: %{y}'),

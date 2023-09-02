@@ -2,6 +2,7 @@
 
 # load pkgs
 suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(tidyr))
 suppressPackageStartupMessages(library(purrr))
 suppressPackageStartupMessages(library(stringr))
 suppressPackageStartupMessages(library(data.table))
@@ -26,6 +27,14 @@ xtra_cols <- c("fasta_filepath")
 combined_res <- combined_res %>% 
 	select(-xtra_cols) %>% # remove xtra cols
 	select(id, serovar, qc_status, qc_messages, everything())
+
+# metagenomic binning check
+binning <- any(str_detect(combined_res$id, "_BIN_"))
+
+# return
+if (binning) {
+	combined_res <- combined_res %>% separate(id, into = c("id", "bin"), sep = "_BIN_")
+}
 
 # write out
 fwrite(combined_res, row.names = F, sep = ",")
