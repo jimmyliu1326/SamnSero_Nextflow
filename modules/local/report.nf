@@ -8,6 +8,7 @@ process qc_report {
         path(sistr_res)
         path(checkm_res)
         path(quast_res)
+        path(target_res)
         path(kreport)
     output:
         file("qc_report.html")
@@ -15,7 +16,7 @@ process qc_report {
         """
         mkdir kreport && mv *.kraken.report kreport/
 
-        Rscript -e 'rmarkdown::render("/R/qc_report.Rmd", output_dir=getwd(), knit_root_dir=getwd())' ${checkm_res} ${quast_res} ${sistr_res} kreport/
+        Rscript -e 'rmarkdown::render("/R/qc_report.Rmd", output_dir=getwd(), knit_root_dir=getwd())' ${checkm_res} ${quast_res} ${sistr_res} ${target_res} kreport/
         """   
 }
 

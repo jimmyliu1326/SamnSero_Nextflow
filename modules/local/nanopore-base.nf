@@ -36,6 +36,7 @@ process nanoq {
     tag "Read filtering on ${sample_id}"
     label "process_low"
     cache true
+    // publishDir "$params.outdir"+"/reads/", mode: "copy"
 
     input:
         tuple val(sample_id), path(reads)
@@ -43,21 +44,29 @@ process nanoq {
         tuple val(sample_id), file("${sample_id}.filt.fastq.gz")
     shell:
         """
-        nanoq -i ${reads} -l 200 -q 7 -O g > ${sample_id}.filt.fastq.gz
+        nanoq -i ${reads} -l 1000 -q 10 -O g > ${sample_id}.filt.fastq.gz
         """
 }
 
 process nanocomp {
     tag "Generating raw read QC with NanoPlot"
     label "process_low"
-    publishDir "$params.outdir"+"/reports/", mode: "copy"
+    publishDir "$params.outdir"+"/reports/", mode: "copy", pattern: "*.html", saveAs: { "NanoComp_report.html" }
+    publishDir "$params.outdir"+"/qc/nanocomp/", mode: "copy", pattern: "*.{txt,gz}", saveAs: { 
+        fn ->
+            if ( fn.endsWith("txt") ) { 
+                "NanoComp_stats.tsv"
+            } else { "NanoComp_data.tsv.gz" }
+    }
 
     input:
         path(reads)
     output:
-        file("NanoComp-report.html")
+        path("NanoComp-report.html"), emit: report_html
+        path("NanoStats.txt"), emit: stats_tsv
+        path("NanoComp-data.tsv.gz"), emit: data
     shell:
         """
-        NanoComp -t ${task.cpus} --fastq *.fastq* --names \$(ls | sed 's/.fastq*//g') -o .
+        NanoComp -t ${task.cpus} --tsv_stats --raw --fastq_rich *.fastq* --names \$(ls | sed 's/.fastq*//g') -o .
         """
 }

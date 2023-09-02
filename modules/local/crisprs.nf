@@ -52,8 +52,6 @@ process cctyper {
         cctyper \
             -t ${task.cpus} \
             --no_plot \
-            --repeat_id 50 \
-            --spacer_id 40 \
             ${crispr_fa} \
             cctyper_res/ \
 
