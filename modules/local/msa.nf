@@ -1,7 +1,7 @@
 process mafft {
     tag "CRISPR ${crispr_id} MSA"
     label "process_low"
-    publishDir "$params.outdir"+"/annotations/crisprs/msa/", mode: "copy"
+    publishDir "$params.out_dir"+"/annotations/crisprs/msa/", mode: "copy"
 
     input:
         tuple val(crispr_id), path(crispr_fa)

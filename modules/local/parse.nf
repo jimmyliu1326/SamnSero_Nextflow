@@ -1,7 +1,7 @@
 process combine_res {
     tag "Generate master result file"
     label "process_low"
-    publishDir "$params.outdir", mode: "copy"
+    publishDir "$params.out_dir", mode: "copy"
 
     input:
         path(sistr_res)

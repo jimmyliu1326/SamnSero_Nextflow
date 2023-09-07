@@ -1,7 +1,7 @@
 process target_reads_aggregate {
     tag "Aggregating target reads statistics"
     label "process_low"
-    // publishDir "$params.outdir"+"/qc/target_reads/", mode: "copy", pattern: "*.csv"
+    // publishDir "$params.out_dir"+"/qc/target_reads/", mode: "copy", pattern: "*.csv"
 
     input:
         path(target_reads_stats)

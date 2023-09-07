@@ -15,7 +15,7 @@ process fastqc {
 process multiqc {
     tag "Aggregating FastQC reports with MultiQC"
     label "process_low"
-    publishDir "$params.outdir"+"/reports/", mode: "copy"
+    publishDir "$params.out_dir"+"/reports/", mode: "copy"
 
     input: 
         path(fastqc)

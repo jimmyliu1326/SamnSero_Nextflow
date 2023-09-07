@@ -2,7 +2,7 @@
 process tnblast {
     tag "In-silico CRISPR PCR for ${sample_id}"
     label "process_low"
-    publishDir "$params.outdir"+"/annotations/crisprs/fasta/", mode: "copy"
+    publishDir "$params.out_dir"+"/annotations/crisprs/fasta/", mode: "copy"
 
     input:
         tuple val(sample_id), path(assembly), path(primers)
@@ -40,7 +40,7 @@ process tnblast {
 process cctyper {
     tag "CRISPR ${crispr_id} typing for ${sample_id}"
     label "process_low"
-    publishDir "$params.outdir"+"/annotations/crisprs/gff/crispr_${crispr_id}/", mode: "copy", pattern: "*.gff"
+    publishDir "$params.out_dir"+"/annotations/crisprs/gff/crispr_${crispr_id}/", mode: "copy", pattern: "*.gff"
 
     input:
         tuple val(sample_id), path(crispr_fa), val(crispr_id)
@@ -67,7 +67,7 @@ process cctyper {
 process aggregate_cctyper {
     tag "Aggregating CCTyper results"
     label "process_low"
-    publishDir "$params.outdir"+"/annotations/crisprs/typing_res/", mode: "copy"
+    publishDir "$params.out_dir"+"/annotations/crisprs/typing_res/", mode: "copy"
 
     input:
         tuple val(crispr_id), path(cctyper_res)

@@ -1,7 +1,7 @@
 process checkm {
     tag "Checking genome completness and contamination"
     label "process_medium"
-    publishDir "$params.outdir"+"/qc/", mode: "copy"
+    publishDir "$params.out_dir"+"/qc/", mode: "copy"
 
     input:
         path(assemblies)
@@ -45,7 +45,7 @@ process checkm_single {
 process aggregate_checkm_watch {
     tag "Aggregating CheckM results"
     label "process_low"
-    publishDir "${params.outdir}/timepoints/${res.first().getBaseName().replaceAll('_TIME_.*', '')}/checkm", mode: 'copy', saveAs: { "checkm_res_aggregate.csv" }
+    publishDir "${params.out_dir}/timepoints/${res.first().getBaseName().replaceAll('_TIME_.*', '')}/checkm", mode: 'copy', saveAs: { "checkm_res_aggregate.csv" }
     maxForks 1
 
     input:

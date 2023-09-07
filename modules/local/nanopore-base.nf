@@ -62,7 +62,7 @@ process nanoq {
     tag "Read filtering on ${sample_id}"
     label "process_low"
     cache true
-    // publishDir "$params.outdir"+"/reads/", mode: "copy"
+    // publishDir "$params.out_dir"+"/reads/", mode: "copy"
 
     input:
         tuple val(sample_id), path(reads)
@@ -77,8 +77,8 @@ process nanoq {
 process nanocomp {
     tag "Generating raw read QC with NanoPlot"
     label "process_low"
-    publishDir "$params.outdir"+"/reports/", mode: "copy", pattern: "*.html", saveAs: { "NanoComp_report.html" }
-    publishDir "$params.outdir"+"/qc/nanocomp/", mode: "copy", pattern: "*.{txt,gz}", saveAs: { 
+    publishDir "$params.out_dir"+"/reports/", mode: "copy", pattern: "*.html", saveAs: { "NanoComp_report.html" }
+    publishDir "$params.out_dir"+"/qc/nanocomp/", mode: "copy", pattern: "*.{txt,gz}", saveAs: { 
         fn ->
             if ( fn.endsWith("txt") ) { 
                 "NanoComp_stats.tsv"

@@ -1,7 +1,7 @@
 process seqkit_fx2tab {
     tag "Calculating total target read length for ${sample_id}"
     label "process_low"
-    //publishDir "$params.outdir"+"/qc/target_reads/", mode: "copy", pattern: "*.csv"
+    //publishDir "$params.out_dir"+"/qc/target_reads/", mode: "copy", pattern: "*.csv"
 
     input:
         tuple val(sample_id), path(reads)

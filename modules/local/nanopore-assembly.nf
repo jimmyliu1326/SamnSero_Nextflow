@@ -2,7 +2,7 @@
 process metaflye {
     tag "MetaFlye assembly on ${sample_id}"
     label "process_medium"
-    publishDir "$params.outdir"+"/assembly/${sample_id}", mode: "copy", pattern: "*.{log,txt,gfa,fasta}"
+    publishDir "$params.out_dir"+"/assembly/${sample_id}", mode: "copy", pattern: "*.{log,txt,gfa,fasta}"
     errorStrategy 'ignore'
 
     input:
@@ -24,7 +24,7 @@ process metaflye {
 process dragonflye {
     tag "DragonFlye assembly on ${sample_id}"
     label "process_medium"
-    publishDir "$params.outdir"+"/assembly/${sample_id}", mode: "copy", pattern: "*.{log,txt,gfa}"
+    publishDir "$params.out_dir"+"/assembly/${sample_id}", mode: "copy", pattern: "*.{log,txt,gfa}"
     errorStrategy 'ignore'
 
     input:
@@ -39,7 +39,7 @@ process dragonflye {
         def timestamp = sample_id.replaceAll('_TIME_.*', '')
         def id = sample_id.replaceAll('.*_TIME_', '')
         """
-        dragonflye --reads ${reads} --cpus ${task.cpus} --outdir . --force --ram ${task.memory.toGiga()} ${flye_opts}    
+        dragonflye --reads ${reads} --cpus ${task.cpus} --out_dir . --force --ram ${task.memory.toGiga()} ${flye_opts}    
         mv contigs.fa ${sample_id}.fasta
         mv flye-unpolished.gfa ${sample_id}.gfa
         """

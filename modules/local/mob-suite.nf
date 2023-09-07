@@ -9,7 +9,7 @@ process mob_suite {
         tuple val(sample_id), file("mobtyper_results.txt"), file("contig_report.txt"), optional: true
     shell:
         """
-        mob_recon --infile ${assembly} --outdir results --num_threads ${task.cpus}
+        mob_recon --infile ${assembly} --out_dir results --num_threads ${task.cpus}
 
         if test -f results/mobtyper_results.txt; then
             sed  's/^sample_id/id/g' results/mobtyper_results.txt > mobtyper_results.txt
@@ -36,7 +36,7 @@ process mob_suite_merge {
 process aggregate_mob_suite {
     tag "Aggregating MOB-Suite results"
     label "process_medium"
-    publishDir "$params.outdir"+"/annotations/results", mode: "copy"
+    publishDir "$params.out_dir"+"/annotations/results", mode: "copy"
 
     input:
         path(mob_suite_res)
@@ -51,7 +51,7 @@ process aggregate_mob_suite {
 process mob_suite_summary {
     tag "Summarizing MOB-Suite results"
     label "process_low"
-    publishDir "$params.outdir"+"/annotations/summary", mode: "copy"
+    publishDir "$params.out_dir"+"/annotations/summary", mode: "copy"
 
     input:
         path(mob_suite_res)

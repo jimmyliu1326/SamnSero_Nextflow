@@ -41,7 +41,7 @@ process centrifuge {
 process krona {
     tag "Generating Krona viz"
     label "process_low"
-    publishDir "$params.outdir"+"/reports/", mode: "copy"
+    publishDir "$params.out_dir"+"/reports/", mode: "copy"
 
     input:
         path(krona_input)
@@ -57,7 +57,7 @@ process aggregate_kreport_watch {
     tag "Aggregating Centrifuge results"
     label "process_low"
     maxForks 1
-    // publishDir "${params.outdir}/timepoints/${res.first().getBaseName().replaceAll('_TIME_.*', '')}/qc/centrifuge", mode: 'copy', saveAs: { "kreport_res_aggregate.kraken.report" }
+    // publishDir "${params.out_dir}/timepoints/${res.first().getBaseName().replaceAll('_TIME_.*', '')}/qc/centrifuge", mode: 'copy', saveAs: { "kreport_res_aggregate.kraken.report" }
 
     input:
         path(res)
@@ -76,7 +76,7 @@ process aggregate_krona_watch {
     tag "Aggregating Centrifuge output for Krona"
     label "process_low"
     maxForks 1
-    // publishDir "${params.outdir}/timepoints/${res.first().getBaseName().replaceAll('_TIME_.*', '')}/qc/centrifuge", mode: 'copy', saveAs: { "centrifuge_res_aggregate.krona" }
+    // publishDir "${params.out_dir}/timepoints/${res.first().getBaseName().replaceAll('_TIME_.*', '')}/qc/centrifuge", mode: 'copy', saveAs: { "centrifuge_res_aggregate.krona" }
 
     input:
         path(res)
@@ -95,7 +95,7 @@ process aggregate_krona_split {
     tag "Splitting Centrifuge output for Krona"
     label "process_low"
     maxForks 1
-    publishDir "${params.outdir}/timepoints/${res.getBaseName().replaceAll('centrifuge_res_aggregate_', '')}/qc/centrifuge", mode: 'copy', pattern: '*.krona'
+    publishDir "${params.out_dir}/timepoints/${res.getBaseName().replaceAll('centrifuge_res_aggregate_', '')}/qc/centrifuge", mode: 'copy', pattern: '*.krona'
 
     input:
         path(res)
@@ -121,7 +121,7 @@ process aggregate_kreport_split {
     tag "Splitting Centrifuge output"
     label "process_low"
     maxForks 1
-    publishDir "${params.outdir}/timepoints/${res.getSimpleName().replaceAll('centrifuge_res_aggregate_', '')}/qc/centrifuge", mode: 'copy', pattern: '*.tsv', saveAs: { file -> file.replaceAll('stdin-', '').replaceAll('tsv', 'kraken.report')}
+    publishDir "${params.out_dir}/timepoints/${res.getSimpleName().replaceAll('centrifuge_res_aggregate_', '')}/qc/centrifuge", mode: 'copy', pattern: '*.tsv', saveAs: { file -> file.replaceAll('stdin-', '').replaceAll('tsv', 'kraken.report')}
 
     input:
         path(res)

@@ -34,7 +34,7 @@ process quast {
 process aggregate_quast {
     tag "Aggregating QUAST results"
     label "process_low"
-    publishDir "$params.outdir"+"/qc/", mode: "copy"
+    publishDir "$params.out_dir"+"/qc/", mode: "copy"
 
     input:
         path(quast_res)
@@ -50,7 +50,7 @@ process aggregate_quast {
 process aggregate_quast_watch {
     tag "Aggregating QUAST results"
     label "process_low"
-    publishDir "${params.outdir}/timepoints/${res.first().getBaseName().replaceAll('_TIME_.*', '')}/quast", mode: 'copy', saveAs: { "quast_res_aggregate.csv" }
+    publishDir "${params.out_dir}/timepoints/${res.first().getBaseName().replaceAll('_TIME_.*', '')}/quast", mode: 'copy', saveAs: { "quast_res_aggregate.csv" }
     maxForks 1
 
     input:

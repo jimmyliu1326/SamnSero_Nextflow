@@ -19,7 +19,7 @@ process rgi {
 process aggregate_rgi {
     tag "Aggregating RGI results"
     label "process_low"
-    publishDir "$params.outdir"+"/annotations/results", mode: "copy"
+    publishDir "$params.out_dir"+"/annotations/results", mode: "copy"
 
     input:
         path(rgi_res)
@@ -34,7 +34,7 @@ process aggregate_rgi {
 process rgi_summary {
     tag "Summarizing RGI results"
     label "process_low"
-    publishDir "$params.outdir"+"/annotations/summary", mode: "copy"
+    publishDir "$params.out_dir"+"/annotations/summary", mode: "copy"
 
     input:
         path(rgi_res)

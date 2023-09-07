@@ -47,7 +47,7 @@ process abricate_custom {
 process abricate_summary {
     tag "Generate Abricate summary for ${db}"
     label "process_low"
-    publishDir "$params.outdir", mode: "copy"
+    publishDir "$params.out_dir", mode: "copy"
 
     input:
         tuple val(db), path(assembly)
