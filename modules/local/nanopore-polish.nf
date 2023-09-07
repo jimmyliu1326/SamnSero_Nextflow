@@ -2,13 +2,15 @@
 process medaka {
     tag "Assembly polishing for ${sample_id}"
     label "process_medium"
-    publishDir "$params.outdir"+"/assembly/${sample_id}", mode: "copy"
+    publishDir "${params.outdir}/assembly/${sample_id}", mode: "copy"
 
     input:
         tuple val(sample_id), path(assembly), path(reads)
     output:
         tuple val(sample_id), file("${sample_id}.fasta")
-    shell:
+    script:
+        def timestamp = sample_id.replaceAll('_TIME_.*', '')
+        def id = sample_id.replaceAll('.*_TIME_', '')
         """
         medaka_consensus -i ${reads} -d ${assembly} -o . -t ${task.cpus}
         mv consensus.fasta ${sample_id}.fasta
@@ -16,16 +18,18 @@ process medaka {
 }
 
 process medaka_gpu {
-    tag "Assembly polishing for ${sample_id}"
+    tag "GPU-accelerated Assembly polishing for ${sample_id}"
     label "process_medium"
     maxForks 1
-    publishDir "$params.outdir"+"/assembly/${sample_id}", mode: "copy"
+    publishDir "${params.outdir}/assembly/${sample_id}", mode: "copy"
 
     input:
         tuple val(sample_id), path(assembly), path(reads)
     output:
         tuple val(sample_id), file("${sample_id}.fasta")
-    shell:
+    script:
+        def timestamp = sample_id.replaceAll('_TIME_.*', '')
+        def id = sample_id.replaceAll('.*_TIME_', '')
         """
         medaka_consensus -i ${reads} -d ${assembly} -o . -t ${task.cpus} -b ${params.medaka_batchsize}
         mv consensus.fasta ${sample_id}.fasta

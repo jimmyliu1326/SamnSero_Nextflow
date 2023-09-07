@@ -2,7 +2,7 @@
 process metaflye {
     tag "MetaFlye assembly on ${sample_id}"
     label "process_medium"
-    publishDir "$params.outdir"+"/assembly/${sample_id}", mode: "copy", pattern: "*.{log,txt,gfa}"
+    publishDir "$params.outdir"+"/assembly/${sample_id}", mode: "copy", pattern: "*.{log,txt,gfa,fasta}"
     errorStrategy 'ignore'
 
     input:
@@ -35,7 +35,9 @@ process dragonflye {
         tuple val(sample_id), path("${sample_id}.gfa"), emit: gfa
         tuple val(sample_id), path("dragonflye.log"), emit: dragonflye_log
         tuple val(sample_id), path("flye-info.txt"), optional: true, emit: info_txt
-    shell:
+    script:
+        def timestamp = sample_id.replaceAll('_TIME_.*', '')
+        def id = sample_id.replaceAll('.*_TIME_', '')
         """
         dragonflye --reads ${reads} --cpus ${task.cpus} --outdir . --force --ram ${task.memory.toGiga()} ${flye_opts}    
         mv contigs.fa ${sample_id}.fasta

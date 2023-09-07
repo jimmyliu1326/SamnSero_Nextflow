@@ -1,5 +1,6 @@
 #!/usr/bin/env nextflow
 nextflow.enable.dsl=2
+nextflow.preview.recursion=true
 
 // define global var
 pipeline_name = workflow.manifest.name
@@ -84,20 +85,62 @@ WorkflowMain.initialise(workflow, params, log)
 include { nanopore } from './workflow/nanopore.nf'
 include { illumina } from './workflow/illumina.nf'
 include { post_asm_process } from './workflow/post_asm_process.nf'
+include { insert_sample_id } from './modules/local/insert_sample_id/insert_sample_id.nf'
 
 // define main workflow
+process foo {
+  input: 
+    path data
+  output:
+    path 'out_*.txt'  
+  """
+    echo "Task $task.index inputs: $data" > out_${task.index}.txt
+  """
+}
+
+workflow nanopore_main {
+    take: data
+    main: 
+        nanopore(data)
+        post_asm_process(nanopore.out.assembly, nanopore.out.reads)
+        
+    emit:
+        nanopore.out.combined_reads
+}
+
 workflow {
     
     // read data
-    data = channel
-        .fromPath(params.input, checkIfExists: true)
-        .splitCsv(header: false)
+    if (params.input) {
+
+        data = channel
+            .fromPath(params.input, checkIfExists: true)
+            .splitCsv(header: false)
+
+    } else if (params.watchdir) {
+        
+        Channel.watchPath(params.watchdir)
+            | until { it.getSimpleName() == 'STOP' }
+            | map { file ->
+                id = file.getParent().getBaseName()
+                tuple (id, file)
+            }
+            | insert_sample_id
+            | set { data }
+
+    } else {
+
+        data = Channel.empty()
+
+    }     
+
 
     // start analysis
     if ( params.seq_platform == "nanopore" ) {
 
         nanopore(data)
         post_asm_process(nanopore.out.assembly, nanopore.out.reads)
+
 
     } else if ( params.seq_platform == "illumina" ) {
         

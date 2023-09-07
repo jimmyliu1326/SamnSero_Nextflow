@@ -10,9 +10,6 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": [
-                "input"
-            ],
             "properties": {
                 "input": {
                     "type": "string",
@@ -30,6 +27,10 @@
                     "default": "./results",
                     "fa_icon": "fas fa-folder-open",
                     "format": "directory-path"
+                },
+                "watchdir": {
+                    "type": "string",
+                    "fa_icon": "fas fa-eye"
                 }
             }
         },
@@ -69,8 +70,14 @@
                     ]
                 },
                 "meta": {
-                    "type": "boolean",
-                    "description": "Optimize assembly parameters for metagenomic samples"
+                    "type": "string",
+                    "description": "Optimize assembly parameters for metagenomic samples",
+                    "default": "off",
+                    "enum": [
+                        "off",
+                        "untargeted",
+                        "targeted"
+                    ]
                 },
                 "nanohq": {
                     "type": "boolean",
@@ -113,6 +120,19 @@
                 }
             },
             "fa_icon": "fas fa-search"
+        },
+        "metagenomics_options": {
+            "title": "Metagenomics options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "min_binsize": {
+                    "type": "integer",
+                    "default": 2000000,
+                    "description": "Minimum bin size to output and analyze"
+                }
+            }
         },
         "gpu_acceleration": {
             "title": "GPU acceleration",
@@ -183,6 +203,9 @@
         },
         {
             "$ref": "#/definitions/genome_annotation"
+        },
+        {
+            "$ref": "#/definitions/metagenomics_options"
         },
         {
             "$ref": "#/definitions/gpu_acceleration"

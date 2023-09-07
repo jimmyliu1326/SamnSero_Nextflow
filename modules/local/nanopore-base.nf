@@ -1,6 +1,6 @@
 // basic processes for Nanopore workflows
 process combine {
-    tag "Combining Fastq files for ${sample_id}"
+    tag "Combining FASTQ files for ${sample_id}"
     label "process_low"
 
     input:
@@ -15,6 +15,32 @@ process combine {
         else
             cat ${reads}/*.fastq > ${sample_id}.fastq
         fi
+        """
+}
+
+process combine_watch {
+    tag "Combining FASTQ files"
+    label "process_low"
+    maxForks 1
+
+    input:
+        path(reads)
+    output:
+        path("*.{fastq,fastq.gz}")
+    script:
+        def file = reads[0]
+        def ext = file.getExtension()
+        def inputs =  reads.join(', ')
+        def new_fastq = reads.first()
+        def cumulative_fastq = task.index != 1 ? reads.last() : ''
+        def date = new Date()
+        // def timestamp = date.format("dd_MM_yyyy_HH_mm_ss")
+        def timestamp = date.getTime()
+        def out_fastq = ext == 'gz' ? "${timestamp}.fastq.gz" : "${timestamp}.fastq"
+        println "Task ${task.index}: Combining "+ new_fastq + ", " + cumulative_fastq
+        """
+        cat ${new_fastq} ${cumulative_fastq} > ${out_fastq}
+        timestamp=${timestamp}
         """
 }
 

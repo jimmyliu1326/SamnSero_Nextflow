@@ -42,3 +42,21 @@ process annot_report {
         Rscript -e 'rmarkdown::render("/R/annot_report.Rmd", output_dir=getwd(), knit_root_dir=getwd())' ${sistr_res} annotations
         """
 }
+
+// in-silico serotyping using SISTR
+process qc_report_watch {
+    tag "Generating QC Report"
+    label "process_low"
+    publishDir "$params.outdir"+"/reports/", mode: "copy"
+
+    input:
+        tuple val(timestamp), path(sistr_res), path(checkm_res), path(quast_res), path(target_res), path(kreport)
+    output:
+        file("qc_report.html")
+    shell:
+        """
+        mkdir kreport && mv *.kraken.report kreport/
+
+        Rscript -e 'rmarkdown::render("/R/qc_report.Rmd", output_dir=getwd(), knit_root_dir=getwd())' ${checkm_res} ${quast_res} ${sistr_res} ${target_res} kreport/
+        """   
+}

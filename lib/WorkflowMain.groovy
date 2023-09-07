@@ -66,9 +66,11 @@ class WorkflowMain {
         log.info paramsSummaryLog(workflow, params, log)
 
         // check if input sample sheet exists
-        if ( !Utils.fileExists(params.input) ) {
-            log.error "Please provide a valid path to the input sample sheet"
+        if ( params.input ) {
+            if ( !Utils.fileExists(params.input) ) {
+                log.error "Please provide a valid path to the input sample sheet"
             System.exit(1)
+            }
         }
 
         // check if taxon name contains non-empty values

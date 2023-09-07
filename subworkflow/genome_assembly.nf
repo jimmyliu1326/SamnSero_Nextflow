@@ -11,45 +11,44 @@ workflow ASSEMBLY_nanopore {
         if( params.nanohq ) { flye_opts = flye_opts + " --nano-hq" }
         
         // run assembly workflow
-        if ( params.meta ) {
-            metaflye(reads, flye_opts)
-
-            assembly = metaflye.out.fasta
-        } else {
-            dragonflye(reads, flye_opts)
-
-            assembly = dragonflye.out.fasta
-        }
-        
-        if (params.gpu) {
-
-            assembly \
-                | join(reads) \
-                | medaka_gpu
-
-            assembly_out = medaka_gpu.out
-
-        } else {
+        if ( params.meta != 'off' ) {
             
-            assembly \
-                | join(reads) \
-                | medaka
+            metaflye(reads, flye_opts)
+            assembly_out = metaflye.out.fasta
+            
+        } else {
 
-            assembly_out = medaka.out
+            dragonflye(reads, flye_opts)
+            assembly = dragonflye.out.fasta
+
+            if (params.gpu) {
+
+                assembly
+                    | join(reads)
+                    | medaka_gpu
+                    | set { assembly_out }
+
+            } else {
+                
+                assembly
+                    | join(reads)
+                    | medaka
+                    | set { assembly_out }
+
+            }
+
         }
-        
+               
     emit:
         assembly_out
 }
 
 workflow ASSEMBLY_illumina {
     take: reads
-
     main:
         // define assembly opts for target wgs and metagenomics
         shovill_opts=""
-        if (params.meta) { shovill_opts = shovill_opts + "--opts '--meta'" }
-        
+        if (params.meta != 'off') { shovill_opts = shovill_opts + "--opts '--meta'" }
         // run assembly workflow
         assembly_out = shovill(reads, shovill_opts)
         

@@ -27,3 +27,23 @@ process aggregate_sistr {
         sed -i 's/,genome,/,id,/g' sistr_res_aggregate.csv
         """
 }
+
+process aggregate_sistr_watch {
+    tag "Aggregating serotyping results"
+    label "process_low"
+    publishDir "${params.outdir}/timepoints/${res.first().getBaseName().replaceAll('_TIME_.*', '')}/sistr", mode: 'copy', saveAs: { "sistr_res_aggregate.csv" }
+    maxForks 1
+
+    input:
+        path(res)
+    output:
+        file("sistr_res_aggregate_${res.first().getBaseName().replaceAll('_TIME_.*', '')}.csv")
+    script:
+        def new_res = res.first()
+        def timestamp = new_res.getBaseName().replaceAll('_TIME_.*', '')
+        def cumulative_res = task.index != 1 ? res.last() : ''
+        """
+        sed -i 's/,genome,/,id,/g' ${new_res}
+        awk 'NR == 1 || FNR > 1' ${new_res} ${cumulative_res} > sistr_res_aggregate_${timestamp}.csv
+        """
+}

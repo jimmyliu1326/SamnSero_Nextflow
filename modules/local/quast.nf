@@ -46,3 +46,23 @@ process aggregate_quast {
         sed -i 's/^Assembly/id/g' quast_res_aggregate.tsv
         """
 }
+
+process aggregate_quast_watch {
+    tag "Aggregating QUAST results"
+    label "process_low"
+    publishDir "${params.outdir}/timepoints/${res.first().getBaseName().replaceAll('_TIME_.*', '')}/quast", mode: 'copy', saveAs: { "quast_res_aggregate.csv" }
+    maxForks 1
+
+    input:
+        path(res)
+    output:
+        path("quast_res_aggregate_${res.first().getBaseName().replaceAll('_TIME_.*', '')}.tsv")
+    script:
+        def new_res = res.first()
+        def timestamp = new_res.getBaseName().replaceAll('_TIME_.*', '')
+        def cumulative_res = task.index != 1 ? res.last() : ''
+        """
+        sed -i 's/^Assembly/id/g' ${new_res}
+        awk 'NR == 1 || FNR > 1' ${new_res} ${cumulative_res} > quast_res_aggregate_${timestamp}.tsv
+        """
+}
