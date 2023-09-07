@@ -119,7 +119,8 @@ workflow {
 
     } else if (params.watchdir) {
         
-        Channel.watchPath(params.watchdir)
+        watchdir = params.watchdir+"/*/*.{fastq,fastq.gz}"
+        Channel.watchPath(watchdir)
             | until { it.getSimpleName() == 'STOP' }
             | map { file ->
                 id = file.getParent().getBaseName()

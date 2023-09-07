@@ -30,7 +30,8 @@
                 },
                 "watchdir": {
                     "type": "string",
-                    "fa_icon": "fas fa-eye"
+                    "fa_icon": "fas fa-eye",
+                    "format": "directory-path"
                 }
             }
         },
