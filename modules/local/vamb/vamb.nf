@@ -10,6 +10,6 @@ process vamb {
         path("vamb/bins/*", type: 'dir')
     shell:
         """
-        vamb --bam *.bam --out_dir vamb --fasta ${reference} --minfasta ${params.min_binsize} -o C -p ${task.cpus} ${args}
+        vamb --bam *.bam --outdir vamb --fasta ${reference} --minfasta ${params.min_binsize} -o C -p ${task.cpus} ${args}
         """
 }

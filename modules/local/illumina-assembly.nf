@@ -14,7 +14,7 @@ process shovill {
         shovill --R1 ${reads[0]} \
             --R2 ${reads[1]} \
             --cpus ${task.cpus} \
-            --out_dir shovill \
+            --outdir shovill \
             --ram ${task.memory.toGiga()} \
             ${opts} 
         mv shovill/contigs.fa ${sample_id}.fasta

@@ -39,7 +39,7 @@ process dragonflye {
         def timestamp = sample_id.replaceAll('_TIME_.*', '')
         def id = sample_id.replaceAll('.*_TIME_', '')
         """
-        dragonflye --reads ${reads} --cpus ${task.cpus} --out_dir . --force --ram ${task.memory.toGiga()} ${flye_opts}    
+        dragonflye --reads ${reads} --cpus ${task.cpus} --outdir . --force --ram ${task.memory.toGiga()} ${flye_opts}    
         mv contigs.fa ${sample_id}.fasta
         mv flye-unpolished.gfa ${sample_id}.gfa
         """
