@@ -132,6 +132,7 @@ workflow {
     } else {
 
         data = Channel.empty()
+        println "${workflow.manifest.name} No valid inputs were provided."
 
     }     
 
