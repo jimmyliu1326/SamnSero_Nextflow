@@ -8,16 +8,17 @@ workflow ASSEMBLY_nanopore {
     main:
         // define assembly opts for target wgs and metagenomics
         flye_opts=""
-        if( params.nanohq ) { flye_opts = flye_opts + " --nano-hq" }
         
         // run assembly workflow
         if ( params.meta != 'off' ) {
             
+            if( params.nanohq ) { flye_opts = flye_opts + " --nano-hq" }
             metaflye(reads, flye_opts)
             assembly_out = metaflye.out.fasta
             
         } else {
-
+            
+            if( params.nanohq ) { flye_opts = flye_opts + " --nanohq" }
             dragonflye(reads, flye_opts)
             assembly = dragonflye.out.fasta
 
