@@ -47,7 +47,7 @@ process annot_report {
 process qc_report_watch {
     tag "Generating QC Report"
     label "process_low"
-    publishDir "$params.out_dir"+"/reports/", mode: "copy"
+    publishDir "$params.out_dir", mode: "copy"
 
     input:
         tuple val(timestamp), path(sistr_res), path(checkm_res), path(quast_res), path(target_res), path(kreport)
