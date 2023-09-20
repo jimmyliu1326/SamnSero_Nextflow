@@ -12,7 +12,7 @@ library(magrittr)
 # load sistr res
 load_sistr <- function(path) {
 	# read data
-	df <- fread(path, sep = ",", header = T, colClasses = c(id = "character"))
+	df <- fread(path, sep = ",", header = T, colClasses = "character")
 	# clean df
 	df <- df %>% 
 		#rename("id" = "genome") %>% 
