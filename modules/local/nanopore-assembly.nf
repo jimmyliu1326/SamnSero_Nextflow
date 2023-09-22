@@ -15,7 +15,7 @@ process metaflye {
         tuple val(sample_id), path("assembly_info.txt"), optional: true, emit: info_txt
     shell:
         """
-        flye ${flye_opts} ${reads} -t ${task.cpus} --meta --out-dir .
+        flye ${flye_opts} ${reads} -t ${task.cpus} --meta --keep-haplotypes --out-dir .
         mv assembly.fasta ${sample_id}.fasta
         mv assembly_graph.gfa ${sample_id}.gfa
         """
