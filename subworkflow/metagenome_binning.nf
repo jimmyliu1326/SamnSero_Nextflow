@@ -30,14 +30,16 @@ workflow MG_BIN {
             
             vamb_args=vamb_args+" --cuda" 
             vamb_gpu(samtools_view.out.map{ it[1] }.collect(), vamb_concatenate.out, vamb_args)
+            vamb_out = vamb_gpu.out
         
         } else {
 
             vamb(samtools_view.out.map{ it[1] }.collect(), vamb_concatenate.out, vamb_args)
+            vamb_out = vamb.out
 
         }
         
-        vamb.out // a list of directory paths 
+        vamb_out // a list of directory paths 
             | flatten 
             | map { dir ->
                 dir_name = dir.getBaseName()
