@@ -99,6 +99,8 @@ kreport_sum <- function(df) {
 			unclassified <- x %>% 
 				filter(level == "U") %>% 
 				pull(percent)
+			if (length(unclassified) == 0) { unclassified = 0}
+			#print(paste0("unclassified: ", unclassified))
 			
 			# calc classified reads
 			classified <- 100-unclassified
@@ -108,6 +110,8 @@ kreport_sum <- function(df) {
 				filter(taxid %in% c(0, 1)) %>% 
 				pull(count) %>% 
 				sum()
+			
+			#print(paste0("total_count: ", total_count))
 			# calc bacterial reads
 			bacteria <- x %>% filter(name == "Bacteria") %>% pull(percent)
 			if (length(bacteria) == 0) bacteria <- 0

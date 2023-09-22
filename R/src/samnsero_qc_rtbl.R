@@ -250,7 +250,18 @@ stats_reactable <- function(stats_ct) {
 					digits = 2
 				),
 				filterMethod = JS("filterRange"),
-				filterInput = JS("muiRangeFilter"))
+				filterInput = JS("muiRangeFilter")),
+				`# contigs` = colDef(
+					filterMethod = JS("filterRange"),
+					filterInput = JS("muiRangeFilter")
+				),
+				`# N's per 100 kbp` = colDef(
+					filterMethod = JS("filterRange"),
+					filterInput = JS("muiRangeFilter")
+				),
+				labels = colDef(
+					show = F
+				)
 			), # end of list
 			style = list(#fontFamily = "Arial",
 				fontSize = 16),
@@ -336,6 +347,7 @@ kreport_class_reactable <- function(kreport_class_df) {
 
 
 kreport_summary_reactable <- function(kreport_summary_ct) {
+	n_select <- nrow(kreport_summary_data$origData())
 	kreport_summary_ct %>% 
 		reactable(
 			defaultColDef = colDef(
@@ -512,6 +524,7 @@ kreport_summary_reactable <- function(kreport_summary_ct) {
 			highlight = T,
 			searchable = T,
 			selection = "multiple",
+			defaultSelected = c(1:n_select),
 			onClick = "select",
 			bordered = T,
 			showPageInfo = FALSE, 

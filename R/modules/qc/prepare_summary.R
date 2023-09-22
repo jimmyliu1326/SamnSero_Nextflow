@@ -2,7 +2,8 @@
 source(file.path(src_dir, "src/samnsero_summary.R"))
 
 # combine serotyping and assembly stat results
-combined_res <- combine_sistr_qc(quast_res, checkm_res, sistr_res_clean)
+combined_res <- combine_sistr_qc(quast_res, checkm_res, sistr_res_clean) %>% 
+	mutate(labels = id)
 
 # taxonomic summary
 kreport_summary <- kreport_sum(kreport_res) %>% 
