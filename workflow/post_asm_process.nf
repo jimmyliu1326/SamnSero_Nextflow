@@ -69,19 +69,19 @@ workflow post_asm_process {
                 if ( params.watchdir ) {
                     
                     SEROTYPING.out.map { 
-                        timestamp = it.getBaseName().replaceAll('sistr_res_aggregate_', '')
+                        timestamp = it.getSimpleName().replaceAll('sistr_res_aggregate_', '')
                         tuple( timestamp, it)
                     }
                     | join(ASSEMBLY_QC.out.checkm_res.map { 
-                        timestamp = it.getBaseName().replaceAll('checkm_res_aggregate_', '')
+                        timestamp = it.getSimpleName().replaceAll('checkm_res_aggregate_', '')
                         tuple( timestamp, it)
                     })
                     | join(ASSEMBLY_QC.out.quast_res.map { 
-                        timestamp = it.getBaseName().replaceAll('quast_res_aggregate_', '')
+                        timestamp = it.getSimpleName().replaceAll('quast_res_aggregate_', '')
                         tuple( timestamp, it)
                     })
                     | join(READ_QC.out.target_res.map { 
-                        timestamp = it.getBaseName().replaceAll('target_reads_aggregate_', '')
+                        timestamp = it.getSimpleName().replaceAll('target_reads_aggregate_', '')
                         tuple( timestamp, it)
                     })
                     | join(READ_QC.out.kreport)

@@ -30,17 +30,17 @@ process combine_watch {
     script:
         def file = reads[0]
         def ext = file.getExtension()
-        def inputs =  reads.join(', ')
+        // def inputs =  reads.join(', ')
         def new_fastq = reads.first()
         def cumulative_fastq = task.index != 1 ? reads.last() : ''
         def date = new Date()
+        def id = new_fastq.getSimpleName()
         // def timestamp = date.format("dd_MM_yyyy_HH_mm_ss")
         def timestamp = date.getTime()
-        def out_fastq = ext == 'gz' ? "${timestamp}.fastq.gz" : "${timestamp}.fastq"
+        def out_fastq = ext == 'gz' ? "${timestamp}_TIME_${id}.fastq.gz" : "${timestamp}_TIME_${id}.fastq"
         println "Task ${task.index}: Combining "+ new_fastq + ", " + cumulative_fastq
         """
         cat ${new_fastq} ${cumulative_fastq} > ${out_fastq}
-        timestamp=${timestamp}
         """
 }
 

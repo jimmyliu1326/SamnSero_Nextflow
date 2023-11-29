@@ -21,7 +21,8 @@ workflow nanopore {
                 | flatten
                 | map { file ->
                     // id = file.getName().replaceAll('.*\\d+\\.part_', '').replaceAll('.fastq.gz', '')
-                    id = file.getName().replaceAll('\\.part_', '_TIME_').replaceAll('.fastq.gz', '')
+                    // id = file.getName().replaceAll('\\.part_', '_TIME_').replaceAll('.fastq.gz', '')
+                    id = file.getSimpleName()
                     tuple(id, file)
                 }
                 | rename_FASTQ
