@@ -61,10 +61,10 @@ The pipeline executes process in Docker containers by default. Usage of Singular
 nextflow run jimmyliu1326/SamnSero_Nextflow -r [pipeline_version] --input samples.csv --outdir results
 ```
 
-**With Slurm HPC**
+**With Slurm HPC with Singularity**
 
 ```bash
-nextflow run jimmyliu1326/SamnSero_Nextflow -r [pipeline_version] --input samples.csv --outdir results -profile slurm
+nextflow run jimmyliu1326/SamnSero_Nextflow -r [pipeline_version] --input samples.csv --outdir results --account my-slurm-account -profile slurm,singularity 
 ```
 
 Below is the complete list of pipeline options available:
