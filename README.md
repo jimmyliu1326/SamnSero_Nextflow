@@ -53,18 +53,24 @@ Once you have set up the data directory as described and created the `samples.cs
 
 ## Pipeline Usage
 
-The pipeline executes process in Docker containers by default. Usage of Singularity containers is also supported, but only configured for HPC environments that use Slurm scheduler. Note that a pipeline version must be specified when calling the pipeline.
+The pipeline executes process in Docker containers by default. Singularity containers and process management by Slurm are also supported. See below how to run the pipeline using different container platforms.
 
-**With Docker (Default)**
+**Docker (Default)**
 
 ```bash
-nextflow run jimmyliu1326/SamnSero_Nextflow -r [pipeline_version] --input samples.csv --outdir results
+nextflow run jimmyliu1326/SamnSero_Nextflow -latest --input samples.csv --out_dir results
 ```
 
-**With Slurm HPC using Singularity containers**
+**Singularity**
 
 ```bash
-nextflow run jimmyliu1326/SamnSero_Nextflow -r [pipeline_version] --input samples.csv --outdir results --account my-slurm-account -profile slurm,singularity 
+nextflow run jimmyliu1326/SamnSero_Nextflow -latest --input samples.csv --out_dir results -profile singularity
+```
+
+**Slurm + Singularity**
+
+```bash
+nextflow run jimmyliu1326/SamnSero_Nextflow -latest --input samples.csv --out_dir results --account my-slurm-account -profile slurm,singularity 
 ```
 
 Below is the complete list of pipeline options available:
@@ -79,13 +85,12 @@ Below is the complete list of pipeline options available:
         --seq_platform STR              Sequencing platform that generated the input data (Options: nanopore|illumina) 
                                         [Default = nanopore]
         --meta                          Optimize assembly parameters for metagenomic samples
-        --taxon_name STR                Name of the target organism sequenced. Quote the string if the name contains
-                                        space characters [Default = "Salmonella enterica"]
-        --taxon_level STR               Taxon level of the target organism sequenced. [Default = species]
-        --nanohq                        Input reads were basecalled using Guppy v5 SUP models
+        --taxon_name STR                Name of the target organism sequenced. [Default = "Salmonella enterica"]
+        --taxon_level STR               Taxon level of the target organism specified. [Default = species]
+        --nanohq                        Input Nanopore reads were basecalled using SUP models
 
     Data quality check:
-        --trim                          Perform read trimming
+        --trim                          Perform adapter and barcode trimming on raw reads
         --qc                            Quality check input reads and genome assemblies
         --centrifuge PATH               Path to DIRECTORY containing Centrifuge database index (required if using --qc)
 
