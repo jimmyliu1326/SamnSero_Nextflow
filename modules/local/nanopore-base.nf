@@ -93,6 +93,6 @@ process nanocomp {
         path("NanoComp-data.tsv.gz"), emit: data
     shell:
         """
-        NanoComp -t ${task.cpus} --tsv_stats --raw --fastq_rich *.fastq* --names \$(ls | sed 's/.fastq*//g') -o .
+        NanoComp -t ${task.cpus} --tsv_stats --raw --fastq *.fastq* --names \$(ls | sed 's/.fastq*//g') -o .
         """
 }
