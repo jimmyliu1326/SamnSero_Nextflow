@@ -42,6 +42,22 @@ process checkm_single {
         """
 }
 
+process aggregate_checkm {
+    tag "Aggregating CheckM results"
+    label "process_low"
+    publishDir "$params.out_dir"+"/qc/", mode: "copy"
+
+    input:
+        path(quast_res)
+    output:
+        file("checkm_res_aggregate.tsv")
+    shell:
+        """
+        awk 'NR == 1 || FNR > 1' *.tsv > checkm_res_aggregate.tsv
+        sed -i 's/^Bin Id/id/g' checkm_res_aggregate.tsv
+        """
+}
+
 process aggregate_checkm_watch {
     tag "Aggregating CheckM results"
     label "process_low"

@@ -1,5 +1,5 @@
 // import modules
-include { checkm; checkm_single; aggregate_checkm_watch } from '../modules/local/checkm.nf'
+include { checkm; checkm_single; aggregate_checkm_watch; aggregate_checkm } from '../modules/local/checkm.nf'
 include { quast; aggregate_quast; aggregate_quast_watch } from '../modules/local/quast.nf'
 
 workflow ASSEMBLY_QC {
@@ -20,7 +20,11 @@ workflow ASSEMBLY_QC {
 
         } else {
 
-            checkm(assembly.map { it[1] }.collect())
+            assembly 
+                | checkm_single
+                | map { it[1] }
+                | collect
+                | aggregate_checkm
                 | set { aggregate_checkm }
 
         }        
@@ -70,7 +74,6 @@ workflow ASSEMBLY_QC {
 
 // import modules
 include { centrifuge; krona; aggregate_krona_watch; aggregate_kreport_watch; aggregate_krona_split; aggregate_kreport_split } from '../modules/local/taxonomy_class.nf'
-include { taxonkit_name2taxid } from '../modules/local/taxonkit/name2taxid.nf'
 include { target_reads_xtract } from '../modules/local/target_reads/xtract.nf'
 include { target_reads_aggregate; target_reads_aggregate_watch } from '../modules/local/target_reads/aggregate.nf'
 include { seqkit_fx2tab } from '../modules/local/seqkit/fx2tab.nf'
@@ -78,11 +81,13 @@ include { fastqc; multiqc } from '../modules/local/fastqc.nf'
 include { nanocomp } from '../modules/local/nanopore-base.nf'
 
 workflow READ_QC {
-    take: reads
+    take: 
+        reads
+        taxid
     main:
         centrifuge_db=file(params.centrifuge, checkIfExists: true)
         centrifuge(reads, centrifuge_db)
-        taxon_id = taxonkit_name2taxid(params.taxon_name)
+        
 
         if ( params.watchdir ) {
             
@@ -97,7 +102,7 @@ workflow READ_QC {
 
             // calculate target bases sequenced
             target_stats = centrifuge.out.krona
-                | combine(taxon_id)
+                | combine(taxid)
                 | join(reads)
                 | target_reads_xtract
                 | seqkit_fx2tab
@@ -120,7 +125,7 @@ workflow READ_QC {
 
             // calculate target bases sequenced
             centrifuge.out.krona
-                | combine(taxon_id)
+                | combine(taxid)
                 | join(reads)
                 | target_reads_xtract
                 | seqkit_fx2tab
