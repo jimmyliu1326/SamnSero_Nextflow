@@ -1,7 +1,7 @@
 // import modules
 include { rename_CTG } from '../modules/local/rename_CTG/rename_CTG.nf'
 include { rename_FASTA } from '../modules/local/rename_FASTA/rename_FASTA.nf'
-include { vamb; vamb as vamb_gpu } from '../modules/local/vamb/vamb.nf'
+include { vamb } from '../modules/local/vamb/vamb.nf'
 include { vamb_concatenate } from '../modules/local/vamb/concatenate.nf'
 include { minimap2_map_ont } from '../modules/local/minimap2/map-ont.nf'
 include { samtools_view } from '../modules/local/samtools/view.nf'
@@ -25,21 +25,9 @@ workflow MG_BIN {
             | samtools_view        
 
         // metagenomic binning
-        vamb_args=""
-        if (params.gpu) { 
-            
-            vamb_args=vamb_args+" --cuda" 
-            vamb_gpu(samtools_view.out.map{ it[1] }.collect(), vamb_concatenate.out, vamb_args)
-            vamb_out = vamb_gpu.out
+        vamb(samtools_view.out.map{ it[1] }.collect(), vamb_concatenate.out)
         
-        } else {
-
-            vamb(samtools_view.out.map{ it[1] }.collect(), vamb_concatenate.out, vamb_args)
-            vamb_out = vamb.out
-
-        }
-        
-        vamb_out // a list of directory paths 
+        vamb.out // a list of directory paths 
             | flatten 
             | map { dir ->
                 dir_name = dir.getBaseName()
