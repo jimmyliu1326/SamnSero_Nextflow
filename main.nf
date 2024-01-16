@@ -53,6 +53,7 @@ include { nanopore } from './workflow/nanopore.nf'
 include { illumina } from './workflow/illumina.nf'
 include { post_asm_process } from './workflow/post_asm_process.nf'
 include { insert_sample_id } from './modules/local/insert_sample_id/insert_sample_id.nf'
+include { taxonkit_name2taxid } from './modules/local/taxonkit/name2taxid.nf'
 
 // define main workflow
 workflow {
@@ -85,16 +86,17 @@ workflow {
 
 
     // start analysis
+    taxid = taxonkit_name2taxid(params.taxon_name)
+
     if ( params.seq_platform == "nanopore" ) {
         
         nanopore(data)
-        post_asm_process(nanopore.out.assembly, nanopore.out.reads)
-
+        post_asm_process(nanopore.out.assembly, nanopore.out.reads, taxid)
 
     } else if ( params.seq_platform == "illumina" ) {
         
         illumina(data)
-        post_asm_process(illumina.out.assembly, illumina.out.reads)
+        post_asm_process(illumina.out.assembly, illumina.out.reads, taxid)
 
     }
     
