@@ -1,5 +1,5 @@
 //
-// This file holds several functions specific to the main.nf workflow in the nf-core/samnsero pipeline
+// This file holds several functions specific to the main.nf workflow in the jimmyliu1326/SamnSero_Nextflow pipeline
 //
 
 class WorkflowMain {
@@ -22,7 +22,7 @@ class WorkflowMain {
     // Print help to screen if required
     //
     public static String help(workflow, params, log) {
-        def command = "nextflow run jimmyliu1326/SamnSero -r [version] --input samplesheet.csv"
+        def command = "nextflow run jimmyliu1326/SamnSero_Nextflow -r [version] --input samplesheet.csv"
         def help_string = ''
         help_string += NfcoreTemplate.logo(workflow, params.monochrome_logs)
         help_string += NfcoreSchema.paramsHelp(workflow, params, command)
@@ -55,7 +55,7 @@ class WorkflowMain {
 
         // Print pipeline version if --version is invoked
         if (params.version) {
-            log.info "${workflow.manifest.name} v${workflow.manifest.version}"
+            log.info "${workflow.manifest.name} ${workflow.manifest.version}"
             System.exit(0)
         }
 
