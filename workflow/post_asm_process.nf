@@ -20,7 +20,7 @@ workflow post_asm_process {
         // perform metagenomic binning
         if ( params.meta != 'off' ) {
             
-            if ( !params.no_binning ) { // bin contigs
+            if ( !params.disable_binning ) { // bin contigs
                 
                 MG_BIN(in_assembly, reads)
                 
