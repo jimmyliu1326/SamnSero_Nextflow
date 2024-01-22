@@ -105,6 +105,7 @@ workflow READ_QC {
                 | combine(taxid)
                 | join(reads)
                 | target_reads_xtract
+                | join(reads)
                 | seqkit_fx2tab
                 | map { it[1] }
             target_res = target_reads_aggregate_watch.scan(target_stats)
@@ -128,6 +129,7 @@ workflow READ_QC {
                 | combine(taxid)
                 | join(reads)
                 | target_reads_xtract
+                | join(reads)
                 | seqkit_fx2tab
                 | map { it[1] }
                 | collect
