@@ -385,9 +385,35 @@ kreport_summary_reactable <- function(kreport_summary_ct) {
 											 						fill = "hsl(31, 89%, 69%)", # orange
 											 						align = "right")
 											 },
-											 cell = function(value) {
-											 	div(scales::comma(value))
+											 format = colFormat(
+											 	digits = 2
+											 ),
+											 header = function(value) {
+											 	units <- div(style = "color: #999", "K reads")
+											 	div(title = value, value, units)
 											 },
+											 # cell = function(value) {
+											 # 	div(scales::comma(value))
+											 # },
+											 filterMethod = JS("filterRange"),
+											 filterInput = JS("muiRangeFilter")
+				),
+				total_bases = colDef(name = "Total Output",
+											 style = function(value) {
+											 	bar_style(width = value / max(kreport_summary$total_bases),
+											 						fill = "hsl(31, 89%, 69%)", # orange
+											 						align = "right")
+											 },
+											 format = colFormat(
+											 	digits = 2
+											 ),
+											 header = function(value) {
+											 	units <- div(style = "color: #999", "Mbps")
+											 	div(title = value, value, units)
+											 },
+											 # cell = function(value) {
+											 # 	div(scales::comma(value))
+											 # },
 											 filterMethod = JS("filterRange"),
 											 filterInput = JS("muiRangeFilter")
 				),
@@ -421,7 +447,7 @@ kreport_summary_reactable <- function(kreport_summary_ct) {
 					name = "Target DNA",
 					minWidth = 125,
 					format = colFormat(
-						digits = 1
+						digits = 2
 					),
 					style = function(value) {
 						bar_style(width = value / max(kreport_summary$target_count),
@@ -439,7 +465,7 @@ kreport_summary_reactable <- function(kreport_summary_ct) {
 					name = "Target DNA",
 					minWidth = 125,
 					format = colFormat(
-						digits = 1
+						digits = 2
 					),
 					style = function(value) {
 						bar_style(width = value / max(kreport_summary$target_bases),

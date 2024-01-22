@@ -1,3 +1,37 @@
+# filter time points data
+# keep only the latest time point per sample
+tp_filter <- function(df) {
+	
+	# get the most current id tp combinations	
+	current_id_tps <- df %>% 
+		separate(id, into = c('timepoint', 'id'), sep = "_TIME_") %>% 
+		mutate(timepoint = as.numeric(timepoint)) %>% 
+		group_by(id) %>%
+		arrange(desc(timepoint)) %>%
+		slice(1) %>%
+		mutate(id = paste(timepoint, id, sep = "_TIME_")) %>% 
+		pull(id)
+		
+	# only keep the most current id tp combos
+	df %>% 
+		filter(id %in% current_id_tps) %>% 
+		separate(id, into = c('timepoint', 'id'), sep = "_TIME_") %>% 
+		select(-timepoint)
+
+}
+
+# parse timepoints data
+tp_process <- function(df) {
+	df %>% 
+		separate(id, into = c('timepoint', 'id'), sep = "_TIME_") %>% 
+		mutate(timepoint = as.numeric(timepoint)) %>%
+		group_by(id) %>% 
+		mutate(timepoint = (timepoint - min(timepoint))/60000, # convert ms to minutes
+					 serovar = if_else(is.na(serovar), "Missing", serovar),
+					 labels = paste0(id, " (", serovar, ")")) %>% 
+		ungroup()
+}
+
 annot_sum2mat <- function(df, var_only=F) {
 	
 		var_df <- df %>%  
@@ -70,9 +104,9 @@ getSummaryType <- function(df, type_id) {
 combine_sistr_qc <- function(quast_res, checkm_res, sistr_res) {
 	quast_res %>%
 		select(id, "# contigs", "Total length", "# N's per 100 kbp", "N50", "Avg. coverage depth") %>%
-		left_join(checkm_res %>% 
+		inner_join(checkm_res %>% 
 								select(id, Completeness, Contamination, `Strain heterogeneity`), by = "id") %>%
-		left_join(sistr_res %>%
+		inner_join(sistr_res %>%
 								select(id, serogroup, serovar, serovar_antigen, serovar_cgmlst, qc_status, qc_messages),
 							by = "id"
 		) %>%
@@ -106,9 +140,9 @@ kreport_sum <- function(df) {
 			classified <- 100-unclassified
 			
 			# calc total number of reads
-			total_count <- x %>% 
-				filter(taxid %in% c(0, 1)) %>% 
-				pull(count) %>% 
+			total_count <- x %>%
+				filter(taxid %in% c(0, 1)) %>%
+				pull(count) %>%
 				sum()
 			
 			#print(paste0("total_count: ", total_count))
@@ -157,8 +191,11 @@ kreport_class_sum <- function(df) {
 	# get the domain of each species group
 	domain_group <- unlist(map(tax_groups_idx, ~return(rep(kreport_class_res$name[.[1]], length(.)))))
 	# add domain group to class results table
+	kreport_class_res %<>% mutate(domain = domain_group)
+	# process timepoint data
+	if ( rt ) { kreport_class_res %<>% tp_filter() }
+	# pivot to wide format
 	kreport_class_res %>% 
-		mutate(domain = domain_group) %>% 
 		pivot_wider(id_cols = c("level", "taxid", "name", "domain"),
 								names_from = "id", values_from= "percent") %>% 
 		filter(level != "D") %>% 

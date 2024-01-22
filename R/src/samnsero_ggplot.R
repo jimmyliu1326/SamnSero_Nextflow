@@ -113,3 +113,32 @@ quast_plot <- function(df) {
 					 showlegend = F,
 					 shapes = list(abline(xmax = max(df$origData()$N50), "red")))
 }
+
+temporal_plot <- function(
+		input = NULL,
+		y = "",
+		axis.y.title = "",
+		axis.y.text = "",
+		axis.y.text.suffix = "",
+		show.legend = T,
+		height = 400
+) {
+	input %>% 
+		plot_ly(x = ~timepoint, y = as.formula(paste0("~", "`", y, "`")), name = ~id, text = ~I(labels),
+						hovertemplate = paste0('<b>%{text}</b><br>',
+																	'Time: %{x}<br>',
+																	axis.y.text, ': %{y}', axis.y.text.suffix,
+																	"<extra></extra>"),
+						
+						type = 'scatter',
+						mode = 'lines+markers',
+						connectgaps = T) %>% 
+			layout(xaxis = list(title = 'Time elapsed (mins)',
+													#rangemode="tozero",
+													zeroline = F),
+						 yaxis = list(title = axis.y.title,
+						 						 rangemode="tozero",
+						 						 zeroline = F),
+						 showlegend = show.legend)
+		
+}
