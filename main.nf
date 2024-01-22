@@ -2,9 +2,6 @@
 nextflow.enable.dsl=2
 nextflow.preview.recursion=true
 
-// define global var
-pipeline_name = workflow.manifest.name
-
 // print help message
 def helpMessage() {
     log.info """
@@ -48,66 +45,17 @@ def helpMessage() {
         """.stripIndent()
 }
 
+// validate user-supplied parameters
 WorkflowMain.initialise(workflow, params, log)
-
-// if ( params.qc == true & !(params.taxon_level ==~ '(species|kingdom|phylum|class|order|family|genus|domain)') ) {
-//     error pipeline_name+": The taxon_level parameter contains invalid values"
-// }
-
-// if ( !(params.seq_platform ==~ '(nanopore|illumina)') ) {
-//     error pipeline_name+": The seq_platform parameter contains invalid values"
-// }
-
-
-
-// print log info
-// log.info """\
-//          ========================================
-//          S A M N S E R O   P I P E L I N E  v${workflow.manifest.version}
-//          ========================================
-//          input               : ${params.input}
-//          outdir              : ${params.outdir}
-//          seq_platform        : ${params.seq_platform}
-//          taxon_level         : ${params.taxon_level}
-//          taxon_name          : ${params.taxon_name}
-//          trim                : ${params.trim}
-//          nanohq              : ${params.nanohq}
-//          quality check       : ${params.qc}
-//          annotation          : ${params.annot}
-//          meta                : ${params.meta}
-//          gpu                 : ${params.gpu}
-//          noreport            : ${params.noreport}
-//          medaka_batchsize    : ${params.medaka_batchsize}
-//          """
-//          .stripIndent()
 
 // import workflows
 include { nanopore } from './workflow/nanopore.nf'
 include { illumina } from './workflow/illumina.nf'
 include { post_asm_process } from './workflow/post_asm_process.nf'
 include { insert_sample_id } from './modules/local/insert_sample_id/insert_sample_id.nf'
+include { taxonkit_name2taxid } from './modules/local/taxonkit/name2taxid.nf'
 
 // define main workflow
-process foo {
-  input: 
-    path data
-  output:
-    path 'out_*.txt'  
-  """
-    echo "Task $task.index inputs: $data" > out_${task.index}.txt
-  """
-}
-
-workflow nanopore_main {
-    take: data
-    main: 
-        nanopore(data)
-        post_asm_process(nanopore.out.assembly, nanopore.out.reads)
-        
-    emit:
-        nanopore.out.combined_reads
-}
-
 workflow {
     
     // read data
@@ -132,22 +80,23 @@ workflow {
     } else {
 
         data = Channel.empty()
-        println "${workflow.manifest.name} No valid inputs were provided."
+        println "${workflow.manifest.name}: No valid inputs were provided."
 
     }     
 
 
     // start analysis
+    taxid = taxonkit_name2taxid(params.taxon_name)
+
     if ( params.seq_platform == "nanopore" ) {
-
+        
         nanopore(data)
-        post_asm_process(nanopore.out.assembly, nanopore.out.reads)
-
+        post_asm_process(nanopore.out.assembly, nanopore.out.reads, taxid)
 
     } else if ( params.seq_platform == "illumina" ) {
         
         illumina(data)
-        post_asm_process(illumina.out.assembly, illumina.out.reads)
+        post_asm_process(illumina.out.assembly, illumina.out.reads, taxid)
 
     }
     

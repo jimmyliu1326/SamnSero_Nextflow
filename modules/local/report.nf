@@ -3,6 +3,7 @@ process qc_report {
     tag "Generating QC Report"
     label "process_low"
     publishDir "$params.out_dir"+"/reports/", mode: "copy"
+    errorStrategy 'ignore'
 
     input:
         path(sistr_res)
@@ -24,6 +25,7 @@ process annot_report {
     tag "Generating Genome Annotation Report"
     label "process_low"
     publishDir "$params.out_dir"+"/reports/", mode: "copy"
+    errorStrategy 'ignore'
 
     input:
         path(sistr_res)

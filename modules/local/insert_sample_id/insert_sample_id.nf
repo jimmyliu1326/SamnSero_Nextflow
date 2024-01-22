@@ -10,9 +10,9 @@ process insert_sample_id {
         def ext = reads.getExtension()
         """
         if [[ $ext == "gz" ]]; then
-            zcat ${reads} | sed '1~4 s/\$/ samnsero_id=${sample_id}/g' > ${reads.getSimpleName()}.rn.fastq
+            zcat ${reads} | sed '1~4 s/\$/ samnsero_id=${sample_id}/g' > ${sample_id}.${task.index}.rn.fastq
         else
-            sed '1~4 s/\$/ samnsero_id=${sample_id}/g' ${reads} > ${reads.getSimpleName()}.rn.fastq
+            sed '1~4 s/\$/ samnsero_id=${sample_id}/g' ${reads} > ${sample_id}.${task.index}.rn.fastq
         fi
         """
 }

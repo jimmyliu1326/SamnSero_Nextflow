@@ -95,25 +95,53 @@ process aggregate_krona_split {
     tag "Splitting Centrifuge output for Krona"
     label "process_low"
     maxForks 1
-    publishDir "${params.out_dir}/timepoints/${res.getBaseName().replaceAll('centrifuge_res_aggregate_', '')}/qc/centrifuge", mode: 'copy', pattern: '*.krona'
+    publishDir "${params.out_dir}/timepoints/${res.getSimpleName().replaceAll('centrifuge_res_aggregate_', '')}/qc/centrifuge", mode: 'copy', pattern: '*.krona'
 
     input:
         path(res)
     output:
         path('*.krona')
     script:
-        def timestamp = res.getBaseName().replaceAll('centrifuge_res_aggregate_', '')
+        def timestamp = res.getSimpleName().replaceAll('centrifuge_res_aggregate_', '')
         def id_col = 3
         """
-        cat ${res} \
-            | csvtk grep -H -t -T -f ${id_col} -r -p ${timestamp} \
-            | csvtk mutate -t -T -H -f ${id_col} -R -p "_TIME_(\\S+)"  \
-            | csvtk split -t -T -H -f ${id_col}
+        #!/usr/local/bin/Rscript
+        # cat ${res} \
+        #    | csvtk grep -H -t -T -f ${id_col} -r -p ${timestamp} \
+        #    | csvtk mutate -t -T -H -f ${id_col} -R -p "_TIME_(\\S+)"  \
+        #    | csvtk split -t -T -H -f ${id_col}
         
-        sed -i -r 's/(.*)\\s+[^\\s]+\$/\\1/' *.tsv
-        sed -i 's/"//g' *.tsv
+        #sed -i -r 's/(.*)\\s+[^\\s]+\$/\\1/' *.tsv
+        #sed -i 's/"//g' *.tsv
         
-        find . -type f -name '*.tsv' -exec sh -c 'mv "\$1" "\$(echo "\$1" | sed s/stdin-// | sed s/tsv/krona/)"' _ {} \\;
+        #find . -type f -name '*.tsv' -exec sh -c 'mv "\$1" "\$(echo "\$1" | sed s/stdin-// | sed s/tsv/krona/)"' _ {} \\;
+        
+        library(dplyr)
+        library(stringr)
+        library(tidyr)
+        library(purrr)
+        library(magrittr)
+        library(tibble)
+        library(data.table)
+        
+        df <- fread("${res}", header = F)
+        current_id_tps <- df %>%
+            separate(V3, into = c('timepoint', 'id'), sep = "_TIME_") %>%
+            mutate(timepoint = as.numeric(timepoint)) %>%
+            group_by(id) %>%
+            arrange(desc(timepoint)) %>%
+            slice(1) %>%
+            mutate(id = paste(timepoint, id, sep = "_TIME_")) %>%
+            pull(id)
+        df_grp <- df %>%
+            filter(V3 %in% current_id_tps) %>%
+            mutate(V3 = str_replace_all(V3, ".*_TIME_", "")) %>%
+            split(f = as.factor(.\$V3))
+        
+        walk2(names(df_grp), df_grp, function(x, y) {
+            write.table(y, paste0(x, ".krona"), sep = "\t", quote = F, row.names = F, col.names = F)
+        })
+
         """
 }
 
@@ -121,8 +149,8 @@ process aggregate_kreport_split {
     tag "Splitting Centrifuge output"
     label "process_low"
     maxForks 1
-    publishDir "${params.out_dir}/timepoints/${res.getSimpleName().replaceAll('centrifuge_res_aggregate_', '')}/qc/centrifuge", mode: 'copy', pattern: '*.tsv', saveAs: { file -> file.replaceAll('stdin-', '').replaceAll('tsv', 'kraken.report')}
-
+    //publishDir "${params.out_dir}/timepoints/${res.getSimpleName().replaceAll('centrifuge_res_aggregate_', '')}/qc/centrifuge", mode: 'copy', pattern: '*.tsv', saveAs: { file -> file.replaceAll('stdin-', '').replaceAll('tsv', 'kraken.report')}
+    publishDir "${params.out_dir}/timepoints/${res.getSimpleName().replaceAll('centrifuge_res_aggregate_', '')}/qc/centrifuge", mode: 'copy', pattern: '*.tsv', saveAs: { file -> file.replaceAll('tsv', 'kraken.report') }
     input:
         path(res)
     output:
@@ -132,17 +160,53 @@ process aggregate_kreport_split {
         def timestamp = res.getSimpleName().replaceAll('centrifuge_res_aggregate_', '')
         def id_col = 7
         """
-        cat ${res} \
-            | csvtk grep -H -t -T -f ${id_col} -r -p ${timestamp} \
-            | csvtk mutate -t -T -H -f ${id_col} -R -p "_TIME_(\\S+)"  \
-            | csvtk split -t -T -H -f ${id_col}
+        #!/usr/local/bin/Rscript
+        # cat ${res} \
+        #     | csvtk grep -H -t -T -f ${id_col} -r -p ${timestamp} \
+        #     | csvtk mutate -t -T -H -f ${id_col} -R -p "_TIME_(\\S+)"  \
+        #     | csvtk split -t -T -H -f ${id_col}
         
-        cat ${res} \
-            | csvtk split -t -T -H -f ${id_col}
+        # cat ${res} \
+        #     | csvtk split -t -T -H -f ${id_col}
         
-        sed -i -r 's/(.*)\\s+[^\\s]+\$/\\1/' *.tsv
-        sed -i 's/"//g' *.tsv
+        # sed -i -r 's/(.*)\\s+[^\\s]+\$/\\1/' *.tsv
+        # sed -i 's/"//g' *.tsv
         
-        find . -type f -name '*_TIME_*' -exec sh -c 'mv "\$1" "\$(echo "\$1" | sed s/stdin-// | sed s/tsv/kraken.report/)"' _ {} \\;
+        # find . -type f -name '*_TIME_*' -exec sh -c 'mv "\$1" "\$(echo "\$1" | sed s/stdin-// | sed s/tsv/kraken.report/)"' _ {} \\;
+
+        library(dplyr)
+        library(stringr)
+        library(tidyr)
+        library(purrr)
+        library(magrittr)
+        library(tibble)
+        library(data.table)
+        
+        df <- fread("${res}", header = F)
+
+        current_id_tps <- df %>%
+            separate(V7, into = c('timepoint', 'id'), sep = "_TIME_") %>%
+            mutate(timepoint = as.numeric(timepoint)) %>%
+            group_by(id) %>%
+            arrange(desc(timepoint)) %>%
+            slice(1) %>%
+            mutate(id = paste(timepoint, id, sep = "_TIME_")) %>%
+            pull(id)
+
+        current_df_grp <- df %>%
+            filter(V7 %in% current_id_tps) %>%
+            mutate(V7 = str_replace_all(V7, ".*_TIME_", "")) %>%
+            split(f = as.factor(.\$V7))
+
+        walk2(names(current_df_grp), current_df_grp, function(x, y) {
+            write.table(y, paste0(x, ".tsv"), sep = "\t", quote = F, row.names = F, col.names = F)
+        })
+
+        all_df_grp <- df %>%
+            split(f = as.factor(.\$V7))
+        
+        walk2(names(all_df_grp), all_df_grp, function(x, y) {
+            write.table(y, paste0(x, ".kraken.report"), sep = "\t", quote = F, row.names = F, col.names = F)
+        })
         """
 }

@@ -31,7 +31,8 @@
                 "watchdir": {
                     "type": "string",
                     "fa_icon": "fas fa-eye",
-                    "format": "directory-path"
+                    "format": "directory-path",
+                    "description": "Path to the watch directory for executing the pipeline in real-time"
                 }
             }
         },
@@ -58,7 +59,7 @@
                 "taxon_level": {
                     "type": "string",
                     "default": "species",
-                    "description": "Taxon level of the target organism sequenced.",
+                    "description": "Taxon rank of the target organism sequenced.",
                     "enum": [
                         "species",
                         "kingdom",
@@ -132,6 +133,31 @@
                     "type": "integer",
                     "default": 2000000,
                     "description": "Minimum bin size to output and analyze"
+                },
+                "disable_binning": {
+                    "type": "boolean",
+                    "description": "Disable metagenomic binning on metagenome assembly"
+                },
+                "mmseqs_db": {
+                    "type": "string",
+                    "default": "/mnt/e/data/reference/mmseqs2_bacteria",
+                    "description": "MMSeqs2 taxonomic database DIRECTORY path",
+                    "format": "file-path"
+                },
+                "lca_rank": {
+                    "type": "string",
+                    "default": "genus",
+                    "description": "Restrict sequence analysis to contigs assigned at this lowest LCA rank (only applies when using --meta targeted and --disable_binning)",
+                    "enum": [
+                        "species",
+                        "kingdom",
+                        "phylum",
+                        "class",
+                        "order",
+                        "family",
+                        "genus",
+                        "domain"
+                    ]
                 }
             }
         },
@@ -161,7 +187,6 @@
             "properties": {
                 "account": {
                     "type": "string",
-                    "default": "None",
                     "description": "Slurm group account"
                 }
             },

@@ -5,7 +5,7 @@ process seqkit_split {
     input:
         path(reads)
     output:
-        path('*.fastq.gz')
+        path("*${reads.getSimpleName().replaceAll('.*_TIME_', '')}.fastq.gz")
     script:
         """
         seqkit split -i --id-regexp "samnsero_id=(\\S+)" \
