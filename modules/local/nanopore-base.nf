@@ -12,8 +12,11 @@ process combine {
         sample=\$(ls ${reads} | head -n 1)
         if [[ \${sample##*.} == "gz" ]]; then
             cat ${reads}/*.fastq.gz > ${sample_id}.fastq.gz
+            # verify file integrity
+            zcat ${sample_id}.fastq.gz > /dev/null
         else
             cat ${reads}/*.fastq > ${sample_id}.fastq
+            cat ${sample_id}.fastq > /dev/null
         fi
         """
 }
