@@ -9,7 +9,7 @@ process mob_suite {
         tuple val(sample_id), file("mobtyper_results.txt"), file("contig_report.txt"), optional: true
     shell:
         """
-        mob_recon --infile ${assembly} --outdir results --num_threads ${task.cpus}
+        mob_recon --infile ${assembly} --outdir results --num_threads ${task.cpus} -f
 
         if test -f results/mobtyper_results.txt; then
             sed  's/^sample_id/id/g' results/mobtyper_results.txt > mobtyper_results.txt
