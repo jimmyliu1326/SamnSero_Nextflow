@@ -11,13 +11,19 @@ process combine {
         """
         sample=\$(ls ${reads} | head -n 1)
         if [[ \${sample##*.} == "gz" ]]; then
-            cat ${reads}/*.fastq.gz > ${sample_id}.fastq.gz
-            # verify file integrity
-            zcat ${sample_id}.fastq.gz > /dev/null
+            ext="fastq.gz"
+            cat_cmd="zcat"
         else
-            cat ${reads}/*.fastq > ${sample_id}.fastq
-            cat ${sample_id}.fastq > /dev/null
+            ext="fastq"
+            cat_cmd="cat"
         fi
+        cat ${reads}/*.\$ext > ${sample_id}.\$ext
+        # verify file integrity
+        \$cat_cmd ${sample_id}.\$ext | \
+            awk 'NR%4==2 || NR%4==0' | \
+            paste - - | \
+            awk '{if(length($1) != length($2)) {print "Read " NR/4 " has different number of bases and quality scores"; exit 1}}' \
+            > /dev/null
         """
 }
 
