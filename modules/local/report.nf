@@ -16,8 +16,7 @@ process qc_report {
     shell:
         """
         mkdir kreport && mv *.kraken.report kreport/
-
-        Rscript -e 'rmarkdown::render("/R/qc_report.Rmd", output_dir=getwd(), knit_root_dir=getwd(), params=list(checkm=${checkm_res}, quast=${quast_res}, typing=${sistr_res}, kreport=kreport, target=${target_res}))'
+        Rscript -e 'rmarkdown::render("/R/qc_report.Rmd", output_dir=getwd(), knit_root_dir=getwd(), params=list(kreport="kreport", target="${target_res}"))'
         """   
 }
 
