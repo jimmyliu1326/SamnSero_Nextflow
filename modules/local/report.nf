@@ -17,7 +17,7 @@ process qc_report {
         """
         mkdir kreport && mv *.kraken.report kreport/
 
-        Rscript -e 'rmarkdown::render("/R/qc_report.Rmd", output_dir=getwd(), knit_root_dir=getwd())' ${checkm_res} ${quast_res} ${sistr_res} ${target_res} kreport/
+        Rscript -e 'rmarkdown::render("/R/qc_report.Rmd", output_dir=getwd(), knit_root_dir=getwd(), params=list(checkm=${checkm_res}, quast=${quast_res}, typing=${sistr_res}, kreport=kreport, target=${target_res}))'
         """   
 }
 
@@ -45,8 +45,23 @@ process annot_report {
         """
 }
 
-// in-silico serotyping using SISTR
 process qc_report_watch {
+    tag "Generating QC Report"
+    label "process_low"
+    publishDir "$params.out_dir", mode: "copy"
+
+    input:
+        tuple val(timestamp), path(target_res), path(kreport)
+    output:
+        file("qc_report.html")
+    shell:
+        """
+        mkdir kreport && mv *.kraken.report kreport/
+        Rscript -e 'rmarkdown::render("/R/qc_report.Rmd", output_dir=getwd(), knit_root_dir=getwd(), params=list(kreport="kreport", target="${target_res}"))'
+        """   
+}
+
+process qc_report_asm_watch {
     tag "Generating QC Report"
     label "process_low"
     publishDir "$params.out_dir", mode: "copy"
@@ -58,7 +73,6 @@ process qc_report_watch {
     shell:
         """
         mkdir kreport && mv *.kraken.report kreport/
-
-        Rscript -e 'rmarkdown::render("/R/qc_report.Rmd", output_dir=getwd(), knit_root_dir=getwd())' ${checkm_res} ${quast_res} ${sistr_res} ${target_res} kreport/
+        Rscript -e 'rmarkdown::render("/R/qc_report.Rmd", output_dir=getwd(), knit_root_dir=getwd(), params=list(checkm="${checkm_res}", quast="${quast_res}", typing="${sistr_res}", kreport="kreport", target="${target_res}"))'
         """   
 }
