@@ -16,7 +16,7 @@ process qc_report {
     shell:
         """
         mkdir kreport && mv *.kraken.report kreport/
-        Rscript -e 'rmarkdown::render("/R/qc_report.Rmd", output_dir=getwd(), knit_root_dir=getwd(), params=list(kreport="kreport", target="${target_res}"))'
+        Rscript -e 'rmarkdown::render("/R/qc_report.Rmd", output_dir=getwd(), knit_root_dir=getwd(), params=list(checkm="${checkm_res}", quast="${quast_res}", typing="${sistr_res}", kreport="kreport", target="${target_res}"))'
         """   
 }
 
@@ -48,6 +48,7 @@ process qc_report_watch {
     tag "Generating QC Report"
     label "process_low"
     publishDir "$params.out_dir", mode: "copy"
+    maxForks 1
 
     input:
         tuple val(timestamp), path(target_res), path(kreport)
@@ -64,6 +65,7 @@ process qc_report_asm_watch {
     tag "Generating QC Report"
     label "process_low"
     publishDir "$params.out_dir", mode: "copy"
+    maxForks 1
 
     input:
         tuple val(timestamp), path(sistr_res), path(checkm_res), path(quast_res), path(target_res), path(kreport)
