@@ -189,6 +189,11 @@
                     "type": "integer",
                     "default": 32,
                     "description": "Maximum CPUs allocated for real-time sequence analysis"
+                },
+                "watch_mode": {
+                    "type": "string",
+                    "default": "create",
+                    "description": "Types of file event to trigger real-time analysis (create/modify/delete). Multiple values delimited by a comma can be specified to enable the detection of multiple event types."
                 }
             }
         },

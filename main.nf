@@ -73,8 +73,16 @@ workflow {
             System.exit(1)
         }
 
+        // check watch mode is valid
+        params.watch_mode.tokenize(',').each {
+            if ( ! it.matches('create|modify|delete') ) {
+                log.info "${workflow.manifest.name}: '$it' is an invalid value for --watch_mode. Valid values: create/modify/delete"
+                System.exit(1)
+            }
+        }
+
         watchdir = params.watchdir+"/*/*.{fastq,fastq.gz}"
-        Channel.watchPath(watchdir)
+        Channel.watchPath(watchdir, params.watch_mode)
             | until { it.getSimpleName() == 'STOP' }
             | map { file ->
                 id = file.getParent().getBaseName()
