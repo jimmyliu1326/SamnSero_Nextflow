@@ -179,6 +179,19 @@
             },
             "fa_icon": "fas fa-tachometer-alt"
         },
+        "real_time_options": {
+            "title": "Real-time options",
+            "type": "object",
+            "description": "Tuning real-time analysis settings",
+            "default": "",
+            "properties": {
+                "watch_cpus": {
+                    "type": "integer",
+                    "default": 32,
+                    "description": "Maximum CPUs allocated for real-time sequence analysis"
+                }
+            }
+        },
         "slurm_hpc": {
             "title": "Slurm HPC",
             "type": "object",
@@ -235,6 +248,9 @@
         },
         {
             "$ref": "#/definitions/gpu_acceleration"
+        },
+        {
+            "$ref": "#/definitions/real_time_options"
         },
         {
             "$ref": "#/definitions/slurm_hpc"

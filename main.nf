@@ -67,6 +67,12 @@ workflow {
 
     } else if (params.watchdir) {
         
+        // check if max_cpus is sufficient for analysis
+        if ( params.watch_cpus.intdiv(32) == 0 ) {
+            log.info "${workflow.manifest.name}: Require at least 32 watch_cpus to use --watchdir"
+            System.exit(1)
+        }
+
         watchdir = params.watchdir+"/*/*.{fastq,fastq.gz}"
         Channel.watchPath(watchdir)
             | until { it.getSimpleName() == 'STOP' }
