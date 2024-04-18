@@ -55,6 +55,7 @@ workflow ASSEMBLY_QC {
                 | set { quast_res }
             aggregate_quast_watch.scan(quast_res)
                 | set { aggregate_quast }
+            
 
         } else {
             
@@ -63,7 +64,7 @@ workflow ASSEMBLY_QC {
                 | collect
                 | aggregate_quast
                 | set { aggregate_quast }
-
+   
         }
         
 
@@ -91,7 +92,7 @@ workflow READ_QC {
 
         if ( params.watchdir ) {
             
-            aggregate_kreport_watch.scan(centrifuge.out.kreport.map{ it[1] })
+            aggregate_kreport_watch.scan(centrifuge.out.kreport.map{ it[1] }.filter { file(it).size() > 0 })
             aggregate_kreport_split(aggregate_kreport_watch.out)
             kreport = aggregate_kreport_split.out.kreport
 

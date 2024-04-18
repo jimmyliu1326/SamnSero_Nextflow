@@ -1,4 +1,5 @@
 // import modules
+import java.nio.file.Files
 include { porechop; combine; nanoq; combine_watch } from '../modules/local/nanopore-base.nf'
 include { rename_FASTQ } from '../modules/local/rename_FASTQ/rename_FASTQ.nf'
 include { seqkit_split } from '../modules/local/seqkit/split.nf'
@@ -36,7 +37,7 @@ workflow nanopore {
         }
         
 
-        // trimming and assembly
+        // trimming
         if ( params.trim ) { 
             
             reads = porechop(combined_reads)
@@ -47,10 +48,13 @@ workflow nanopore {
 
         }
 
-        nanoq(reads)
-        ASSEMBLY_nanopore(nanoq.out)
+        // keep only non-empty FASTQ
+        reads_out = nanoq(reads).filter { id, fastq -> fastq.countFastq() > 0 }
+
+        // assembly
+        ASSEMBLY_nanopore(reads_out)
         
     emit:
         assembly = ASSEMBLY_nanopore.out
-        reads = nanoq.out
+        reads = reads_out
 }
