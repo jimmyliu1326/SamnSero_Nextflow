@@ -81,9 +81,13 @@ workflow {
             }
         }
 
-        watchdir = params.watchdir+"/*/*.{fastq,fastq.gz}"
+        // remove / at the end of watchdir path
+        watchpath = params.watchdir.endsWith('/') ? params.watchdir.substring(0, params.watchdir.length() - 1) : params.watchdir
+        // define watch file pattern
+        watchdir = watchpath+"/**/*.{fastq,fastq.gz}"
         Channel.watchPath(watchdir, params.watch_mode)
             | until { it.getSimpleName() == 'STOP' }
+            | filter { it.getParent().getParent() =~ 'pass' } // only keep fastq files written to pass subfolders e.g. fastq_pass
             | map { file ->
                 id = file.getParent().getBaseName()
                 tuple (id, file)
