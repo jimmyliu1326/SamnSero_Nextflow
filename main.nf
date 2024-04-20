@@ -53,6 +53,7 @@ include { nanopore } from './workflow/nanopore.nf'
 include { illumina } from './workflow/illumina.nf'
 include { post_asm_process } from './workflow/post_asm_process.nf'
 include { insert_sample_id } from './modules/local/insert_sample_id/insert_sample_id.nf'
+include { fastq_check } from './modules/local/fastq_check/fastq_check.nf'
 include { taxonkit_name2taxid } from './modules/local/taxonkit/name2taxid.nf'
 
 // define main workflow
@@ -87,11 +88,12 @@ workflow {
         watchdir = watchpath+"/**/*.{fastq,fastq.gz}"
         Channel.watchPath(watchdir, params.watch_mode)
             | until { it.getSimpleName() == 'STOP' }
-            | filter { it.getParent().getParent().getBaseName() =~ 'pass' } // only keep fastq files written to pass subfolders e.g. fastq_pass
+            | filter { it.getParent().getParent().getBaseName() =~ 'pass' } // only keep fastq files written to pass subfolders e.g. fastq_pass            
             | map { file ->
                 id = file.getParent().getBaseName()
                 tuple (id, file)
             }
+            | fastq_check
             | insert_sample_id
             | set { data }
 
