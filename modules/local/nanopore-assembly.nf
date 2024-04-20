@@ -37,7 +37,7 @@ process dragonflye {
         path('assembly.txt'), emit: exitCode
     script:
         """
-        dragonflye --reads ${reads} --cpus ${task.cpus} --outdir . --force --ram ${task.memory.toGiga()} ${flye_opts}
+        dragonflye --reads ${reads} --cpus ${task.cpus} --outdir . --nofilter --force --ram ${task.memory.toGiga()} ${flye_opts}
         echo \$? > assembly.txt
         mv contigs.fa ${sample_id}.fasta
         mv flye-unpolished.gfa ${sample_id}.gfa
