@@ -10,8 +10,8 @@ workflow ASSEMBLY_nanopore {
         // define assembly opts for target wgs and metagenomics
         flye_opts=""
 
-        // only perform assemblies on samples with >3k reads
-        asm_reads = reads.filter{ it[1].countFastq() >= 3000 }
+        // only perform assemblies on samples with >N reads
+        asm_reads = reads.filter{ it[1].countFastq() >= params.min_tr }
         
         // run assembly workflow
         if ( params.meta != 'off' ) {
@@ -24,34 +24,38 @@ workflow ASSEMBLY_nanopore {
             
             flye_opts = params.gsize ? flye_opts + " -g ${params.gsize} --asm-coverage ${params.asm_cov}" : flye_opts
             flye(asm_reads, flye_opts)
-            // split assemblies by contig count
-            assembly = flye.out.fasta.branch { id, fasta ->
-                small: fasta.countFasta() <= 30
-                large: fasta.countFasta() > 30
-            }
-            // assembly.small.view { "$it is small" }
-            // assembly.large.view { "$it is large" }
-            // polish those with low contig count
-            if (params.gpu) {
-
-                assembly.small
-                    | join(asm_reads)
-                    | medaka_gpu
-                    | set { polished_asm }
-
-            } else {
-                
-                assembly.small
-                    | join(asm_reads)
-                    | medaka
-                    | set { polished_asm }
-
-            }
-            // skip polishing for highly fragmented assemblies
-            rename_FASTA(assembly.large)
-
-            assembly_out = Channel.empty().mix(assembly.large, polished_asm)
             
+            if (!params.nopolish) {
+                // split assemblies by contig count
+                assembly = flye.out.fasta.branch { id, fasta ->
+                    small: fasta.countFasta() <= 30
+                    large: fasta.countFasta() > 30
+                }
+                // assembly.small.view { "$it is small" }
+                // assembly.large.view { "$it is large" }
+                // polish those with low contig count
+                if (params.gpu) {
+
+                    assembly.small
+                        | join(asm_reads)
+                        | medaka_gpu
+                        | set { polished_asm }
+
+                    } else {
+                        
+                        assembly.small
+                            | join(asm_reads)
+                            | medaka
+                            | set { polished_asm }
+
+                    }
+                    // skip polishing for highly fragmented assemblies
+                    rename_FASTA(assembly.large)
+                    assembly_out = Channel.empty().mix(assembly.large, polished_asm)
+                } else {
+                    rename_FASTA(flye.out.fasta)
+                    assembly_out = rename_FASTA.out
+                }            
         }
                
     emit: assembly_out
