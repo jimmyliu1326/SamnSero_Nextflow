@@ -28,7 +28,7 @@ process fastq_check {
         ${cat_cmd} ${out_fastq} | sed -n "1,\${n}p" | gzip > ${out_prefix}.fastq.gz.tmp
         mv ${out_prefix}.fastq.gz.tmp ${out_prefix}.fastq.gz
         # verify file integrity
-        ${cat_cmd} ${out_prefix}.fastq.gz | \
+        zcat ${out_prefix}.fastq.gz | \
             awk 'NR%4==2 || NR%4==0' | \
             paste - - | \
             awk '{if(length(\$1) != length(\$2)) {print "Read " NR/4 " has different number of bases and quality scores"; exit 1}}' \
