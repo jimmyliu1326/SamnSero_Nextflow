@@ -122,12 +122,12 @@ class NfcoreSchema {
                 has_error = true
             }
             // unexpected params
-            //def params_ignore = params.schema_ignore_params.split(',') + 'schema_ignore_params'
+            def params_ignore = params.schema_ignore_params.split(',') + 'schema_ignore_params'
             def expectedParamsLowerCase = expectedParams.collect{ it.replace("-", "").toLowerCase() }
             def specifiedParamLowerCase = specifiedParam.replace("-", "").toLowerCase()
             def isCamelCaseBug = (specifiedParam.contains("-") && !expectedParams.contains(specifiedParam) && expectedParamsLowerCase.contains(specifiedParamLowerCase))
-            //if (!expectedParams.contains(specifiedParam) && !params_ignore.contains(specifiedParam) && !isCamelCaseBug) {
-            if (!expectedParams.contains(specifiedParam) && !isCamelCaseBug) {
+            if (!expectedParams.contains(specifiedParam) && !params_ignore.contains(specifiedParam) && !isCamelCaseBug) {
+            // if (!expectedParams.contains(specifiedParam) && !isCamelCaseBug) {
                 // Temporarily remove camelCase/camel-case params #1035
                 def unexpectedParamsLowerCase = unexpectedParams.collect{ it.replace("-", "").toLowerCase()}
                 if (!unexpectedParamsLowerCase.contains(specifiedParamLowerCase)){
@@ -142,7 +142,7 @@ class NfcoreSchema {
         JSONObject raw_schema = new JSONObject(new JSONTokener(input_stream))
 
         // Remove anything that's in params.schema_ignore_params
-        // raw_schema = removeIgnoredParams(raw_schema, params)
+        raw_schema = removeIgnoredParams(raw_schema, params)
 
         Schema schema = SchemaLoader.load(raw_schema)
 
