@@ -214,7 +214,7 @@
               },
               "watch_mode": {
                   "type": "string",
-                  "default": "create",
+                  "default": "create,modify",
                   "description": "Types of file event to trigger real-time analysis (create/modify/delete). Multiple values delimited by a comma can be specified to enable the detection of multiple event types."
               }
           }
