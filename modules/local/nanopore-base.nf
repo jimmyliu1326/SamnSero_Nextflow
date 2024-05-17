@@ -27,29 +27,58 @@ process combine {
         """
 }
 
-process combine_watch {
-    tag "Combining FASTQ files"
+process fastq_watch {
+    tag "Collecting FASTQ files"
     label "process_low"
     maxForks 1
 
     input:
         path(reads)
     output:
-        path("*.{fastq,fastq.gz}")
+        path("latest_${task.index}/")
     script:
         def file = reads[0]
         def ext = file.getExtension()
-        // def inputs =  reads.join(', ')
         def new_fastq = reads.first()
-        def cumulative_fastq = task.index != 1 ? reads.last() : ''
-        def date = new Date()
         def id = new_fastq.getSimpleName()
-        // def timestamp = date.format("dd_MM_yyyy_HH_mm_ss")
-        def timestamp = date.getTime()
-        def out_fastq = ext == 'gz' ? "${timestamp}_TIME_${id}.fastq.gz" : "${timestamp}_TIME_${id}.fastq"
-        println "Task ${task.index}: Combining "+ new_fastq + ", " + cumulative_fastq
+        def barcode = id.replaceAll('.*_TIME_', '')
+        def timestamp = id.replaceAll('_TIME_.*', '')
+        def dir = 'latest_' + task.index
+        def out_fastq = ext == 'gz' ? "${timestamp}_TIME_${barcode}.fastq.gz" : "${timestamp}_TIME_${barcode}.fastq"
+        // println "Task ${task.index}: Combining "+ new_fastq + ", " + cumulative_fastq
+        println "Task ${task.index}: Adding " + new_fastq + " to " + dir
         """
-        cat ${new_fastq} ${cumulative_fastq} > ${out_fastq}
+        # create output dir
+        mkdir ${dir}
+        # copy symlink for new_fastq
+        cp -a ${new_fastq} ${dir}/${out_fastq}
+        # create symlinks from previous i-1 iteration
+        if test ${task.index} -gt 1; then
+        find -L \$PWD/latest_\$(( ${task.index} - 1)) -type f -name '*.fastq*' | \
+        parallel -j 8 'f={}; cp -a \$f ${dir}/\$(basename \$f)' \\;
+        fi
+        """
+}
+
+process combine_watch {
+    tag "Combining FASTQ files"
+    label "process_low"
+
+    input:
+        path(dir)
+    output:
+        path("*.{fastq,fastq.gz}")
+    script:
+        """
+        # find the latest barcode
+        latest=\$(find -L ${dir} -maxdepth 1 -type f -name '*.fastq*' -exec sh -c 'echo \$(basename {})' \\; | sort -r | head -n1 | sed 's/.fastq.*//g')
+        barcode=\$(echo \${latest} | sed 's/.*_TIME_//g')
+        timestamp=\$(echo \${latest} | sed 's/_TIME_.*//g')
+        sample_id=\$(echo \${timestamp}_TIME_\${barcode})
+        # search for all fastq associated with latest barcode
+        fastq=\$(find -L \$PWD/${dir} -maxdepth 1 -type f -name "*\${barcode}.fastq*")
+        # concatenate and deduplicate
+        cat \${fastq} | seqkit rmdup -n -o \${sample_id}.fastq.gz
         """
 }
 
@@ -79,20 +108,13 @@ process nanoq {
         tuple val(sample_id), file("${sample_id}.filt.fastq.gz")
     shell:
         """
-        nanoq -i ${reads} -l 1000 -q 10 -O g > ${sample_id}.filt.fastq.gz
+        nanoq -i ${reads} -l ${params.min_rl} -q ${params.min_rq} -O g > ${sample_id}.filt.fastq.gz
         """
 }
 
 process nanocomp {
     tag "Generating raw read QC with NanoPlot"
     label "process_low"
-    publishDir "$params.out_dir"+"/reports/", mode: "copy", pattern: "*.html", saveAs: { "NanoComp_report.html" }
-    publishDir "$params.out_dir"+"/qc/nanocomp/", mode: "copy", pattern: "*.{txt,gz}", saveAs: { 
-        fn ->
-            if ( fn.endsWith("txt") ) { 
-                "NanoComp_stats.tsv"
-            } else { "NanoComp_data.tsv.gz" }
-    }
 
     input:
         path(reads)
@@ -102,6 +124,22 @@ process nanocomp {
         path("NanoComp-data.tsv.gz"), emit: data
     shell:
         """
-        NanoComp -t ${task.cpus} --tsv_stats --raw --fastq *.fastq* --names \$(ls | sed 's/.fastq*//g') -o .
+        NanoComp -t ${task.cpus} --tsv_stats --raw --fastq *.fastq* --names \$(ls | sed 's/.fastq.*//g') -o .
+        """
+}
+
+process nanocomp_dir {
+    tag "Generating raw read QC with NanoPlot"
+    label "process_low"
+
+    input:
+        tuple path(dir), path(work)
+    output:
+        path("NanoComp-report.html"), emit: report_html
+        path("NanoStats.txt"), emit: stats_tsv
+        path("NanoComp-data.tsv.gz"), emit: data
+    shell:
+        """
+        NanoComp -t ${task.cpus} --tsv_stats --raw --fastq ${dir}/*.fastq* --names \$(ls ${dir} | sed 's/.fastq.*//g') -o .
         """
 }

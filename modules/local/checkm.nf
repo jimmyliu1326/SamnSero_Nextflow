@@ -62,6 +62,7 @@ process aggregate_checkm_watch {
     tag "Aggregating CheckM results"
     label "process_low"
     publishDir "${params.out_dir}/timepoints/${res.first().getBaseName().replaceAll('_TIME_.*', '')}/checkm", mode: 'copy', saveAs: { "checkm_res_aggregate.csv" }
+    publishDir "${params.out_dir}/report_data/checkm/", mode: 'copy'
     maxForks 1
 
     input:

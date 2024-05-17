@@ -52,7 +52,7 @@ WorkflowMain.initialise(workflow, params, log)
 include { nanopore } from './workflow/nanopore.nf'
 include { illumina } from './workflow/illumina.nf'
 include { post_asm_process } from './workflow/post_asm_process.nf'
-include { insert_sample_id } from './modules/local/insert_sample_id/insert_sample_id.nf'
+include { rename_FASTQ } from './modules/local/rename_FASTQ/rename_FASTQ.nf'
 include { fastq_check } from './modules/local/fastq_check/fastq_check.nf'
 include { taxonkit_name2taxid } from './modules/local/taxonkit/name2taxid.nf'
 
@@ -71,6 +71,11 @@ workflow {
         // check if max_cpus is sufficient for analysis
         if ( params.watch_cpus.intdiv(32) == 0 ) {
             log.info "${workflow.manifest.name}: Require at least 32 watch_cpus to use --watchdir"
+            System.exit(1)
+        }
+        // check if max_cpus is multiple of 32
+        if ( params.watch_cpus % 32 != 0 ) {
+            log.info "${workflow.manifest.name}: watch_cpus must be multiples of 32"
             System.exit(1)
         }
 
@@ -94,7 +99,8 @@ workflow {
                 tuple (id, file)
             }
             | fastq_check
-            | insert_sample_id
+            | rename_FASTQ
+            | map { it[1] }
             | set { data }
 
     } else {

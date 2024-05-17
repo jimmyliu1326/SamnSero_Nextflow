@@ -4,11 +4,11 @@ process rename_FASTA {
     publishDir "${params.out_dir}/assembly/${sample_id.replaceAll('_BIN_.*', '')}/bins/", mode: "copy"
 
     input:
-        tuple val(sample_id), path(assembly)
+        tuple val(sample_id), path(assembly, stageAs: "input.fasta") 
     output:
         tuple val(sample_id), path("*.fasta")
     shell:
         """
-        mv ${assembly} ${sample_id}.fasta
+        mv input.fasta ${sample_id}.fasta
         """
 }

@@ -32,6 +32,7 @@ process aggregate_sistr_watch {
     tag "Aggregating serotyping results"
     label "process_low"
     publishDir "${params.out_dir}/timepoints/${res.first().getBaseName().replaceAll('_TIME_.*', '')}/sistr", mode: 'copy', saveAs: { "sistr_res_aggregate.csv" }
+    publishDir "${params.out_dir}/report_data/sistr/", mode: 'copy'
     maxForks 1
 
     input:

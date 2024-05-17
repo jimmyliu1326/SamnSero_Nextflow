@@ -1,8 +1,6 @@
 // import modules
 import java.nio.file.Files
-include { porechop; combine; nanoq; combine_watch } from '../modules/local/nanopore-base.nf'
-include { rename_FASTQ } from '../modules/local/rename_FASTQ/rename_FASTQ.nf'
-include { seqkit_split } from '../modules/local/seqkit/split.nf'
+include { porechop; combine; nanoq; combine_watch; fastq_watch } from '../modules/local/nanopore-base.nf'
 
 // import subworkflow
 include { ASSEMBLY_nanopore } from '../subworkflow/genome_assembly.nf'
@@ -17,17 +15,17 @@ workflow nanopore {
         // combine reads
         if ( params.watchdir ) {
             
-            combine_watch.scan(data)
-                | seqkit_split
-                | flatten
+            fastq_watch.scan(data)
+                | combine_watch
                 | map { file ->
                     // id = file.getName().replaceAll('.*\\d+\\.part_', '').replaceAll('.fastq.gz', '')
                     // id = file.getName().replaceAll('\\.part_', '_TIME_').replaceAll('.fastq.gz', '')
                     id = file.getSimpleName()
                     tuple(id, file)
                 }
-                | rename_FASTQ
                 | set { combined_reads }
+
+            // combined_reads.subscribe{ println "Detected: ${it}"}
 
         } else {
 

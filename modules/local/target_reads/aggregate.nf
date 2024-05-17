@@ -17,6 +17,7 @@ process target_reads_aggregate_watch {
     tag "Aggregating Target DNA results"
     label "process_low"
     maxForks 1
+    publishDir "${params.out_dir}/report_data/target/", mode: 'copy'
 
     input:
         path(res)

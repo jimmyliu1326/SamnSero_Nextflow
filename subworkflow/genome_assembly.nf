@@ -1,47 +1,60 @@
 // import modules
-include { metaflye; dragonflye } from '../modules/local/nanopore-assembly.nf'
+include { metaflye; dragonflye; flye } from '../modules/local/nanopore-assembly.nf'
 include { medaka; medaka_gpu } from '../modules/local/nanopore-polish.nf'
 include { shovill } from '../modules/local/illumina-assembly.nf'
+include { rename_FASTA } from '../modules/local/rename_FASTA/rename_FASTA.nf'
 
 workflow ASSEMBLY_nanopore {
     take: reads
     main:
         // define assembly opts for target wgs and metagenomics
         flye_opts=""
+
+        // only perform assemblies on samples with >3k reads
+        asm_reads = reads.filter{ it[1].countFastq() >= 3000 }
         
         // run assembly workflow
         if ( params.meta != 'off' ) {
             
             if( params.nanohq ) { flye_opts = flye_opts + " --nano-hq" } else { flye_opts = flye_opts + " --nano-raw" }
-            metaflye(reads, flye_opts)
+            metaflye(asm_reads, flye_opts)
             assembly_out = metaflye.out.fasta
             
         } else {
             
-            if( params.nanohq ) { flye_opts = flye_opts + " --nanohq" }
-            dragonflye(reads, flye_opts)
-            assembly = dragonflye.out.fasta
-
+            flye_opts = params.gsize ? flye_opts + " -g ${params.gsize} --asm-coverage ${params.asm_cov}" : flye_opts
+            flye(asm_reads, flye_opts)
+            // split assemblies by contig count
+            assembly = flye.out.fasta.branch { id, fasta ->
+                small: fasta.countFasta() <= 30
+                large: fasta.countFasta() > 30
+            }
+            // assembly.small.view { "$it is small" }
+            // assembly.large.view { "$it is large" }
+            // polish those with low contig count
             if (params.gpu) {
 
-                assembly
-                    | join(reads)
+                assembly.small
+                    | join(asm_reads)
                     | medaka_gpu
-                    | set { assembly_out }
+                    | set { polished_asm }
 
             } else {
                 
-                assembly
-                    | join(reads)
+                assembly.small
+                    | join(asm_reads)
                     | medaka
-                    | set { assembly_out }
+                    | set { polished_asm }
 
             }
+            // skip polishing for highly fragmented assemblies
+            rename_FASTA(assembly.large)
 
+            assembly_out = Channel.empty().mix(assembly.large, polished_asm)
+            
         }
                
-    emit:
-        assembly_out
+    emit: assembly_out
 }
 
 workflow ASSEMBLY_illumina {
