@@ -63,7 +63,6 @@ process fastq_watch {
 process combine_watch {
     tag "Combining FASTQ files"
     label "process_low"
-    maxForks 1
 
     input:
         path(dir)
@@ -142,6 +141,9 @@ process nanocomp_dir {
         path("NanoComp-data.tsv.gz"), emit: data
     shell:
         """
-        NanoComp -t ${task.cpus} --tsv_stats --raw --fastq ${dir}/*.fastq* --names \$(ls ${dir} | sed 's/.fastq.*//g') -o .
+        id=\$(find -L ${dir} -type f -name '*.fastq.gz' -printf '%f\\n' | sed 's/.*_TIME_//g' | sed 's/.filt.fastq.gz//g' | sort -u)
+        fastq=""
+        for i in \$id; do fastq+=$(find -L ${dir} -type f | grep \$i.filt.fastq.gz | sort -r | head -n1); fastq+=" "; done
+        NanoComp -t ${task.cpus} --tsv_stats --raw --fastq \$fastq --names $(echo \$fastq | sed 's/ /\\n/g' | sed 's/.*_//g' | sed 's/.filt.fastq.gz//g' | tr '\\n' ' ') -o .
         """
 }
