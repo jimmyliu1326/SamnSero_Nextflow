@@ -12,10 +12,10 @@ class WorkflowMain {
             // TODO nf-core: Add Zenodo DOI for pipeline after first release
             //"* The pipeline\n" +
             //"  https://doi.org/10.5281/zenodo.XXXXXXX\n\n" +
-            "* The nf-core framework\n" +
-            "  https://doi.org/10.1038/s41587-020-0439-x\n\n" +
-            "* Software dependencies\n" +
-            "  https://github.com/${workflow.manifest.name}/blob/master/CITATIONS.md"
+            // "* The nf-core framework\n" +
+            // "  https://doi.org/10.1038/s41587-020-0439-x\n\n" +
+            // "* Software dependencies\n" +
+            "  ${workflow.manifest.homePage}/"
     }
 
     //
