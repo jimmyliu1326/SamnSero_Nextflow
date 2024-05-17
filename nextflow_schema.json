@@ -123,8 +123,7 @@
                   "description": "Maximum contig depth of coverage"
               },
               "nopolish": {
-                  "type": "string",
-                  "default": "None",
+                  "type": "boolean",
                   "description": "Disable post-assembly polishing by medaka"
               }
           },
