@@ -51,7 +51,7 @@ process fastq_watch {
         # create output dir
         mkdir ${dir}
         # copy symlink for new_fastq
-        cp -a ${new_fastq} ${dir}/${out_fastq}
+        cp -P ${new_fastq} ${dir}/${out_fastq}
         # create symlinks from previous i-1 iteration
         if test ${task.index} -gt 1; then
         find -L \$PWD/latest_\$(( ${task.index} - 1)) -type f -name '*.fastq*' | \
