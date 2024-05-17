@@ -63,6 +63,7 @@ process fastq_watch {
 process combine_watch {
     tag "Combining FASTQ files"
     label "process_low"
+    maxForks 1
 
     input:
         path(dir)
@@ -131,6 +132,7 @@ process nanocomp {
 process nanocomp_dir {
     tag "Generating raw read QC with NanoPlot"
     label "process_low"
+    maxForks 1
 
     input:
         tuple path(dir), path(work)
