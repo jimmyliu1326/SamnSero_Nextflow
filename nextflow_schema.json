@@ -94,7 +94,7 @@
               },
               "trim": {
                   "type": "boolean",
-                  "description": "Perform read trimming"
+                  "description": "Perform barcode and adapter trimming"
               },
               "centrifuge": {
                   "type": "string",
@@ -112,10 +112,20 @@
                   "default": 1000,
                   "description": "Minimum raw read length"
               },
+              "min_tr": {
+                  "type": "integer",
+                  "default": 3000,
+                  "description": "Minimum number of total reads required to attempt genome assembly"
+              },
               "asm_cov": {
                   "type": "integer",
                   "default": 150,
                   "description": "Maximum contig depth of coverage"
+              },
+              "nopolish": {
+                  "type": "string",
+                  "default": "None",
+                  "description": "Disable post-assembly polishing by medaka"
               }
           },
           "fa_icon": "far fa-check-circle"
