@@ -15,7 +15,7 @@ process metaflye {
     script:
         input = params.nanohq ? '--nano-hq' : '--nano-raw'
         """
-        flye ${input} ${reads} -t ${task.cpus} --meta --keep-haplotypes --out-dir . ${flye_opts}
+        flye ${input} ${reads} -t ${task.cpus} --meta --keep-haplotypes --out-dir . ${flye_opts} ${task.ext.args}
         mv assembly.fasta ${sample_id}.fasta
         mv assembly_graph.gfa ${sample_id}.gfa
         """
@@ -37,7 +37,7 @@ process flye {
     script:
         input = params.nanohq ? '--nano-hq' : '--nano-raw'
         """
-        flye ${input} ${reads} -t ${task.cpus} --out-dir . ${flye_opts}
+        flye ${input} ${reads} -t ${task.cpus} --out-dir . ${flye_opts} ${task.ext.args}
         mv assembly.fasta ${sample_id}.fasta
         mv assembly_graph.gfa ${sample_id}.gfa
         """
