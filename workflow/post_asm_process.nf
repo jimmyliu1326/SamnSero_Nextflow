@@ -92,7 +92,7 @@ workflow post_asm_process {
                     report_data_dir = new File(report_data_path)
                     report_data_dir.mkdir()
                     report_data_files = report_data_path+"/**/*.{tsv,csv,fastq.gz}"
-                    report_data = Channel.watchPath(report_data_files, 'create')
+                    report_data = Channel.watchPath(report_data_files, 'create,modify')
                     report_data
                         | branch {
                             qc: it.getExtension() =~ 'sv'
