@@ -16,7 +16,6 @@ workflow ASSEMBLY_nanopore {
         // run assembly workflow
         if ( params.meta != 'off' ) {
             
-            if( params.nanohq ) { flye_opts = flye_opts + " --nano-hq" } else { flye_opts = flye_opts + " --nano-raw" }
             metaflye(asm_reads, flye_opts)
             assembly_out = metaflye.out.fasta
             
