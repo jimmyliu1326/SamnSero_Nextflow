@@ -14,8 +14,9 @@ process metaflye {
         tuple val(sample_id), path("assembly_info.txt"), optional: true, emit: info_txt
     script:
         input = params.nanohq ? '--nano-hq' : '--nano-raw'
+        args = task.ext.args ? task.ext.args : ''
         """
-        flye ${input} ${reads} -t ${task.cpus} --meta --keep-haplotypes --out-dir . ${flye_opts} ${task.ext.args}
+        flye ${input} ${reads} -t ${task.cpus} --meta --keep-haplotypes --out-dir . ${flye_opts} ${args}
         mv assembly.fasta ${sample_id}.fasta
         mv assembly_graph.gfa ${sample_id}.gfa
         """
@@ -36,8 +37,9 @@ process flye {
         tuple val(sample_id), path("assembly_info.txt"), optional: true, emit: info_txt
     script:
         input = params.nanohq ? '--nano-hq' : '--nano-raw'
+        args = task.ext.args ? task.ext.args : ''
         """
-        flye ${input} ${reads} -t ${task.cpus} --out-dir . ${flye_opts} ${task.ext.args}
+        flye ${input} ${reads} -t ${task.cpus} --out-dir . ${flye_opts} ${args}
         mv assembly.fasta ${sample_id}.fasta
         mv assembly_graph.gfa ${sample_id}.gfa
         """
