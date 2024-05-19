@@ -3,8 +3,8 @@
 # SamnSero: Bacterial Genomics for Nanopore Sequencing
 
 `SamnSero` was developed to streamline the analysis of Nanopore sequencing data from bacterial isolates and metagenomic samples. The workflow serves three primary purposes:
-- [Long read (meta-)genome assembly](https://github.com/jimmyliu1326/SamnSero_Nextflow?tab=readme-ov-file#long-read-genome-assembly)
-- [Data quality assessment and control](https://github.com/jimmyliu1326/SamnSero_Nextflow?tab=readme-ov-file#data-quality-assessment-control)
+- [Long read (meta-)genome assembly](https://github.com/jimmyliu1326/SamnSero_Nextflow?tab=readme-ov-file#meta-genome-assembly)
+- [Data quality assessment and control](https://github.com/jimmyliu1326/SamnSero_Nextflow?tab=readme-ov-file#data-quality-assessment-and-control)
 - Post-assembly analysis e.g. Typing and annotation
 
 Originally designed as a post-run analysis tool, it has since evolved to leverage the live basecalling feature of Oxford Nanopore Technologies (ONT) to deliver real-time data processing. Motivated by the need to reduce time to genomics results and bring greater transparency to sequencing experiments, users can now execute the pipeline in parallel with their sequencing experiments to monitor read quality, genome assembly quality, taxonomic abundance and typing results as a function of time (Note: for typing, only *Salmonella* *in silico* serotyping is supported at the moment!).
