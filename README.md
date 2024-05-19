@@ -3,8 +3,8 @@
 # SamnSero: Bacterial Genomics for Nanopore Sequencing
 
 `SamnSero` was developed to streamline the analysis of Nanopore sequencing data from bacterial isolates and metagenomic samples. The workflow serves three primary purposes:
-- Long read (meta-)genome assembly
-- Data quality assessment and control
+- [Long read (meta-)genome assembly](https://github.com/jimmyliu1326/SamnSero_Nextflow?tab=readme-ov-file#long-read-genome-assembly)
+- [Data quality assessment and control](https://github.com/jimmyliu1326/SamnSero_Nextflow?tab=readme-ov-file#data-quality-assessment-control)
 - Post-assembly analysis e.g. Typing and annotation
 
 Originally designed as a post-run analysis tool, it has since evolved to leverage the live basecalling feature of Oxford Nanopore Technologies (ONT) to deliver real-time data processing. Motivated by the need to reduce time to genomics results and bring greater transparency to sequencing experiments, users can now execute the pipeline in parallel with their sequencing experiments to monitor read quality, genome assembly quality, taxonomic abundance and typing results as a function of time (Note: for typing, only *Salmonella* *in silico* serotyping is supported at the moment!).
@@ -47,7 +47,7 @@ For more user-friendly graphical interfaces, we recommend installing the pipelin
 Required Parameters:
 
 - `--input`: comma-delimited sample sheet 
-- `-profile`: `docker`/`singularity`/`slurm` or a combination of multiple profiles by delimiting the values by comma
+- `-profile`: `docker`/`singularity`/`slurm` or a combination of multiple profiles delimiting the values by comma
 
 To initiate a `SamnSero` run, you must first prepare a **headerless** `samples.csv` with two columns that indicate sample IDs and paths to **DIRECTORIES** containing .FASTQ or .FASTQ.GZ files
 
@@ -84,7 +84,7 @@ Once you have set up the data directory as described and created the `samples.cs
 Required Parameters:
 
 - `--watchdir`: directory to where FASTQ files are deposited in real-time
-- `-profile`: `docker`/`singularity`/`slurm` or a combination of multiple profiles by delimiting the values by comma
+- `-profile`: `docker`/`singularity`/`slurm` or a combination of multiple profiles delimiting the values by comma
 
 The pipeline assumes `watchdir` follows the nested output directory structure of ONT basecallers: `[run_id]/**/[qscore_pass_fail]/[barcode_arrangement]/`
 
@@ -138,3 +138,28 @@ For environments with Slurm support, append `-profile singularity` and specify y
 ```bash
 nextflow run jimmyliu1326/SamnSero_Nextflow -r [vers] --input samples.csv --out_dir results --account my-slurm-account -profile slurm,singularity 
 ```
+
+## (Meta-)Genome assembly
+
+Both ONT long-read and Illumina paired-end short read genome assemblies are supported which can be toggled using `--seq_platform nanopore/illumina`. 
+
+For metagenomic data, use `--meta on` to generate metagenome assembled genomes (MAGs). Post-assembly contig binning is currently under active development. We are actively working towards resolving strain-level haplotypes and reconstruct genomes of individual strains which would enable the decomposition of mixed populations of the same species.
+
+There is currently no plans to support hybrid genome assembly.
+
+## Data quality assessment and control
+
+Sequencing data quality assessment and control can be invoked by the `--qc` option.
+
+The sequencing data QA/QC involves the following modules:
+
+- nanoq: Read quality/length filtering
+- centrifuge: Taxonomic classification
+- krona: Visualization of microbial composition
+- QUAST: Genome assembly statistics summary
+- CheckM: Single copy marker gene analysis
+- nanocomp: Raw read summary statistics report
+
+To use the `--qc` option, a pre-downloaded Centrifuge database is required, which can be downloaded from [here](https://genome-idx.s3.amazonaws.com/centrifuge/p_compressed%2Bh%2Bv.tar.gz). 
+
+After downloading the tar file, it needs to be decompressed into a directory, the path of which needs to supplied via the `--centrifuge` option along with `--qc`.
