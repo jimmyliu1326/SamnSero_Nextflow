@@ -125,6 +125,11 @@
               "nopolish": {
                   "type": "boolean",
                   "description": "Disable post-assembly polishing by medaka"
+              },
+              "medaka_model": {
+                  "type": "string",
+                  "description": "Specify the medaka model used for consensus polishing",
+                  "default": "False"
               }
           },
           "fa_icon": "far fa-check-circle"
