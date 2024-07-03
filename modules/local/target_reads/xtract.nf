@@ -10,6 +10,6 @@ process target_reads_xtract {
     shell:
         """
         cat ${krona} | grep ${taxon_id} | cut -f1 > target_reads.txt
-        cat ${reads} | seqkit grep -f target_reads.txt -j ${task.cpus} -rp - -o ${sample_id}.target.fastq.gz
+        cat ${reads} | seqkit grep -f target_reads.txt -j ${task.cpus} -p - -o ${sample_id}.target.fastq.gz
         """   
 }
