@@ -12,7 +12,7 @@ include { nanocomp_dir } from '../modules/local/nanopore-base.nf'
 
 workflow post_asm_process {
 
-    take: assembly
+    take: ch_assembly
           reads
           taxid
 
@@ -21,41 +21,46 @@ workflow post_asm_process {
         // perform metagenomic binning
         // if ( params.meta != 'off' ) { 
             
-        //     if ( !params.watchdir) { // currently do not support contig binning in real-time
+            // if ( !params.watchdir) { // currently do not support contig binning in real-time
 
-        //     if ( !params.disable_binning ) { // bin contigs
+            // if ( !params.disable_binning ) { // bin contigs
                 
-        //         MG_BIN(in_assembly, reads)
+            //     MG_BIN(ch_assembly, reads)
                 
-        //         if ( params.meta == 'targeted' ) {
+            //     if ( params.meta == 'targeted' ) {
                     
-        //             assembly = MG_BIN.out.target_bins
+            //         assembly = MG_BIN.out.target_bins
 
-        //         } else {
+            //     } else {
 
-        //             assembly = MG_BIN.out.bins
+            //         assembly = MG_BIN.out.bins
 
-        //         }
-        //     } else { // run if binning is disabled
+            //     }
 
-        //         assembly = in_assembly
+            // } else { // run if binning is disabled
 
-        //         if ( params.meta == "targeted" ) {
+                
 
-        //             assembly = XTRACT_TARGET_CTGS(in_assembly, reads, taxid) 
-
-        //         }
-
-        //     }
-        //     }            
+            // }
 
         // } else {
 
-        //     assembly = in_assembly
+        //     assembly = ch_assembly
 
         // }
 
-        // in-silico serotyping
+        // For targeted metagenomics mode, extract
+        // target contigs for downstream typing and annotation
+        assembly = ch_assembly
+
+        if ( params.meta == "targeted" ) {
+            assembly = XTRACT_TARGET_CTGS(ch_assembly, reads, taxid)
+                .filter { id, asm -> 
+                    asm.countFasta() >= 1
+                }
+        }
+
+        // in silico serotyping
         SEROTYPING(assembly)
 
         // genome annotation

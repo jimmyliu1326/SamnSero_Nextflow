@@ -12,6 +12,7 @@ process centrifuge {
         tuple val(sample_id), path("*.kraken.report"), emit: kreport
     script:
         def watch = params.watchdir ?: ''
+        def args = task.ext.args ?: ''
         """
         db_path=\$(find -L ${database_dir} -name "*.1.cf" -not -name "._*"  | sed 's/.1.cf//')
         
@@ -21,7 +22,7 @@ process centrifuge {
             input="-U ${reads}"
         fi
 
-        centrifuge \$input -S ${sample_id}.out --report ${sample_id}.report -x \$db_path -p ${task.cpus} --mm
+        centrifuge \$input -S ${sample_id}.out --report ${sample_id}.report -x \$db_path -p ${task.cpus} --mm ${args}
         
         # insert sample ID if watchpath is invoked
         if test -z $watch; then
