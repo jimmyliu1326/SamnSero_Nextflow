@@ -128,8 +128,7 @@
                 },
                 "medaka_model": {
                     "type": "string",
-                    "description": "Specify the medaka model used for consensus polishing",
-                    "default": "False"
+                    "description": "Specify the medaka model used for consensus polishing"
                 }
             },
             "fa_icon": "far fa-check-circle"
@@ -248,6 +247,29 @@
             "fa_icon": "fas fa-server",
             "help_text": ""
         },
+        "resource_control": {
+            "title": "Resource control",
+            "type": "object",
+            "description": "Define the maximum limits allowed for any given Nextflow process",
+            "default": "",
+            "properties": {
+                "max_memory": {
+                    "type": "string",
+                    "default": "128.GB",
+                    "description": "Maximum memory"
+                },
+                "max_cpus": {
+                    "type": "integer",
+                    "default": 64,
+                    "description": "Maximum number of CPUs"
+                },
+                "max_time": {
+                    "type": "string",
+                    "default": "120.h",
+                    "description": "Maximum process duration"
+                }
+            }
+        },
         "generic_options": {
             "title": "Generic options",
             "type": "object",
@@ -260,6 +282,12 @@
                     "description": "Display help text.",
                     "fa_icon": "fas fa-question-circle",
                     "hidden": true
+                },
+                "schema_ignore_params": {
+                    "type": "string",
+                    "default": "client_fields",
+                    "hidden": true,
+                    "description": "Selectively ignore specific options from the command line. Multiple values can be supplied using the comma delimiter."
                 },
                 "version": {
                     "type": "boolean",
@@ -296,6 +324,9 @@
         },
         {
             "$ref": "#/definitions/slurm_hpc"
+        },
+        {
+            "$ref": "#/definitions/resource_control"
         },
         {
             "$ref": "#/definitions/generic_options"
