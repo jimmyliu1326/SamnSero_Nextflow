@@ -84,7 +84,7 @@ process combine_watch {
 
 process porechop {
     tag "Adaptor trimming on ${sample_id}"
-    label "process_high"
+    label "process_medium"
 
     input:
         tuple val(sample_id), path(reads)
