@@ -12,9 +12,10 @@ include { nanocomp_dir } from '../modules/local/nanopore-base.nf'
 
 workflow post_asm_process {
 
-    take: ch_assembly
-          reads
-          taxid
+    take: ch_assembly // Path: assembly path
+          reads       // Path: filtered raw read path
+          taxid       // String: NCBI Taxonomy ID
+          asm_only    // Boolean: whether input only contains genome assemblies
 
     main:
         
@@ -81,7 +82,7 @@ workflow post_asm_process {
         // run sequence QC
         if ( params.qc ) { 
                 
-            READ_QC(reads, taxid)
+            if (!asm_only) { READ_QC(reads, taxid) }
             ASSEMBLY_QC(assembly, reads)
 
             if ( !params.noreport ) {
@@ -168,8 +169,10 @@ workflow post_asm_process {
 
                 } else {
 
-                    qc_report(SEROTYPING.out, ASSEMBLY_QC.out.checkm_res, ASSEMBLY_QC.out.quast_res, READ_QC.out.target_res, READ_QC.out.kreport)
-
+                    if (!asm_only) {
+                        qc_report(SEROTYPING.out, ASSEMBLY_QC.out.checkm_res, ASSEMBLY_QC.out.quast_res, READ_QC.out.target_res, READ_QC.out.kreport)
+                    }    
+                    
                 }           
             }
 

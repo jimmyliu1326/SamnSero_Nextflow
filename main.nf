@@ -51,10 +51,11 @@ WorkflowMain.initialise(workflow, params, log)
 // import workflows
 include { nanopore } from './workflow/nanopore.nf'
 include { illumina } from './workflow/illumina.nf'
-include { post_asm_process } from './workflow/post_asm_process.nf'
+include { post_asm_process as post_asm_process_r; post_asm_process as post_asm_process_asm } from './workflow/post_asm_process.nf'
 include { rename_FASTQ } from './modules/local/rename_FASTQ/rename_FASTQ.nf'
 include { fastq_check } from './modules/local/fastq_check/fastq_check.nf'
 include { taxonkit_name2taxid } from './modules/local/taxonkit/name2taxid.nf'
+include { rename_FASTA } from './modules/local/rename_FASTA/rename_FASTA.nf'
 
 // define main workflow
 workflow {
@@ -65,6 +66,12 @@ workflow {
         data = channel
             .fromPath(params.input, checkIfExists: true)
             .splitCsv(header: false)
+            .branch{ id,path ->
+                reads: file(path).isDirectory()
+                asm: ( ! file(path).isDirectory() ) & ['.fa', '.fasta', '.fna'].any { path.endsWith(it) }
+            }
+        
+        rename_FASTA(data.asm)
 
     } else if (params.watchdir) {
         
@@ -116,14 +123,17 @@ workflow {
 
     if ( params.seq_platform == "nanopore" ) {
         
-        nanopore(data)
-        post_asm_process(nanopore.out.assembly, nanopore.out.reads, taxid)
+        nanopore(data.reads)
+        post_asm_process_r(nanopore.out.assembly, nanopore.out.reads, taxid, false)
 
     } else if ( params.seq_platform == "illumina" ) {
         
-        illumina(data)
-        post_asm_process(illumina.out.assembly, illumina.out.reads, taxid)
+        illumina(data.reads)
+        post_asm_process_r(illumina.out.assembly, illumina.out.reads, taxid, false)
 
     }
+
+    // // process genome assembly directly
+    post_asm_process_asm(rename_FASTA.out, data.asm.map { id,path -> [id, [] ] }, taxid, true)
     
 }
