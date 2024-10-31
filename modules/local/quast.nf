@@ -8,9 +8,7 @@ process quast {
     output:
         tuple val(sample_id), file("${sample_id}.tsv")
     script:
-        def input_reads = params.seq_platform == 'illumina' ?: "-1 ${reads[0]} -2 ${reads[1]}"
-        input_reads = params.seq_platform == 'nanopore' ?: "--nanopore ${reads}"
-        input_reads = reads ?: ''
+        def input_reads = reads ? ( params.seq_platform == 'illumina' ? "-1 ${reads[0]} -2 ${reads[1]}" : "--nanopore ${reads}" ) : ''
         // def input_reads = (params.seq_platform == 'illumina') ? "-1 ${reads[0]} -2 ${reads[1]}" : "--nanopore ${reads}"
         """
         quast.py \
