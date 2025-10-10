@@ -24,6 +24,7 @@ process combine {
             paste - - | \
             awk '{if(length(\$1) != length(\$2)) {print "Read " NR/4 " has different number of bases and quality scores"; exit 1}}' \
             > /dev/null
+        zcat PDS2505498-19.fastq.gz > /dev/null
         """
 }
 
