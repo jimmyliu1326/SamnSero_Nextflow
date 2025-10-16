@@ -113,7 +113,7 @@ For real-time analysis, the pipeline internally attempts to optimize the resourc
 
 ## Pipeline Usage
 
-The pipeline executes process in Docker containers by default. Singularity containers and process management by Slurm are also supported. See below how to run the pipeline using different containerization technologies.
+The pipeline executes processes in Docker containers by default. Singularity containers and process management by Slurm are also supported. See below how to run the pipeline using different containerization technologies.
 
 **Docker (Default)**
 
@@ -143,9 +143,9 @@ nextflow run jimmyliu1326/SamnSero_Nextflow -r [vers] --input samples.csv --out_
 
 Both ONT long-read and Illumina paired-end short read genome assemblies are supported which can be toggled using `--seq_platform nanopore/illumina`. 
 
-For metagenomic data, use `--meta on` to generate metagenome assembled genomes (MAGs). Post-assembly contig binning is currently under active development. We are actively working towards resolving strain-level haplotypes and reconstruct genomes of individual strains which would enable the decomposition of mixed populations of the same species.
+For metagenomic data, use `--meta on` to generate metagenome assembled genomes (MAGs). Post-assembly contig binning is currently under active development. We are actively working towards resolving strain-level haplotypes and reconstructing genomes of individual strains which would enable the decomposition of mixed populations of the same species.
 
-There is currently no plans to support hybrid genome assembly.
+There are currently no plans to support hybrid genome assembly.
 
 ## Data quality assessment and control
 
@@ -162,4 +162,9 @@ The sequencing data QA/QC involves the following modules:
 
 To use the `--qc` option, a pre-downloaded Centrifuge database is required, which can be downloaded from [here](https://genome-idx.s3.amazonaws.com/centrifuge/p_compressed%2Bh%2Bv.tar.gz). 
 
-After downloading the tar file, it needs to be decompressed into a directory, the path of which needs to supplied via the `--centrifuge` option along with `--qc`.
+After downloading the tar file, it needs to be decompressed into a directory, the path of which needs to be supplied via the `--centrifuge` option along with `--qc`.
+
+# Citations
+If you use `SamnSero` for your analysis, please cite the following:
+> Karunarathna R, Liu CC, Periyasamy D, Berg A, Ngeleka M, Trokhymchuk A. Towards decentralization of Salmonella serotyping and risk assessment in poultry production environments with nanopore sequencing. Front Microbiol. 2025 Oct 15;16(1669089):1669089.
+   
