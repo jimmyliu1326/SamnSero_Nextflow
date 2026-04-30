@@ -14,8 +14,8 @@ process combine_res {
         def timestamp = date.format("yyyyMMdd_HHmm")
         """
         samnsero_combine.R * > analysis_results_${timestamp}.csv
-        sed -i 's/\$/,${workflow.manifest.name},${workflow.manifest.version}/g' analysis_results_${timestamp}.csv
-        sed -i '1 s/,${workflow.manifest.name},${workflow.manifest.version}/,software,software_version/' analysis_results_${timestamp}.csv
+        sed -i 's|\$|,${workflow.manifest.name},${workflow.manifest.version}|g' analysis_results_${timestamp}.csv
+        sed -i '1 s|,${workflow.manifest.name},${workflow.manifest.version}|,software,software_version|' analysis_results_${timestamp}.csv
             
         """
 }
