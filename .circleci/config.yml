@@ -17,4 +17,4 @@ jobs:
       - run:
           name: Run Tests
           command: |
-            ./nextflow run jimmyliu1326/SamnSero_Nextflow --help
+            ./nextflow run jimmyliu1326/SamnSero_Nextflow -latest --help
