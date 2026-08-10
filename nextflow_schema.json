@@ -104,7 +104,6 @@
                 },
                 "centrifuge": {
                     "type": "string",
-                    "default": "/mnt/e/data/reference/centrifuge/",
                     "description": "Path to DIRECTORY containing Centrifuge database index (required if using --qc)",
                     "format": "directory-path"
                 },
