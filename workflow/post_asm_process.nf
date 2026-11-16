@@ -118,7 +118,7 @@ workflow post_asm_process {
                             // println "Got: ${f}"
                             f.getParent()
                         }
-                        | combine(Channel.fromPath(workflow.workDir))
+                        | combine( [ workflow.workDir ] )
                         | nanocomp_dir
 
                     // monitor for assembly failures
