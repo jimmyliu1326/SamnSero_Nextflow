@@ -69,7 +69,7 @@ workflow {
         // input: path to samplesheet CSV file
         log.info "${workflow.manifest.name}: Detected samplesheet CSV passed as input."
 
-        data = channel
+        data_streams = channel
             .fromPath(params.input, checkIfExists: true)
             .splitCsv(header: false)
             .branch{ id,path ->
@@ -77,7 +77,9 @@ workflow {
                 asm: ( ! file(path).isDirectory() ) & ['.fa', '.fasta', '.fna'].any { path.endsWith(it) }
             }
         
-        rename_FASTA(data.asm)
+        rename_FASTA(data_streams.asm)
+
+        samples = channel.fromPath(params.input, checkIfExists: true)
 
     } else if (params.input_dir) {
 
@@ -99,12 +101,28 @@ workflow {
                 [d.name, file(d.toString())]
             }
         )
+
+        data_streams = data
         .branch{ id,path ->
                 reads: file(path).isDirectory()
                 asm: ( ! file(path).isDirectory() ) & ['.fa', '.fasta', '.fna'].any { path.endsWith(it) }
         }
         
-        rename_FASTA(data.asm)
+        rename_FASTA(data_streams.asm)
+
+        // generate a samplesheet from data channel
+        data
+        .map { id, path ->
+            "${id},${path.toAbsolutePath()}\n"
+        }
+        .collectFile(
+            name: 'samplesheet.csv',
+            newLine: false,
+            sort: false,
+            storeDir: "${params.out_dir}"
+        )
+
+        samples = channel.fromPath("${params.out_dir}"+"/samplesheet.csv", checkIfExists: true)
 
     } else if (params.watchdir) {
         
@@ -157,17 +175,17 @@ workflow {
 
     if ( params.seq_platform == "nanopore" ) {
         
-        nanopore(data.reads)
-        post_asm_process_r(nanopore.out.assembly, nanopore.out.reads, taxid, false)
+        nanopore(data_streams.reads)
+        post_asm_process_r(nanopore.out.assembly, nanopore.out.reads, taxid, false, samples)
 
     } else if ( params.seq_platform == "illumina" ) {
         
-        illumina(data.reads)
-        post_asm_process_r(illumina.out.assembly, illumina.out.reads, taxid, false)
+        illumina(data_streams.reads)
+        post_asm_process_r(illumina.out.assembly, illumina.out.reads, taxid, false, samples)
 
     }
 
     // // process genome assembly directly
-    post_asm_process_asm(rename_FASTA.out, data.asm.map { id,path -> [id, [] ] }, taxid, true)
+    post_asm_process_asm(rename_FASTA.out, data_streams.asm.map { id,path -> [id, [] ] }, taxid, true, samples)
     
 }

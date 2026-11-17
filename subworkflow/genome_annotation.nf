@@ -7,7 +7,9 @@ include { cctyper; tnblast; aggregate_cctyper } from '../modules/local/crisprs.n
 include { mafft } from '../modules/local/msa.nf'
 
 workflow ANNOT {
-    take: assembly
+    take: 
+        assembly
+        samples
     main:
         // run abricate for VF prediction
         db = ['vfdb']
@@ -31,10 +33,6 @@ workflow ANNOT {
         // } else {
         //     abricate_summary(abricate.out.groupTuple())
         // }
-
-        // get samples.list for annot results transposition
-        samples = channel
-            .fromPath(params.input, checkIfExists: true)
         
         // run mob-suite for plasmid prediction
         assembly

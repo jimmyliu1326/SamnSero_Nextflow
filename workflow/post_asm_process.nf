@@ -16,6 +16,7 @@ workflow post_asm_process {
           reads       // Path: filtered raw read path
           taxid       // String: NCBI Taxonomy ID
           asm_only    // Boolean: whether input only contains genome assemblies
+          samplesheet // Path: samplesheet path
 
     main:
         
@@ -68,7 +69,7 @@ workflow post_asm_process {
         if ( params.annot  ) { 
             
             if ( !params.watchdir) { // currently do not support genome annotation in real-time
-                ANNOT(assembly)
+                ANNOT(assembly, samplesheet)
             
                 if ( !params.noreport) {
 
@@ -118,7 +119,7 @@ workflow post_asm_process {
                             // println "Got: ${f}"
                             f.getParent()
                         }
-                        | combine( [ workflow.workDir ] )
+                        | combine(Channel.fromPath(workflow.workDir))
                         | nanocomp_dir
 
                     // monitor for assembly failures
