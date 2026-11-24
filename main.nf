@@ -111,7 +111,7 @@ workflow {
         rename_FASTA(data_streams.asm)
 
         // generate a samplesheet from data channel
-        data
+        samples = data
         .map { id, path ->
             "${id},${path.toAbsolutePath()}\n"
         }
@@ -121,8 +121,6 @@ workflow {
             sort: false,
             storeDir: "${params.out_dir}"
         )
-
-        samples = channel.fromPath("${params.out_dir}"+"/samplesheet.csv", checkIfExists: true)
 
     } else if (params.watchdir) {
         
